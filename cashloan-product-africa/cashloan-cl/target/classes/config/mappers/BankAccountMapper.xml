@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+        <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        <!-- cl_bank_account表:'银行账户记录表模块 -->
+<mapper namespace="com.ajaya.cashloan.cl.mapper.BankAccountMapper">
+<!--返回Map-->
+<resultMap id="BaseResultMap" type="com.ajaya.cashloan.cl.domain.BankAccount">
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="user_id" property="userId" jdbcType="BIGINT" />
+    <result column="bank_name" property="bankName" jdbcType="VARCHAR" />
+    <result column="holder_name" property="holderName" jdbcType="VARCHAR" />
+    <result column="account_number" property="accountNumber" jdbcType="VARCHAR" />
+    <result column="bank_code" property="bankCode" jdbcType="VARCHAR" />
+    <result column="bvn" property="bvn" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="account" property="account" jdbcType="VARCHAR" />
+    <result column="first_name" property="firstName" jdbcType="VARCHAR" />
+    <result column="middle_name" property="middleName" jdbcType="VARCHAR" />
+    <result column="last_name" property="lastName" jdbcType="VARCHAR" />
+    <result column="is_blacklisted" property="isBlacklisted" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+</resultMap>
+
+<!--基本的sql查询字段 公共引用...-->
+<sql id="Base_Column_List">
+    id,user_id,bank_name,holder_name,account_number,bank_code,bvn,status,account,first_name,middle_name,last_name,is_blacklisted,create_time,update_time
+</sql>
+
+<!-- 基本的sql查询条件公共引用 -->
+<sql id="searchBy">
+    <trim prefix="where" prefixOverrides="and|or">
+        <if test=" id != null and id != '' ">
+            id  = #{id,jdbcType=BIGINT}
+        </if>
+        <if test="userId != null and userId != '' ">
+            and user_id = #{userId,jdbcType=BIGINT}
+        </if>
+        <if test="bankName != null and bankName != '' ">
+            and bank_name = #{bankName,jdbcType=VARCHAR}
+        </if>
+        <if test="holderName != null and holderName != '' ">
+            and holder_name = #{holderName,jdbcType=VARCHAR}
+        </if>
+        <if test="accountNumber != null and accountNumber != '' ">
+            and account_number = #{accountNumber,jdbcType=VARCHAR}
+        </if>
+        <if test="bankCode != null and bankCode != '' ">
+            and bank_code = #{bankCode,jdbcType=VARCHAR}
+        </if>
+        <if test="bvn != null and bvn != '' ">
+            and bvn = #{bvn,jdbcType=VARCHAR}
+        </if>
+        <if test="status != null and status != '' ">
+            and status = #{status,jdbcType=VARCHAR}
+        </if>
+        <if test="account != null and account != '' ">
+            and account = #{account,jdbcType=VARCHAR}
+        </if>
+        <if test="firstName != null and firstName != '' ">
+            and first_name = #{firstName,jdbcType=VARCHAR}
+        </if>
+        <if test="middleName != null and middleName != '' ">
+            and middle_name = #{middleName,jdbcType=VARCHAR}
+        </if>
+        <if test="lastName != null and lastName != '' ">
+            and last_name = #{lastName,jdbcType=VARCHAR}
+        </if>
+        <if test="isBlacklisted != null and isBlacklisted != '' ">
+            and is_blacklisted = #{isBlacklisted,jdbcType=VARCHAR}
+        </if>
+        <if test="createTime != null">
+            and create_time = #{createTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="updateTime != null">
+            and update_time = #{updateTime,jdbcType=TIMESTAMP}
+        </if>
+    </trim>
+</sql>
+
+
+<insert id="save" parameterType="com.ajaya.cashloan.cl.domain.BankAccount">
+    insert into cl_bank_account(user_id,bank_name,holder_name,account_number,bank_code,bvn,status,account,first_name,middle_name,last_name,is_blacklisted,create_time,update_time)values(#{userId,jdbcType=BIGINT},#{bankName,jdbcType=VARCHAR},#{holderName,jdbcType=VARCHAR},#{accountNumber,jdbcType=VARCHAR},#{bankCode,jdbcType=VARCHAR},#{bvn,jdbcType=VARCHAR},#{status,jdbcType=VARCHAR},#{account,jdbcType=VARCHAR},#{firstName,jdbcType=VARCHAR},#{middleName,jdbcType=VARCHAR},#{lastName,jdbcType=VARCHAR},#{isBlacklisted,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP},#{updateTime,jdbcType=TIMESTAMP})
+</insert>
+
+
+<update id="update" parameterType="com.ajaya.cashloan.cl.domain.BankAccount">
+    update cl_bank_account set
+    user_id = #{userId,jdbcType=BIGINT},
+    bank_name = #{bankName,jdbcType=VARCHAR},
+    holder_name = #{holderName,jdbcType=VARCHAR},
+    account_number = #{accountNumber,jdbcType=VARCHAR},
+    bank_code = #{bankCode,jdbcType=VARCHAR},
+    bvn = #{bvn,jdbcType=VARCHAR},
+    status = #{status,jdbcType=VARCHAR},
+    account = #{account,jdbcType=VARCHAR},
+    first_name = #{firstName,jdbcType=VARCHAR},
+    middle_name = #{middleName,jdbcType=VARCHAR},
+    last_name = #{lastName,jdbcType=VARCHAR},
+    is_blacklisted = #{isBlacklisted,jdbcType=VARCHAR},
+    create_time = #{createTime,jdbcType=TIMESTAMP},
+    update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id ,jdbcType=INTEGER}
+</update>
+
+
+<update id="updateSelective"  parameterType="java.util.HashMap">
+    update cl_bank_account
+    <set>
+        <if test="userId != null and userId != '' ">
+            user_id = #{userId,jdbcType=BIGINT},
+        </if>
+        <if test="bankName != null and bankName != '' ">
+            bank_name = #{bankName,jdbcType=VARCHAR},
+        </if>
+        <if test="holderName != null and holderName != '' ">
+            holder_name = #{holderName,jdbcType=VARCHAR},
+        </if>
+        <if test="accountNumber != null and accountNumber != '' ">
+            account_number = #{accountNumber,jdbcType=VARCHAR},
+        </if>
+        <if test="bankCode != null and bankCode != '' ">
+            bank_code = #{bankCode,jdbcType=VARCHAR},
+        </if>
+        <if test="bvn != null and bvn != '' ">
+            bvn = #{bvn,jdbcType=VARCHAR},
+        </if>
+        <if test="status != null and status != '' ">
+            status = #{status,jdbcType=VARCHAR},
+        </if>
+        <if test="account != null and account != '' ">
+            account = #{account,jdbcType=VARCHAR},
+        </if>
+        <if test="firstName != null and firstName != '' ">
+            first_name = #{firstName,jdbcType=VARCHAR},
+        </if>
+        <if test="middleName != null and middleName != '' ">
+            middle_name = #{middleName,jdbcType=VARCHAR},
+        </if>
+        <if test="lastName != null and lastName != '' ">
+            last_name = #{lastName,jdbcType=VARCHAR},
+        </if>
+        <if test="isBlacklisted != null and isBlacklisted != '' ">
+            is_blacklisted = #{isBlacklisted,jdbcType=VARCHAR},
+        </if>
+        <if test="createTime != null">
+            create_time = #{createTime,jdbcType=TIMESTAMP},
+        </if>
+        <if test="updateTime != null">
+            update_time = #{updateTime,jdbcType=TIMESTAMP}
+        </if>
+    </set>
+    where id = #{id ,jdbcType=INTEGER}
+</update>
+
+
+<select id="findByPrimary" resultMap="BaseResultMap" parameterType="java.lang.Long">
+    select
+    <include refid="Base_Column_List" />
+    from cl_bank_account
+    where id = #{id,jdbcType=INTEGER}
+</select>
+
+<select id="findSelective" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+    select
+    <include refid="Base_Column_List" />
+    from cl_bank_account
+    <include refid="searchBy"/>
+</select>
+
+<select id="listSelective" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+    select
+    <include refid="Base_Column_List" />
+    from cl_bank_account
+    <include refid="searchBy"/>
+</select>
+    <update id="setNoBinding" parameterType="java.util.HashMap">
+        update cl_bank_account set status = '2' where user_id = #{userId ,jdbcType=BIGINT}
+    </update>
+</mapper>
+

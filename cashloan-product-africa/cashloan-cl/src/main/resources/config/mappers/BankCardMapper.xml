@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- cl_bank_card表:银行卡记录表模块 -->
+<mapper namespace="com.ajaya.cashloan.cl.mapper.BankCardMapper">
+    <!--返回Map-->        
+    <resultMap id="BaseResultMap" type="com.ajaya.cashloan.cl.domain.BankCard">
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="user_id" property="userId" jdbcType="BIGINT" />
+        <result column="status" property="status" jdbcType="VARCHAR" />
+        <result column="bin" property="bin" jdbcType="VARCHAR" />
+        <result column="last4" property="last4" jdbcType="VARCHAR" />
+        <result column="exp_month" property="expMonth" jdbcType="VARCHAR" />
+        <result column="exp_year" property="expYear" jdbcType="VARCHAR" />
+        <result column="channel" property="channel" jdbcType="VARCHAR" />
+        <result column="card_type" property="cardType" jdbcType="VARCHAR" />
+        <result column="bank" property="bank" jdbcType="VARCHAR" />
+        <result column="country_code" property="countryCode" jdbcType="VARCHAR" />
+        <result column="brand" property="brand" jdbcType="VARCHAR" />
+        <result column="reusable" property="reusable" jdbcType="BIT" />
+        <result column="signature" property="signature" jdbcType="VARCHAR" />
+        <result column="customer_id" property="customerId" jdbcType="VARCHAR" />
+        <result column="email" property="email" jdbcType="VARCHAR" />
+        <result column="customer_code" property="customerCode" jdbcType="VARCHAR" />
+        <result column="risk_action" property="riskAction" jdbcType="VARCHAR" />
+        <result column="authorization_code" property="authorizationCode" jdbcType="VARCHAR" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+    <resultMap id="BankCardModel" type="com.ajaya.cashloan.cl.model.BankCardModel">
+    </resultMap>
+    
+    <!--基本的sql查询字段 公共引用...-->
+    <sql id="Base_Column_List">
+        id,user_id,status,bin,last4,exp_month,exp_year,channel,card_type,bank,country_code,brand,reusable,signature,customer_id,email,customer_code,risk_action,authorization_code,create_time,update_time 
+    </sql>
+    
+    <!-- 基本的sql查询条件公共引用 -->
+    <sql id="searchBy">
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test=" id != null and id != '' ">
+                id  = #{id,jdbcType=BIGINT}
+            </if>
+            <if test="userId != null and userId != '' ">
+                and user_id = #{userId,jdbcType=BIGINT}
+            </if>
+            <if test="status != null and status != '' ">
+                and status = #{status,jdbcType=VARCHAR}
+            </if>
+            <if test="bin != null and bin != '' ">
+                and bin = #{bin,jdbcType=VARCHAR}
+            </if>
+            <if test="last4 != null and last4 != '' ">
+                and last4 = #{last4,jdbcType=VARCHAR}
+            </if>
+            <if test="expMonth != null and expMonth != '' ">
+                and exp_month = #{expMonth,jdbcType=VARCHAR}
+            </if>
+            <if test="expYear != null and expYear != '' ">
+                and exp_year = #{expYear,jdbcType=VARCHAR}
+            </if>
+            <if test="channel != null and channel != '' ">
+                and channel = #{channel,jdbcType=VARCHAR}
+            </if>
+            <if test="cardType != null and cardType != '' ">
+                and card_type = #{cardType,jdbcType=VARCHAR}
+            </if>
+            <if test="bank != null and bank != '' ">
+                and bank = #{bank,jdbcType=VARCHAR}
+            </if>
+            <if test="countryCode != null and countryCode != '' ">
+                and country_code = #{countryCode,jdbcType=VARCHAR}
+            </if>
+            <if test="brand != null and brand != '' ">
+                and brand = #{brand,jdbcType=VARCHAR}
+            </if>
+            <if test="reusable != null and reusable != '' ">
+                and reusable = #{reusable,jdbcType=BIT}
+            </if>
+            <if test="signature != null and signature != '' ">
+                and signature = #{signature,jdbcType=VARCHAR}
+            </if>
+            <if test="customerId != null and customerId != '' ">
+                and customer_id = #{customerId,jdbcType=VARCHAR}
+            </if>
+            <if test="email != null and email != '' ">
+                and email = #{email,jdbcType=VARCHAR}
+            </if>
+            <if test="customerCode != null and customerCode != '' ">
+                and customer_code = #{customerCode,jdbcType=VARCHAR}
+            </if>
+            <if test="riskAction != null and riskAction != '' ">
+                and risk_action = #{riskAction,jdbcType=VARCHAR}
+            </if>
+            <if test="authorizationCode != null and authorizationCode != '' ">
+                and authorization_code = #{authorizationCode,jdbcType=VARCHAR}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="updateTime != null">
+                and update_time = #{updateTime,jdbcType=TIMESTAMP}
+            </if>
+        </trim>
+    </sql>
+    
+    
+    <insert id="save" parameterType="com.ajaya.cashloan.cl.domain.BankCard">
+        insert into cl_bank_card(user_id,status,bin,last4,exp_month,exp_year,channel,card_type,bank,country_code,brand,reusable,signature,customer_id,email,customer_code,risk_action,authorization_code,create_time,update_time)values(#{userId,jdbcType=BIGINT},#{status,jdbcType=VARCHAR},#{bin,jdbcType=VARCHAR},#{last4,jdbcType=VARCHAR},#{expMonth,jdbcType=VARCHAR},#{expYear,jdbcType=VARCHAR},#{channel,jdbcType=VARCHAR},#{cardType,jdbcType=VARCHAR},#{bank,jdbcType=VARCHAR},#{countryCode,jdbcType=VARCHAR},#{brand,jdbcType=VARCHAR},#{reusable,jdbcType=BIT},#{signature,jdbcType=VARCHAR},#{customerId,jdbcType=VARCHAR},#{email,jdbcType=VARCHAR},#{customerCode,jdbcType=VARCHAR},#{riskAction,jdbcType=VARCHAR},#{authorizationCode,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP},#{updateTime,jdbcType=TIMESTAMP})
+    </insert>
+
+    
+    <update id="update" parameterType="com.ajaya.cashloan.cl.domain.BankCard">
+        update cl_bank_card set 
+            user_id = #{userId,jdbcType=BIGINT},
+            status = #{status,jdbcType=VARCHAR},
+            bin = #{bin,jdbcType=VARCHAR},
+            last4 = #{last4,jdbcType=VARCHAR},
+            exp_month = #{expMonth,jdbcType=VARCHAR},
+            exp_year = #{expYear,jdbcType=VARCHAR},
+            channel = #{channel,jdbcType=VARCHAR},
+            card_type = #{cardType,jdbcType=VARCHAR},
+            bank = #{bank,jdbcType=VARCHAR},
+            country_code = #{countryCode,jdbcType=VARCHAR},
+            brand = #{brand,jdbcType=VARCHAR},
+            reusable = #{reusable,jdbcType=BIT},
+            signature = #{signature,jdbcType=VARCHAR},
+            customer_id = #{customerId,jdbcType=VARCHAR},
+            email = #{email,jdbcType=VARCHAR},
+            customer_code = #{customerCode,jdbcType=VARCHAR},
+            risk_action = #{riskAction,jdbcType=VARCHAR},
+            authorization_code = #{authorizationCode,jdbcType=VARCHAR},
+            create_time = #{createTime,jdbcType=TIMESTAMP},
+            update_time = #{updateTime,jdbcType=TIMESTAMP}
+        where id = #{id ,jdbcType=INTEGER}
+    </update>
+
+
+    <update id="updateSelective"  parameterType="java.util.HashMap">
+        update cl_bank_card
+          <set>
+            <if test="userId != null and userId != '' ">        
+                user_id = #{userId,jdbcType=BIGINT},                
+            </if>
+            <if test="status != null and status != '' ">        
+                status = #{status,jdbcType=VARCHAR},                
+            </if>
+            <if test="bin != null and bin != '' ">        
+                bin = #{bin,jdbcType=VARCHAR},                
+            </if>
+            <if test="last4 != null and last4 != '' ">        
+                last4 = #{last4,jdbcType=VARCHAR},                
+            </if>
+            <if test="expMonth != null and expMonth != '' ">        
+                exp_month = #{expMonth,jdbcType=VARCHAR},                
+            </if>
+            <if test="expYear != null and expYear != '' ">        
+                exp_year = #{expYear,jdbcType=VARCHAR},                
+            </if>
+            <if test="channel != null and channel != '' ">        
+                channel = #{channel,jdbcType=VARCHAR},                
+            </if>
+            <if test="cardType != null and cardType != '' ">        
+                card_type = #{cardType,jdbcType=VARCHAR},                
+            </if>
+            <if test="bank != null and bank != '' ">        
+                bank = #{bank,jdbcType=VARCHAR},                
+            </if>
+            <if test="countryCode != null and countryCode != '' ">        
+                country_code = #{countryCode,jdbcType=VARCHAR},                
+            </if>
+            <if test="brand != null and brand != '' ">        
+                brand = #{brand,jdbcType=VARCHAR},                
+            </if>
+            <if test="reusable != null and reusable != '' ">        
+                reusable = #{reusable,jdbcType=BIT},                
+            </if>
+            <if test="signature != null and signature != '' ">        
+                signature = #{signature,jdbcType=VARCHAR},                
+            </if>
+            <if test="customerId != null and customerId != '' ">        
+                customer_id = #{customerId,jdbcType=VARCHAR},                
+            </if>
+            <if test="email != null and email != '' ">        
+                email = #{email,jdbcType=VARCHAR},                
+            </if>
+            <if test="customerCode != null and customerCode != '' ">        
+                customer_code = #{customerCode,jdbcType=VARCHAR},                
+            </if>
+            <if test="riskAction != null and riskAction != '' ">        
+                risk_action = #{riskAction,jdbcType=VARCHAR},                
+            </if>
+            <if test="authorizationCode != null and authorizationCode != '' ">        
+                authorization_code = #{authorizationCode,jdbcType=VARCHAR},                
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},                
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP}                
+            </if>
+        </set>    
+        where id = #{id ,jdbcType=INTEGER}
+    </update>
+
+
+    <select id="findByPrimary" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List" />
+        from cl_bank_card
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
+	<select id="findSelective" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+        select
+        <include refid="Base_Column_List" />
+        from cl_bank_card
+        <include refid="searchBy"/>
+    </select>
+               
+    <select id="listSelective" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+        select
+        <include refid="Base_Column_List" />
+        from cl_bank_card
+        <include refid="searchBy"/>
+    </select>
+    <update id="setNoBinding" parameterType="long">
+        update cl_bank_card set status = '2' where user_id = #{userId ,jdbcType=BIGINT}
+    </update>
+
+    <select id="getBankCardListByUserId" resultMap="BankCardModel" parameterType="long" >
+        select
+         id ,status,bank,last4
+        from cl_bank_card
+        where user_id = #{userId,jdbcType=INTEGER}
+    </select>
+</mapper>

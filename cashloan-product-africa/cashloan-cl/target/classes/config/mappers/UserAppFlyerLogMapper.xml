@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- cl_user_apps_flyer_log表:AF统计记表模块 -->
+<mapper namespace="com.ajaya.cashloan.cl.mapper.UserAppFlyerLogMapper">
+    <!--返回Map-->        
+    <resultMap id="BaseResultMap" type="com.ajaya.cashloan.cl.domain.UserAppFlyerLog">
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="customer_user_id" property="customerUserId" jdbcType="VARCHAR" />
+        <result column="event_name" property="eventName" jdbcType="VARCHAR" />
+        <result column="response_json" property="responseJson" jdbcType="VARCHAR" />
+        <result column="event_time" property="eventTime" jdbcType="VARCHAR" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+    
+    <!--基本的sql查询字段 公共引用...-->
+    <sql id="Base_Column_List">
+        id,customer_user_id,event_name,response_json,event_time,create_time,update_time 
+    </sql>
+    
+    <!-- 基本的sql查询条件公共引用 -->
+    <sql id="searchBy">
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test=" id != null and id != '' ">
+                id  = #{id,jdbcType=BIGINT}
+            </if>
+            <if test="customerUserId != null and customerUserId != '' ">
+                and customer_user_id = #{customerUserId,jdbcType=VARCHAR}
+            </if>
+            <if test="eventName != null and eventName != '' ">
+                and event_name = #{eventName,jdbcType=VARCHAR}
+            </if>
+            <if test="responseJson != null and responseJson != '' ">
+                and response_json = #{responseJson,jdbcType=VARCHAR}
+            </if>
+            <if test="eventTime != null">
+                and event_time = #{eventTime,jdbcType=VARCHAR}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="updateTime != null">
+                and update_time = #{updateTime,jdbcType=TIMESTAMP}
+            </if>
+        </trim>
+    </sql>
+    
+    
+    <insert id="save" parameterType="com.ajaya.cashloan.cl.domain.UserAppFlyerLog">
+        insert into cl_user_apps_flyer_log(customer_user_id,event_name,response_json,event_time,create_time,update_time)values(#{customerUserId,jdbcType=VARCHAR},#{eventName,jdbcType=VARCHAR},#{responseJson,jdbcType=VARCHAR},#{eventTime,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP},#{updateTime,jdbcType=TIMESTAMP})
+    </insert>
+
+    
+    <update id="update" parameterType="com.ajaya.cashloan.cl.domain.UserAppFlyerLog">
+        update cl_user_apps_flyer_log set 
+            customer_user_id = #{customerUserId,jdbcType=VARCHAR},
+            event_name = #{eventName,jdbcType=VARCHAR},
+            response_json = #{responseJson,jdbcType=VARCHAR},
+            event_time = #{eventTime,jdbcType=VARCHAR},
+            create_time = #{createTime,jdbcType=TIMESTAMP},
+            update_time = #{updateTime,jdbcType=TIMESTAMP}
+        where id = #{id ,jdbcType=INTEGER}
+    </update>
+
+
+    <update id="updateSelective"  parameterType="java.util.HashMap">
+        update cl_user_apps_flyer_log
+          <set>
+            <if test="customerUserId != null and customerUserId != '' ">        
+                customer_user_id = #{customerUserId,jdbcType=VARCHAR},                
+            </if>
+            <if test="eventName != null and eventName != '' ">        
+                event_name = #{eventName,jdbcType=VARCHAR},                
+            </if>
+            <if test="responseJson != null and responseJson != '' ">        
+                response_json = #{responseJson,jdbcType=VARCHAR},                
+            </if>
+            <if test="eventTime != null">
+                event_time = #{eventTime,jdbcType=VARCHAR},                
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},                
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP}                
+            </if>
+        </set>    
+        where id = #{id ,jdbcType=INTEGER}
+    </update>
+
+
+    <select id="findByPrimary" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List" />
+        from cl_user_apps_flyer_log
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
+	<select id="findSelective" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+        select
+        <include refid="Base_Column_List" />
+        from cl_user_apps_flyer_log
+        <include refid="searchBy"/>
+    </select>
+               
+    <select id="listSelective" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+        select
+        <include refid="Base_Column_List" />
+        from cl_user_apps_flyer_log
+        <include refid="searchBy"/>
+    </select>
+    
+</mapper>

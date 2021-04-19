@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- cl_user_auth表:用户认证模块 -->
+<mapper namespace="com.ajaya.cashloan.cl.mapper.UserAuthMapper">
+    <!--返回Map-->
+    <resultMap id="BaseResultMap" type="com.ajaya.cashloan.cl.domain.UserAuth">
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="basic_info_state" property="basicInfoState" jdbcType="VARCHAR" />
+        <result column="personal_info_state" property="personalInfoState" jdbcType="VARCHAR" />
+        <result column="user_id" property="userId" jdbcType="BIGINT" />
+        <result column="contact_state" property="contactState" jdbcType="VARCHAR" />
+        <result column="bank_account_state" property="bankAccountState" jdbcType="VARCHAR" />
+    </resultMap>
+    <resultMap id="ModelResultMap" type="com.ajaya.cashloan.cl.model.UserAuthModel">
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="login_name" property="loginName" jdbcType="VARCHAR" />
+        <result column="real_name" property="realName" jdbcType="VARCHAR" />
+        <result column="phone" property="phone" jdbcType="VARCHAR" />
+        <result column="basic_info_state" property="basicInfoState" jdbcType="VARCHAR" />
+        <result column="personal_info_state" property="personalInfoState" jdbcType="VARCHAR" />
+        <result column="user_id" property="userId" jdbcType="BIGINT" />
+        <result column="contact_state" property="contactState" jdbcType="VARCHAR" />
+        <result column="bank_account_state" property="bankAccountState" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <!--基本的sql查询字段 公共引用...-->
+    <sql id="Base_Column_List">
+        id,basic_info_state,personal_info_state,user_id,contact_state,bank_account_state
+    </sql>
+
+    <!-- 基本的sql查询条件公共引用 -->
+    <sql id="searchBy">
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="id != null and id != ''">
+                id  = #{id,jdbcType=BIGINT}
+            </if>
+            <if test="basicInfoState != null and basicInfoState != ''">
+                and basic_info_state = #{basicInfoState,jdbcType=VARCHAR}
+            </if>
+            <if test="personalInfoState != null and personalInfoState != ''">
+                and personal_info_state = #{personalInfoState,jdbcType=VARCHAR}
+            </if>
+            <if test="userId != null and userId != ''">
+                and user_id = #{userId,jdbcType=BIGINT}
+            </if>
+            <if test="contactState != null and contactState != ''">
+                and contact_state = #{contactState,jdbcType=VARCHAR}
+            </if>
+            <if test="bankAccountState != null and bankAccountState != ''">
+                and bank_account_state = #{bankAccountState,jdbcType=VARCHAR}
+            </if>
+
+        </trim>
+    </sql>
+    <insert id="save" parameterType="com.ajaya.cashloan.cl.domain.UserAuth">
+        insert into cl_user_auth(
+        basic_info_state,
+        personal_info_state,
+        user_id,
+        contact_state,
+        bank_account_state
+        )values(
+        #{basicInfoState,jdbcType=VARCHAR},
+        #{personalInfoState,jdbcType=VARCHAR},
+        #{userId,jdbcType=BIGINT},
+        #{contactState,jdbcType=VARCHAR},
+        #{bankAccountState,jdbcType=VARCHAR}
+        )
+    </insert>
+
+    <update id="update" parameterType="com.ajaya.cashloan.cl.domain.UserAuth">
+        update cl_user_auth set
+        basic_info_state = #{basicInfoState,jdbcType=VARCHAR},
+        personal_info_state = #{personalInfoState,jdbcType=VARCHAR},
+        user_id = #{userId,jdbcType=BIGINT},
+        contact_state = #{contactState,jdbcType=VARCHAR},
+        bank_account_state = #{bankAccountState,jdbcType=VARCHAR}
+        where id = #{id ,jdbcType=BIGINT}
+    </update>
+
+    <update id="updateByUserId" parameterType="java.util.HashMap">
+        update cl_user_auth
+        <set>
+            <if test="basicInfoState != null and basicInfoState != ''">
+                basic_info_state = #{basicInfoState,jdbcType=VARCHAR},
+            </if>
+            <if test="personalInfoState != null and personalInfoState != ''">
+                personal_info_state = #{personalInfoState,jdbcType=VARCHAR},
+            </if>
+            <if test="contactState != null and contactState != ''">
+                contact_state = #{contactState,jdbcType=VARCHAR},
+            </if>
+            <if test="bankAccountState != null and bankAccountState != ''">
+                bank_account_state = #{bankAccountState,jdbcType=VARCHAR}
+            </if>
+        </set>
+        where user_id = #{userId ,jdbcType=INTEGER}
+    </update>
+
+    <update id="updateSelective"  parameterType="java.util.HashMap">
+        update cl_user_auth
+        <set>
+            <if test="basicInfoState != null and basicInfoState != ''">
+                and basic_info_state = #{basicInfoState,jdbcType=VARCHAR}
+            </if>
+            <if test="personalInfoState != null and personalInfoState != ''">
+                and personal_info_state = #{personalInfoState,jdbcType=VARCHAR}
+            </if>
+            <if test="userId != null and userId != ''">
+                and user_id = #{userId,jdbcType=BIGINT}
+            </if>
+            <if test="contactState != null and contactState != ''">
+                and contact_state = #{contactState,jdbcType=VARCHAR}
+            </if>
+            <if test="bankAccountState != null and bankAccountState != ''">
+                and bank_account_state = #{bankAccountState,jdbcType=VARCHAR}
+            </if>
+        </set>
+        where id = #{id ,jdbcType=BIGINT}
+    </update>
+
+
+    <select id="findByPrimary" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List" />
+        from cl_user_auth
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <select id="findSelective" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+        select
+        <include refid="Base_Column_List" />
+        from cl_user_auth
+        <include refid="searchBy"/>
+    </select>
+
+    <select id="listSelective" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+        select
+        <include refid="Base_Column_List" />
+        from cl_user_auth
+        <include refid="searchBy"/>
+    </select>
+
+
+    <!-- 用户关键信息查询条件公共引用 -->
+    <sql id="searchUserBy">
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="userId !='' and userId !=null">
+                and au.user_id = #{userId,jdbcType=BIGINT}
+            </if>
+            <if test="loginName !='' and loginName !=null">
+                and u.login_name like concat("%",#{loginName,jdbcType=VARCHAR},"%")
+            </if>
+            <if test="realName != null and realName != '' ">
+                and  b.real_name  like concat("%",#{realName,jdbcType=VARCHAR},"%")
+            </if>
+            <if test="phone != null and phone != '' ">
+                and  b.phone like  concat("%",#{phone,jdbcType=VARCHAR},"%")
+            </if>
+            <if test="basicInfoState != null and basicInfoState != ''">
+                and basic_info_state = #{basicInfoState,jdbcType=VARCHAR}
+            </if>
+            <if test="personalInfoState != null and personalInfoState != ''">
+                and personal_info_state = #{personalInfoState,jdbcType=VARCHAR}
+            </if>
+            <if test="contactState !='' and contactState !=null">
+                and au.contact_state = #{contactState,jdbcType=VARCHAR}
+            </if>
+            <if test="bankAccountState !='' and bankAccountState !=null">
+                and au.bank_account_state = #{bankAccountState,jdbcType=VARCHAR}
+            </if>
+        </trim>
+    </sql>
+
+    <select id="listUserAuthModel" resultMap="ModelResultMap" parameterType="java.util.HashMap">
+        select  au.user_id,b.real_name,au.basic_info_state,au.personal_info_state,au.contact_state,au.bank_account_state
+        from  cl_user u join cl_user_auth  au  on u.id=au.user_id  join  cl_user_base_info  b  on u.id=b.user_id
+        <include refid="searchUserBy"/>
+    </select>
+
+
+    <select id="executeSql" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+    	${sqlString}
+    </select>
+
+
+    <select id="findByUserId" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List" />
+        from cl_user_auth
+        where user_id = #{userId,jdbcType=BIGINT}
+    </select>
+</mapper>

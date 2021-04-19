@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- cl_rc_simple_borrow_count表:风控数据统计-（简）借款统计模块 -->
+<mapper namespace="com.ajaya.cashloan.rc.mapper.SimpleBorrowCountMapper">
+    <!--返回Map-->        
+    <resultMap id="BaseResultMap" type="com.ajaya.cashloan.rc.domain.SimpleBorrowCount">
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="user_id" property="userId" jdbcType="BIGINT" />
+        <result column="count_one" property="countOne" jdbcType="INTEGER" />
+        <!--<result column="count_two" property="countTwo" jdbcType="INTEGER" />
+        <result column="count_three" property="countThree" jdbcType="INTEGER" />
+        <result column="count_four" property="countFour" jdbcType="INTEGER" />-->
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+    
+    <!--基本的sql查询字段 公共引用...-->
+    <sql id="Base_Column_List">
+        id,user_id,count_one,<!--count_two,count_three,count_four, -->create_time 
+    </sql>
+    
+    <insert id="save" parameterType="com.ajaya.cashloan.rc.domain.SimpleBorrowCount">
+        insert into cl_rc_simple_borrow_count(user_id,count_one,<!--count_two,count_three,count_four,-->create_time)values(#{userId,jdbcType=INTEGER},#{countOne,jdbcType=INTEGER},<!--#{countTwo,jdbcType=INTEGER},#{countThree,jdbcType=INTEGER},#{countFour,jdbcType=INTEGER},-->#{createTime,jdbcType=TIMESTAMP})
+    </insert>
+    
+    <!-- 借款人有逾期30天以上已还借款数 -->
+    <select id="countOne" resultType="java.lang.Integer" parameterType="java.lang.Long">
+        SELECT COUNT(DISTINCT borrow_id) FROM cl_borrow_repay WHERE state = 10 AND penalty_day > 30 AND user_id = #{userId,jdbcType=BIGINT}
+    </select>
+    
+    <!-- 借款人有逾期未还借款数 -->
+    <!--
+    <select id="countTwo" resultType="java.lang.Integer" parameterType="java.lang.Long">
+        SELECT COUNT(DISTINCT borrow_id) FROM cl_borrow_repay WHERE state = 20 AND penalty_day > 0 AND user_id = #{userId,jdbcType=BIGINT}
+    </select>
+    -->
+    <!-- 借款人有逾期已还借款数 -->
+    <!--
+    <select id="countThree" resultType="java.lang.Integer" parameterType="java.lang.Long">
+        SELECT COUNT(DISTINCT borrow_id) FROM cl_borrow_repay WHERE state = 10 AND penalty_day > 0 AND user_id = #{userId,jdbcType=BIGINT}
+    </select>
+     -->
+    <!-- 借款人正常还款数 -->
+    <!--
+    <select id="countFour" resultType="java.lang.Integer" parameterType="java.lang.Long">
+        SELECT COUNT(DISTINCT borrow_id) FROM cl_borrow_repay WHERE state = 10 AND penalty_day = 0 AND user_id = #{userId,jdbcType=BIGINT}
+    </select>
+     -->
+</mapper>

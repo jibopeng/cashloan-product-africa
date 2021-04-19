@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- cl_91zx_req_log表:风控数据统计-（简）通话记录统计模块 -->
+<mapper namespace="com.ajaya.cashloan.rc.mapper.Zx91ReqLogMapper">
+    <!--返回Map-->        
+    <resultMap id="BaseResultMap" type="com.ajaya.cashloan.rc.domain.Zx91ReqLog">
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="user_id" property="userId" jdbcType="BIGINT" />
+        <result column="req_order" property="reqOrder" jdbcType="VARCHAR" />
+        <result column="req_params" property="reqParams" jdbcType="VARCHAR" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="resp_code" property="respCode" jdbcType="VARCHAR" />
+        <result column="resp_params" property="respParams" jdbcType="VARCHAR" />
+        <result column="resp_time" property="respTime" jdbcType="TIMESTAMP" />
+        <result column="resp_order_no" property="respOrderNo" jdbcType="VARCHAR" />
+    </resultMap>
+    
+    <!--基本的sql查询字段 公共引用...-->
+    <sql id="Base_Column_List">
+        id,user_id,req_order,req_params,create_time,resp_code,resp_params,resp_time,resp_order_no 
+    </sql>
+    
+    <!-- 基本的sql查询条件公共引用 -->
+    <sql id="searchBy">
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test=" id != null and id != '' ">
+                id  = #{id,jdbcType=BIGINT}
+            </if>
+            <if test="userId != null and userId != '' ">
+                and user_id = #{userId,jdbcType=BIGINT}
+            </if>
+            <if test="reqOrder != null and reqOrder != '' ">
+                and req_order = #{reqOrder,jdbcType=VARCHAR}
+            </if>
+            <if test="reqParams != null and reqParams != '' ">
+                and req_params = #{reqParams,jdbcType=VARCHAR}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="respCode != null and respCode != '' ">
+                and resp_code = #{respCode,jdbcType=VARCHAR}
+            </if>
+            <if test="respParams != null and respParams != '' ">
+                and resp_params = #{respParams,jdbcType=VARCHAR}
+            </if>
+            <if test="respTime != null">
+                and resp_time = #{respTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="respOrderNo != null and respOrderNo != '' ">
+                and resp_order_no = #{respOrderNo,jdbcType=VARCHAR}
+            </if>
+        </trim>
+    </sql>
+    
+    
+    <insert id="save" parameterType="com.ajaya.cashloan.rc.domain.Zx91ReqLog">
+        insert into cl_91zx_req_log(user_id,req_order,req_params,create_time,resp_code,resp_params,resp_time,resp_order_no)values(#{userId,jdbcType=BIGINT},#{reqOrder,jdbcType=VARCHAR},#{reqParams,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP},#{respCode,jdbcType=VARCHAR},#{respParams,jdbcType=VARCHAR},#{respTime,jdbcType=TIMESTAMP},#{respOrderNo,jdbcType=VARCHAR})
+    </insert>
+
+    
+    <update id="update" parameterType="com.ajaya.cashloan.rc.domain.Zx91ReqLog">
+        update cl_91zx_req_log set 
+            user_id = #{userId,jdbcType=BIGINT},
+            req_order = #{reqOrder,jdbcType=VARCHAR},
+            req_params = #{reqParams,jdbcType=VARCHAR},
+            create_time = #{createTime,jdbcType=TIMESTAMP},
+            resp_code = #{respCode,jdbcType=VARCHAR},
+            resp_params = #{respParams,jdbcType=VARCHAR},
+            resp_time = #{respTime,jdbcType=TIMESTAMP},
+            resp_order_no = #{respOrderNo,jdbcType=VARCHAR}
+        where id = #{id ,jdbcType=INTEGER}
+    </update>
+
+
+    <update id="updateSelective"  parameterType="java.util.HashMap">
+        update cl_91zx_req_log
+          <set>
+            <if test="userId != null and userId != '' ">        
+                user_id = #{userId,jdbcType=BIGINT},                
+            </if>
+            <if test="reqOrder != null and reqOrder != '' ">        
+                req_order = #{reqOrder,jdbcType=VARCHAR},                
+            </if>
+            <if test="reqParams != null and reqParams != '' ">        
+                req_params = #{reqParams,jdbcType=VARCHAR},                
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},                
+            </if>
+            <if test="respCode != null and respCode != '' ">        
+                resp_code = #{respCode,jdbcType=VARCHAR},                
+            </if>
+            <if test="respParams != null and respParams != '' ">        
+                resp_params = #{respParams,jdbcType=VARCHAR},                
+            </if>
+            <if test="respTime != null">
+                resp_time = #{respTime,jdbcType=TIMESTAMP},                
+            </if>
+            <if test="respOrderNo != null and respOrderNo != '' ">        
+                resp_order_no = #{respOrderNo,jdbcType=VARCHAR}                
+            </if>
+        </set>    
+        where id = #{id ,jdbcType=INTEGER}
+    </update>
+
+
+    <select id="findByPrimary" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List" />
+        from cl_91zx_req_log
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
+	<select id="findSelective" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+        select
+        <include refid="Base_Column_List" />
+        from cl_91zx_req_log
+        <include refid="searchBy"/>
+    </select>
+               
+    <select id="listSelective" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+        select
+        <include refid="Base_Column_List" />
+        from cl_91zx_req_log
+        <include refid="searchBy"/>
+    </select>
+    
+</mapper>

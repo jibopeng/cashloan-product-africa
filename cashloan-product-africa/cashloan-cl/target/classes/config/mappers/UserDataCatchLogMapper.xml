@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- cl_user_data_catch_log表:原始数据抓取记录表模块 -->
+<mapper namespace="com.ajaya.cashloan.cl.mapper.UserDataCatchLogMapper">
+    <!--返回Map-->        
+    <resultMap id="BaseResultMap" type="com.ajaya.cashloan.cl.domain.UserDataCatchLog">
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="user_id" property="userId" jdbcType="BIGINT" />
+        <result column="borrow_id" property="borrowId" jdbcType="BIGINT" />
+        <result column="app" property="app" jdbcType="VARCHAR" />
+        <result column="app_over_time" property="appOverTime" jdbcType="TIMESTAMP" />
+        <result column="contact" property="contact" jdbcType="VARCHAR" />
+        <result column="contact_over_time" property="contactOverTime" jdbcType="TIMESTAMP" />
+        <result column="msg" property="msg" jdbcType="VARCHAR" />
+        <result column="msg_over_time" property="msgOverTime" jdbcType="TIMESTAMP" />
+        <result column="camera" property="camera" jdbcType="VARCHAR" />
+        <result column="camera_over_time" property="cameraOverTime" jdbcType="TIMESTAMP" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+    
+    <!--基本的sql查询字段 公共引用...-->
+    <sql id="Base_Column_List">
+        id,user_id,borrow_id,app,app_over_time,contact,contact_over_time,msg,msg_over_time,camera,camera_over_time,create_time 
+    </sql>
+    
+    <!-- 基本的sql查询条件公共引用 -->
+    <sql id="searchBy">
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test=" id != null and id != '' ">
+                id  = #{id,jdbcType=BIGINT}
+            </if>
+            <if test="userId != null and userId != '' ">
+                and user_id = #{userId,jdbcType=BIGINT}
+            </if>
+            <if test="borrowId != null and borrowId != '' ">
+                and borrow_id = #{borrowId,jdbcType=BIGINT}
+            </if>
+            <if test="app != null and app != '' ">
+                and app = #{app,jdbcType=VARCHAR}
+            </if>
+            <if test="appOverTime != null">
+                and app_over_time = #{appOverTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="contact != null and contact != '' ">
+                and contact = #{contact,jdbcType=VARCHAR}
+            </if>
+            <if test="contactOverTime != null">
+                and contact_over_time = #{contactOverTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="msg != null and msg != '' ">
+                and msg = #{msg,jdbcType=VARCHAR}
+            </if>
+            <if test="msgOverTime != null">
+                and msg_over_time = #{msgOverTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="camera != null and camera != '' ">
+                and camera = #{camera,jdbcType=VARCHAR}
+            </if>
+            <if test="cameraOverTime != null">
+                and camera_over_time = #{cameraOverTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime,jdbcType=TIMESTAMP}
+            </if>
+        </trim>
+    </sql>
+    
+    
+    <insert id="save" parameterType="com.ajaya.cashloan.cl.domain.UserDataCatchLog">
+        insert into cl_user_data_catch_log(user_id,borrow_id,app,app_over_time,contact,contact_over_time,msg,msg_over_time,camera,camera_over_time,create_time)values(#{userId,jdbcType=BIGINT},#{borrowId,jdbcType=BIGINT},#{app,jdbcType=VARCHAR},#{appOverTime,jdbcType=TIMESTAMP},#{contact,jdbcType=VARCHAR},#{contactOverTime,jdbcType=TIMESTAMP},#{msg,jdbcType=VARCHAR},#{msgOverTime,jdbcType=TIMESTAMP},#{camera,jdbcType=VARCHAR},#{cameraOverTime,jdbcType=TIMESTAMP},#{createTime,jdbcType=TIMESTAMP})
+    </insert>
+
+    
+    <update id="update" parameterType="com.ajaya.cashloan.cl.domain.UserDataCatchLog">
+        update cl_user_data_catch_log set 
+            user_id = #{userId,jdbcType=BIGINT},
+            borrow_id = #{borrowId,jdbcType=BIGINT},
+            app = #{app,jdbcType=VARCHAR},
+            app_over_time = #{appOverTime,jdbcType=TIMESTAMP},
+            contact = #{contact,jdbcType=VARCHAR},
+            contact_over_time = #{contactOverTime,jdbcType=TIMESTAMP},
+            msg = #{msg,jdbcType=VARCHAR},
+            msg_over_time = #{msgOverTime,jdbcType=TIMESTAMP},
+            camera = #{camera,jdbcType=VARCHAR},
+            camera_over_time = #{cameraOverTime,jdbcType=TIMESTAMP},
+            create_time = #{createTime,jdbcType=TIMESTAMP}
+        where id = #{id ,jdbcType=INTEGER}
+    </update>
+
+
+    <update id="updateSelective"  parameterType="java.util.HashMap">
+        update cl_user_data_catch_log
+          <set>
+            <if test="userId != null and userId != '' ">        
+                user_id = #{userId,jdbcType=BIGINT},                
+            </if>
+            <if test="borrowId != null and borrowId != '' ">        
+                borrow_id = #{borrowId,jdbcType=BIGINT},                
+            </if>
+            <if test="app != null and app != '' ">        
+                app = #{app,jdbcType=VARCHAR},                
+            </if>
+            <if test="appOverTime != null">
+                app_over_time = #{appOverTime,jdbcType=TIMESTAMP},                
+            </if>
+            <if test="contact != null and contact != '' ">        
+                contact = #{contact,jdbcType=VARCHAR},                
+            </if>
+            <if test="contactOverTime != null">
+                contact_over_time = #{contactOverTime,jdbcType=TIMESTAMP},                
+            </if>
+            <if test="msg != null and msg != '' ">        
+                msg = #{msg,jdbcType=VARCHAR},                
+            </if>
+            <if test="msgOverTime != null">
+                msg_over_time = #{msgOverTime,jdbcType=TIMESTAMP},                
+            </if>
+            <if test="camera != null and camera != '' ">        
+                camera = #{camera,jdbcType=VARCHAR},                
+            </if>
+            <if test="cameraOverTime != null">
+                camera_over_time = #{cameraOverTime,jdbcType=TIMESTAMP},                
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP}                
+            </if>
+        </set>    
+        where id = #{id ,jdbcType=INTEGER}
+    </update>
+
+
+    <select id="findByPrimary" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List" />
+        from cl_user_data_catch_log
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
+	<select id="findSelective" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+        select
+        <include refid="Base_Column_List" />
+        from cl_user_data_catch_log
+        <include refid="searchBy"/>
+    </select>
+               
+    <select id="listSelective" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+        select
+        <include refid="Base_Column_List" />
+        from cl_user_data_catch_log
+        <include refid="searchBy"/>
+    </select>
+    
+</mapper>

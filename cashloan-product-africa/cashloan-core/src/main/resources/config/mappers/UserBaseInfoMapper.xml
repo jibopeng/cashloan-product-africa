@@ -1,0 +1,499 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- cl_user_base_info表:用户详细信息模块 -->
+<mapper namespace="com.ajaya.cashloan.core.mapper.UserBaseInfoMapper">
+    <!--返回Map-->        
+     <resultMap id="BaseResultMap" type="com.ajaya.cashloan.core.domain.UserBaseInfo">
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="user_id" property="userId" jdbcType="INTEGER" />
+        <result column="phone" property="phone" jdbcType="VARCHAR" />
+        <result column="real_name" property="realName" jdbcType="VARCHAR" />
+         <result column="age" property="age" jdbcType="INTEGER" />
+        <result column="sex" property="sex" jdbcType="VARCHAR" />
+         <result column="first_name" property="firstName" jdbcType="VARCHAR" />
+         <result column="middle_name" property="middleName" jdbcType="VARCHAR" />
+         <result column="last_name" property="lastName" jdbcType="VARCHAR" />
+         <result column="date_of_birth" property="dateOfBirth" jdbcType="VARCHAR" />
+         <result column="email" property="email" jdbcType="VARCHAR" />
+         <result column="occupation" property="occupation" jdbcType="VARCHAR" />
+        <result column="bvn_no" property="bvnNo" jdbcType="VARCHAR" />
+        <result column="state_addr" property="stateAddr" jdbcType="VARCHAR" />
+        <result column="education" property="education" jdbcType="VARCHAR" />
+        <result column="salary" property="salary" jdbcType="VARCHAR" />
+        <result column="live_addr" property="liveAddr" jdbcType="VARCHAR" />
+        <result column="register_addr" property="registerAddr" jdbcType="VARCHAR" />
+        <result column="register_coordinate" property="registerCoordinate" jdbcType="VARCHAR" />
+        <result column="state" property="state" jdbcType="VARCHAR" />
+        <result column="black_reason" property="blackReason" jdbcType="VARCHAR" />
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="marital" property="marital" jdbcType="VARCHAR" />
+         <result column="salary_type" property="salaryType" jdbcType="VARCHAR" />
+         <result column="accommodation_type" property="accommodationType" jdbcType="VARCHAR" />
+         <result column="children_number" property="childrenNumber" jdbcType="VARCHAR" />
+         <result column="loan_purpose" property="loanPurpose" jdbcType="VARCHAR" />
+     </resultMap>
+
+    <!--基本的sql查询字段 公共引用...-->
+    <sql id="Base_Column_List">
+        id,accommodation_type,children_number,loan_purpose,salary_type,user_id,phone,real_name,age,sex,first_name,middle_name,last_name,date_of_birth,bvn_no,state_addr,education,salary,live_addr,register_addr,register_coordinate,state,black_reason,update_time,create_time,marital,email,occupation
+    </sql>
+     <!--用户的基本信息的sql查询字段 公共引用...-->
+    <resultMap id="BaseInfoModelMap" extends="BaseResultMap"  type="com.ajaya.cashloan.core.model.ManagerUserModel">
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="phone" property="phone" jdbcType="VARCHAR" />
+        <result column="sex" property="sex" jdbcType="VARCHAR" />
+        <result column="registTime" property="registTime" jdbcType="TIMESTAMP" />
+        <result column="gpsCoordinate" property="gpsCoordinate" jdbcType="VARCHAR" />
+        <result column="registCoordinate" property="registCoordinate" jdbcType="VARCHAR" />
+        <result column="handFillName" property="handFillName" jdbcType="VARCHAR" />
+        <result column="birthday" property="birthday" jdbcType="VARCHAR" />
+        <result column="bvn" property="bvn" jdbcType="VARCHAR" />
+        <result column="email" property="email" jdbcType="VARCHAR" />
+        <result column="bvnName" property="bvnName" jdbcType="VARCHAR" />
+        <result column="bvnPhone" property="bvnPhone" jdbcType="VARCHAR" />
+        <result column="bvnBirthday" property="bvnBirthday" jdbcType="VARCHAR" />
+        <result column="marriage" property="marriage" jdbcType="VARCHAR" />
+        <result column="childenNum" property="childenNum" jdbcType="VARCHAR" />
+        <result column="education" property="education" jdbcType="VARCHAR" />
+        <result column="payWay" property="payWay" jdbcType="VARCHAR" />
+        <result column="monthlySalary" property="monthlySalary" jdbcType="VARCHAR" />
+        <result column="borrowPurpose" property="borrowPurpose" jdbcType="VARCHAR" />
+        <result column="residentialType" property="residentialType" jdbcType="VARCHAR" />
+        <result column="state" property="state" jdbcType="VARCHAR" />
+        <result column="address" property="address" jdbcType="VARCHAR" />
+        
+    </resultMap>
+    <resultMap id="UserProtocolModel"   type="com.ajaya.cashloan.core.model.UserProtocolModel">
+    </resultMap>
+    
+    <!-- 基本的sql查询条件公共引用 -->
+    <sql id="searchBy">
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test=" id !=null and id !=''">
+                id  = #{id,jdbcType=INTEGER}
+            </if>
+            <if test="userId !=null and userId !=''">
+                and user_id = #{userId,jdbcType=INTEGER}
+            </if>
+            <if test="phone !=null and phone !=''">
+                and phone = #{phone,jdbcType=VARCHAR}
+            </if>
+            <if test="realName !=null and realName !=''">
+                and real_name = #{realName,jdbcType=VARCHAR}
+            </if>
+            <if test="age !=null and age !=''">
+                and age = #{age,jdbcType=INTEGER}
+            </if>
+            <if test="sex !=null and sex !=''">
+                and sex = #{sex,jdbcType=VARCHAR}
+            </if>
+            <if test="bvnNo !=null and bvnNo !=''">
+                and bvn_no = #{bvnNo,jdbcType=VARCHAR}
+            </if>
+            <if test="stateAddr !=null and stateAddr !=''" >
+                and state_addr = #{stateAddr,jdbcType=VARCHAR}
+            </if>
+
+            <if test="education !=null and education !=''">
+                and education = #{education,jdbcType=VARCHAR}
+            </if>
+            <if test="salary !=null and salary !=''">
+                and salary = #{salary,jdbcType=VARCHAR}
+            </if>
+
+            <if test="liveAddr !=null and liveAddr !=''">
+                and live_addr = #{liveAddr,jdbcType=VARCHAR}
+            </if>
+
+            <if test="registerAddr !=null and registerAddr !=''">
+                and register_addr = #{registerAddr,jdbcType=VARCHAR}
+            </if>
+            <if test="registerCoordinate !=null and registerCoordinate !=''">
+                and register_coordinate = #{registerCoordinate,jdbcType=VARCHAR}
+            </if>
+            <if test="state !=null and state !=''">
+                and state = #{state,jdbcType=VARCHAR}
+            </if>
+            <if test="firstName !=null and firstName !=''">
+                and first_name = #{firstName,jdbcType=VARCHAR}
+            </if>
+            <if test="middleName !=null and middleName !=''">
+                and middle_name = #{middleName,jdbcType=VARCHAR}
+            </if>
+            <if test="lastName !=null and lastName !=''">
+                and last_name = #{lastName,jdbcType=VARCHAR}
+            </if>
+            <if test="dateOfBirth !=null and dateOfBirth !=''">
+                and date_of_birth = #{dateOfBirth,jdbcType=VARCHAR}
+            </if>
+
+
+            <if test="email !=null and email !=''">
+                and email = #{email,jdbcType=VARCHAR}
+            </if>
+            <if test="occupation !=null and occupation !=''">
+                and occupation = #{occupation,jdbcType=VARCHAR}
+            </if>
+
+            <if test="blackReason !=null and blackReason !=''">
+                and black_reason = #{blackReason,jdbcType=VARCHAR}
+            </if>
+            <if test="updateTime !=null">
+                and update_time = #{updateTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="createTime !=null">
+                and create_time = #{createTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="marital !=null and marital !=''">
+                and marital = #{marital,jdbcType=VARCHAR}
+            </if>
+            <if test="salaryType !=null and salaryType !=''">
+                and salary_type = #{salaryType,jdbcType=VARCHAR}
+            </if>
+
+            <if test="accommodationType !=null and accommodationType !=''">
+                and accommodation_type = #{accommodationType,jdbcType=VARCHAR}
+            </if>
+
+            <if test="childrenNumber !=null and childrenNumber !=''">
+                and children_number = #{childrenNumber,jdbcType=VARCHAR}
+            </if>
+
+            <if test="loanPurpose !=null and loanPurpose !=''">
+                and loan_purpose = #{loanPurpose,jdbcType=VARCHAR}
+            </if>
+
+        </trim>
+    </sql>
+
+
+    <insert id="save" parameterType="com.ajaya.cashloan.core.domain.UserBaseInfo">
+        insert into cl_user_base_info(accommodation_type,children_number,loan_purpose,user_id,salary_type,phone,real_name,age,sex,first_name,middle_name,last_name,date_of_birth,bvn_no,state_addr,education,salary,live_addr,register_addr,register_coordinate,state,black_reason,update_time,create_time,marital,email,office_email,occupation)values(#{accommodationType,jdbcType=VARCHAR},#{childrenNumber,jdbcType=VARCHAR},#{loanPurpose,jdbcType=VARCHAR},#{userId,jdbcType=INTEGER},#{salaryType,jdbcType=VARCHAR},#{phone,jdbcType=VARCHAR},#{realName,jdbcType=VARCHAR},#{age,jdbcType=INTEGER},#{sex,jdbcType=VARCHAR} ,#{firstName,jdbcType=VARCHAR},#{middleName,jdbcType=VARCHAR},#{lastName,jdbcType=VARCHAR},#{dateOfBirth,jdbcType=VARCHAR},#{bvnNo,jdbcType=VARCHAR},#{stateAddr,jdbcType=VARCHAR},#{education,jdbcType=VARCHAR},#{salary,jdbcType=VARCHAR},#{liveAddr,jdbcType=VARCHAR},#{registerAddr,jdbcType=VARCHAR},#{registerCoordinate,jdbcType=VARCHAR},#{state,jdbcType=VARCHAR},#{blackReason,jdbcType=VARCHAR},#{updateTime,jdbcType=TIMESTAMP},#{createTime,jdbcType=TIMESTAMP},#{marital,jdbcType=VARCHAR},#{email,jdbcType=VARCHAR},#{officeEmail,jdbcType=VARCHAR},#{occupation,jdbcType=VARCHAR})
+    </insert>
+
+
+    
+     <update id="update" parameterType="com.ajaya.cashloan.core.domain.UserBaseInfo">
+        update cl_user_base_info
+          <set>
+            <if test="userId != null">        
+                user_id = #{userId,jdbcType=INTEGER},                
+            </if>
+            <if test="phone != null and phone != '' ">        
+                phone = #{phone,jdbcType=VARCHAR},                
+            </if>
+            <if test="realName != null and realName != '' ">        
+                real_name = #{realName,jdbcType=VARCHAR},                
+            </if>
+            <if test="age != null">        
+                age = #{age,jdbcType=INTEGER},                
+            </if>
+            <if test="sex != null and sex != '' ">        
+                sex = #{sex,jdbcType=VARCHAR},                
+            </if>
+
+              <if test="firstName !=null and firstName !=''">
+                   first_name = #{firstName,jdbcType=VARCHAR},
+              </if>
+              <if test="middleName !=null and middleName !=''">
+                   middle_name = #{middleName,jdbcType=VARCHAR},
+              </if>
+              <if test="lastName !=null and lastName !=''">
+                   last_name = #{lastName,jdbcType=VARCHAR},
+              </if>
+              <if test="dateOfBirth !=null and dateOfBirth !=''">
+                   date_of_birth = #{dateOfBirth,jdbcType=VARCHAR},
+              </if>
+
+              <if test="email !=null and email !=''">
+                   email = #{email,jdbcType=VARCHAR},
+              </if>
+
+              <if test="occupation !=null and occupation !=''">
+                   occupation = #{occupation,jdbcType=VARCHAR},
+              </if>
+
+
+            <if test="bvnNo != null and bvnNo != '' ">
+                bvn_no = #{bvnNo,jdbcType=VARCHAR},
+            </if>
+            <if test="stateAddr != null and stateAddr != '' ">
+                state_addr = #{stateAddr,jdbcType=VARCHAR},
+            </if>
+
+            <if test="education != null and education != '' ">        
+                education = #{education,jdbcType=VARCHAR},                
+            </if>
+            <if test="salary != null and salary != '' ">        
+                salary = #{salary,jdbcType=VARCHAR},                
+            </if>
+
+
+            <if test="liveAddr != null and liveAddr != '' ">        
+                live_addr = #{liveAddr,jdbcType=VARCHAR},                
+            </if>
+
+            <if test="registerAddr != null and registerAddr != '' ">        
+                register_addr = #{registerAddr,jdbcType=VARCHAR},                
+            </if>
+            <if test="registerCoordinate != null and registerCoordinate != '' ">        
+                register_coordinate = #{registerCoordinate,jdbcType=VARCHAR},                
+            </if>
+            <if test="state != null and state != '' ">        
+                state = #{state,jdbcType=VARCHAR},                
+            </if>
+            <if test="blackReason != null and blackReason != '' ">        
+                black_reason = #{blackReason,jdbcType=VARCHAR},                
+            </if>
+            <if test="updateTime != null">        
+                update_time = #{updateTime,jdbcType=TIMESTAMP},                
+            </if>
+            <if test="createTime != null">        
+                create_time = #{createTime,jdbcType=TIMESTAMP},                
+            </if>
+            <if test="marital !=null and marital !=''">
+                marital = #{marital,jdbcType=VARCHAR},
+            </if>
+              <if test="salaryType !=null and salaryType !=''">
+                  salary_type = #{salaryType,jdbcType=VARCHAR},
+              </if>
+
+              <if test="accommodationType !=null and accommodationType !=''">
+                   accommodation_type = #{accommodationType,jdbcType=VARCHAR},
+              </if>
+
+              <if test="childrenNumber !=null and childrenNumber !=''">
+                   children_number = #{childrenNumber,jdbcType=VARCHAR},
+              </if>
+              <if test="loanPurpose !=null and loanPurpose !=''">
+                   loan_purpose = #{loanPurpose,jdbcType=VARCHAR}
+              </if>
+        </set>    
+        where id = #{id ,jdbcType=INTEGER}
+    </update>
+
+
+
+   <update id="updateSelective"  parameterType="java.util.HashMap">
+        update cl_user_base_info
+          <set>
+            <if test="userId != null">        
+                user_id = #{userId,jdbcType=INTEGER},                
+            </if>
+            <if test="phone != null and phone != '' ">        
+                phone = #{phone,jdbcType=VARCHAR},                
+            </if>
+            <if test="realName != null and realName != '' ">        
+                real_name = #{realName,jdbcType=VARCHAR},                
+            </if>
+            <if test="age != null">        
+                age = #{age,jdbcType=INTEGER},                
+            </if>
+            <if test="sex != null and sex != '' ">        
+                sex = #{sex,jdbcType=VARCHAR},                
+            </if>
+              <if test="firstName !=null and firstName !=''">
+                  first_name = #{firstName,jdbcType=VARCHAR},
+              </if>
+              <if test="middleName !=null and middleName !=''">
+                  middle_name = #{middleName,jdbcType=VARCHAR},
+              </if>
+              <if test="lastName !=null and lastName !=''">
+                  last_name = #{lastName,jdbcType=VARCHAR},
+              </if>
+              <if test="dateOfBirth !=null and dateOfBirth !=''">
+                  date_of_birth = #{dateOfBirth,jdbcType=VARCHAR},
+              </if>
+
+              <if test="email !=null and email !=''">
+                   email = #{email,jdbcType=VARCHAR},
+              </if>
+
+              <if test="occupation !=null and occupation !=''">
+                   occupation = #{occupation,jdbcType=VARCHAR},
+              </if>
+
+
+            <if test="bvnNo != null and bvnNo != '' ">
+                bvn_no = #{bvnNo,jdbcType=VARCHAR},
+            </if>
+            <if test="stateAddr != null and stateAddr != '' ">
+                state_addr = #{stateAddr,jdbcType=VARCHAR},
+            </if>
+
+            <if test="education != null and education != '' ">        
+                education = #{education,jdbcType=VARCHAR},                
+            </if>
+
+
+            <if test="salary != null and salary != '' ">        
+                salary = #{salary,jdbcType=VARCHAR},                
+            </if>
+
+            <if test="liveAddr != null and liveAddr != '' ">        
+                live_addr = #{liveAddr,jdbcType=VARCHAR},                
+            </if>
+
+            <if test="registerAddr != null and registerAddr != '' ">        
+                register_addr = #{registerAddr,jdbcType=VARCHAR},                
+            </if>
+            <if test="registerCoordinate != null and registerCoordinate != '' ">        
+                register_coordinate = #{registerCoordinate,jdbcType=VARCHAR},                
+            </if>
+            <if test="state != null and state != '' ">        
+                state = #{state,jdbcType=VARCHAR},                
+            </if>
+            <if test="blackReason != null and blackReason != '' ">        
+                black_reason = #{blackReason,jdbcType=VARCHAR},                
+            </if>
+            <if test="updateTime != null">        
+                update_time = #{updateTime,jdbcType=TIMESTAMP},                
+            </if>
+            <if test="createTime != null">        
+                create_time = #{createTime,jdbcType=TIMESTAMP},                
+            </if>
+            <if test="marital !=null and marital !=''">
+                marital = #{marital,jdbcType=VARCHAR},
+            </if>
+
+
+              <if test="salaryType !=null and salaryType !=''">
+                  salary_type = #{salaryType,jdbcType=VARCHAR},
+              </if>
+              <if test="accommodationType !=null and accommodationType !=''">
+                  accommodation_type = #{accommodationType,jdbcType=VARCHAR},
+              </if>
+
+              <if test="childrenNumber !=null and childrenNumber !=''">
+                  children_number = #{childrenNumber,jdbcType=VARCHAR},
+              </if>
+              <if test="loanPurpose !=null and loanPurpose !=''">
+                  loan_purpose = #{loanPurpose,jdbcType=VARCHAR}
+              </if>
+
+        </set>    
+        where id = #{id ,jdbcType=INTEGER}
+    </update>
+
+
+
+    <select id="findByPrimary" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List" />
+        from cl_user_base_info
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
+	<select id="findSelective" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+        select
+        <include refid="Base_Column_List" />
+        from cl_user_base_info
+        <include refid="searchBy"/>
+    </select>
+               
+    <select id="listSelective" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+        select
+        <include refid="Base_Column_List" />
+        from cl_user_base_info
+        <include refid="searchBy"/>
+    </select>
+            
+     <select id="getDictsCache" parameterType="java.lang.String" resultType="java.util.HashMap">
+		SELECT
+			b.item_code as "code",
+			b.item_value as "value"
+		FROM
+			arc_sys_dict a,
+			arc_sys_dict_detail b
+		WHERE
+			a.id = b.parent_id
+			AND a.type_code = #{type}
+	</select>
+	
+    <select id="getBaseModelByUserId" resultMap="BaseInfoModelMap" parameterType="java.lang.Long">
+        SELECT
+			u.login_name 'phone',
+			baseInfo.sex 'sex',
+			u.regist_time 'registTime',
+			baseInfo.register_coordinate 'gpsCoordinate',
+			baseInfo.register_addr 'registCoordinate',
+			baseInfo.real_name 'handFillName',
+			baseInfo.date_of_birth 'birthday',
+			baseInfo.bvn_no 'bvn',
+			baseInfo.email 'email',
+			CONCAT(bvn.first_name,' ',bvn.last_name) 'bvnName',
+			bvn.mobile 'bvnPhone',
+			bvn.formatted_dob 'bvnBirthday',
+			baseInfo.marital 'marriage',
+			baseInfo.children_number 'childenNum',
+			baseInfo.education 'education',
+			baseInfo. occupation 'education',
+			baseInfo.salary_type 'payWay',
+			baseInfo.salary 'monthlySalary',
+			baseInfo.loan_purpose 'borrowPurpose',
+			baseInfo.accommodation_type 'residentialType',
+			baseInfo.state_addr 'state',
+			baseInfo.live_addr 'address'
+		FROM
+			cl_user u
+		LEFT JOIN cl_user_base_info baseInfo ON u.id = baseInfo.user_id
+		LEFT JOIN cl_user_bvn bvn on bvn.user_id = baseInfo.user_id
+		where u.id = #{userId,jdbcType=BIGINT}  
+    </select>
+
+
+	
+	<select id="findByUserId" resultType="com.ajaya.cashloan.core.domain.UserBaseInfo" parameterType="java.lang.Long" >
+		 select
+        <include refid="Base_Column_List" />
+        from cl_user_base_info
+        where user_id = #{userId,jdbcType=INTEGER}
+	</select>
+	
+	<update id="updateBlackIdNos" parameterType="java.util.List">
+		update cl_user_base_info set state = 10 , black_reason = '黑名单用户' where 
+		id in 
+		<foreach collection="list" item="id" index="index" open="(" close=")" separator=",">
+            ${id}
+        </foreach>
+	</update>
+	
+	<select id="findByBvnNo" parameterType="java.lang.String"  resultType="java.lang.Long">
+    	select id from cl_user_base_info where INSTR(bvn_no ,#{bvnNo,jdbcType = VARCHAR}) = 1 and bvn_no is NOT null
+    </select>
+	
+	<select id="findOhterUserBvnNo" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List"/> from cl_user_base_info where bvn_no = #{bvnNo,jdbcType=VARCHAR} and user_id != #{userId,jdbcType=BIGINT}
+	</select>
+	
+	<update id="updateWhiteIdNos" parameterType="java.util.List">
+		update cl_user_base_info set state = 30 , black_reason = '白黑名单用户' where 
+		id in 
+		<foreach collection="list" item="id" index="index" open="(" close=")" separator=",">
+            ${id}
+        </foreach>
+	</update>
+    <select id="getUserBaseDate" resultMap="UserProtocolModel">
+     SELECT u.uuid AS customerId,u.ip,baseInfo.user_id AS userId,baseInfo.real_name AS realName,	baseInfo.state_addr AS liveAddr,	baseInfo.live_addr AS liveDetailAddr,e.imei,e.mac,e.phone_type AS phoneTyep,e.operating_system AS operatingSystem,e.phone_brand AS phoneBrand
+      FROM
+	      cl_user u
+      LEFT JOIN cl_user_base_info baseInfo ON u.id = baseInfo.user_id
+      LEFT JOIN cl_user_equipment_info e ON u.id = e.user_id
+     WHERE u.id =  #{userId,jdbcType=BIGINT}
+    </select>
+    
+    <select id="listUserBaseInfoBetweenDate" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+    	select
+        <include refid="Base_Column_List" />
+        from cl_user_base_info
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="startDate !='' and startDate !=null">
+                and DATE_FORMAT(create_time,'%Y-%m-%d') &gt;= #{startDate,jdbcType=TIMESTAMP}
+            </if>
+            <if test="endDate != null and endDate != '' ">
+                and DATE_FORMAT(create_time,'%Y-%m-%d') &lt;= #{endDate,jdbcType=TIMESTAMP}
+            </if>
+        </trim>
+    </select>
+</mapper>

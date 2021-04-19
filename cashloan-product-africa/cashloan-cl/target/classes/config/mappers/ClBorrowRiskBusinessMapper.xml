@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- cl_borrow_risk_business表:风控订单业务表模块 -->
+<mapper namespace="com.ajaya.cashloan.cl.mapper.ClBorrowRiskBusinessMapper">
+    <!--返回Map-->        
+    <resultMap id="BaseResultMap" type="com.ajaya.cashloan.cl.domain.ClBorrowRiskBusiness">
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="user_id" property="userId" jdbcType="BIGINT" />
+        <result column="appid" property="appid" jdbcType="VARCHAR" />
+        <result column="borrow_id" property="borrowId" jdbcType="BIGINT" />
+        <result column="apply_time" property="applyTime" jdbcType="TIMESTAMP" />
+        <result column="application_amount" property="applicationAmount" jdbcType="DECIMAL" />
+        <result column="application_term" property="applicationTerm" jdbcType="VARCHAR" />
+        <result column="is_new" property="isNew" jdbcType="VARCHAR" />
+        <result column="is_audit" property="isAudit" jdbcType="VARCHAR" />
+        <result column="approval" property="approval" jdbcType="VARCHAR" />
+        <result column="approval_time" property="approvalTime" jdbcType="TIMESTAMP" />
+        <result column="loan_success" property="loanSuccess" jdbcType="VARCHAR" />
+        <result column="loan_success_time" property="loanSuccessTime" jdbcType="TIMESTAMP" />
+        <result column="lending_ammount" property="lendingAmmount" jdbcType="DECIMAL" />
+        <result column="expiry_time" property="expiryTime" jdbcType="TIMESTAMP" />
+        <result column="repay_time" property="repayTime" jdbcType="TIMESTAMP" />
+        <result column="overdue_days" property="overdueDays" jdbcType="INTEGER" />
+        <result column="repay_type" property="repayType" jdbcType="VARCHAR" />
+        <result column="order_no" property="orderNo" jdbcType="VARCHAR" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+    
+    <!--基本的sql查询字段 公共引用...-->
+    <sql id="Base_Column_List">
+        id,user_id,appid,borrow_id,apply_time,application_amount,application_term,is_new,is_audit,approval,approval_time,loan_success,loan_success_time,lending_ammount,expiry_time,repay_time,overdue_days,repay_type,order_no,create_time,update_time 
+    </sql>
+    
+    <!-- 基本的sql查询条件公共引用 -->
+    <sql id="searchBy">
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test=" id != null and id != '' ">
+                id  = #{id,jdbcType=BIGINT}
+            </if>
+            <if test="userId != null and userId != '' ">
+                and user_id = #{userId,jdbcType=BIGINT}
+            </if>
+            <if test="appid != null and appid != '' ">
+                and appid = #{appid,jdbcType=VARCHAR}
+            </if>
+            <if test="borrowId != null and borrowId != '' ">
+                and borrow_id = #{borrowId,jdbcType=BIGINT}
+            </if>
+            <if test="applyTime != null">
+                and apply_time = #{applyTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="applicationAmount != null and applicationAmount != '' ">
+                and application_amount = #{applicationAmount,jdbcType=DECIMAL}
+            </if>
+            <if test="applicationTerm != null and applicationTerm != '' ">
+                and application_term = #{applicationTerm,jdbcType=VARCHAR}
+            </if>
+            <if test="isNew != null and isNew != '' ">
+                and is_new = #{isNew,jdbcType=VARCHAR}
+            </if>
+            <if test="isAudit != null and isAudit != '' ">
+                and is_audit = #{isAudit,jdbcType=VARCHAR}
+            </if>
+            <if test="approval != null and approval != '' ">
+                and approval = #{approval,jdbcType=VARCHAR}
+            </if>
+            <if test="approvalTime != null">
+                and approval_time = #{approvalTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="loanSuccess != null and loanSuccess != '' ">
+                and loan_success = #{loanSuccess,jdbcType=VARCHAR}
+            </if>
+            <if test="loanSuccessTime != null">
+                and loan_success_time = #{loanSuccessTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="lendingAmmount != null and lendingAmmount != '' ">
+                and lending_ammount = #{lendingAmmount,jdbcType=DECIMAL}
+            </if>
+            <if test="expiryTime != null">
+                and expiry_time = #{expiryTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="repayTime != null">
+                and repay_time = #{repayTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="overdueDays != null and overdueDays != '' ">
+                and overdue_days = #{overdueDays,jdbcType=INTEGER}
+            </if>
+            <if test="repayType != null and repayType != '' ">
+                and repay_type = #{repayType,jdbcType=VARCHAR}
+            </if>
+            <if test="orderNo != null and orderNo != '' ">
+                and order_no = #{orderNo,jdbcType=VARCHAR}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="updateTime != null">
+                and update_time = #{updateTime,jdbcType=TIMESTAMP}
+            </if>
+        </trim>
+    </sql>
+    
+    
+    <insert id="save" parameterType="com.ajaya.cashloan.cl.domain.ClBorrowRiskBusiness">
+        insert into cl_borrow_risk_business(user_id,appid,borrow_id,apply_time,application_amount,application_term,is_new,is_audit,approval,approval_time,loan_success,loan_success_time,lending_ammount,expiry_time,repay_time,overdue_days,repay_type,order_no,create_time,update_time)values(#{userId,jdbcType=BIGINT},#{appid,jdbcType=VARCHAR},#{borrowId,jdbcType=BIGINT},#{applyTime,jdbcType=TIMESTAMP},#{applicationAmount,jdbcType=DECIMAL},#{applicationTerm,jdbcType=VARCHAR},#{isNew,jdbcType=VARCHAR},#{isAudit,jdbcType=VARCHAR},#{approval,jdbcType=VARCHAR},#{approvalTime,jdbcType=TIMESTAMP},#{loanSuccess,jdbcType=VARCHAR},#{loanSuccessTime,jdbcType=TIMESTAMP},#{lendingAmmount,jdbcType=DECIMAL},#{expiryTime,jdbcType=TIMESTAMP},#{repayTime,jdbcType=TIMESTAMP},#{overdueDays,jdbcType=INTEGER},#{repayType,jdbcType=VARCHAR},#{orderNo,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP},#{updateTime,jdbcType=TIMESTAMP})
+    </insert>
+
+    
+    <update id="update" parameterType="com.ajaya.cashloan.cl.domain.ClBorrowRiskBusiness">
+        update cl_borrow_risk_business set 
+            user_id = #{userId,jdbcType=BIGINT},
+            appid = #{appid,jdbcType=VARCHAR},
+            borrow_id = #{borrowId,jdbcType=BIGINT},
+            apply_time = #{applyTime,jdbcType=TIMESTAMP},
+            application_amount = #{applicationAmount,jdbcType=DECIMAL},
+            application_term = #{applicationTerm,jdbcType=VARCHAR},
+            is_new = #{isNew,jdbcType=VARCHAR},
+            is_audit = #{isAudit,jdbcType=VARCHAR},
+            approval = #{approval,jdbcType=VARCHAR},
+            approval_time = #{approvalTime,jdbcType=TIMESTAMP},
+            loan_success = #{loanSuccess,jdbcType=VARCHAR},
+            loan_success_time = #{loanSuccessTime,jdbcType=TIMESTAMP},
+            lending_ammount = #{lendingAmmount,jdbcType=DECIMAL},
+            expiry_time = #{expiryTime,jdbcType=TIMESTAMP},
+            repay_time = #{repayTime,jdbcType=TIMESTAMP},
+            overdue_days = #{overdueDays,jdbcType=INTEGER},
+            repay_type = #{repayType,jdbcType=VARCHAR},
+            order_no = #{orderNo,jdbcType=VARCHAR},
+            create_time = #{createTime,jdbcType=TIMESTAMP},
+            update_time = #{updateTime,jdbcType=TIMESTAMP}
+        where id = #{id ,jdbcType=INTEGER}
+    </update>
+
+
+    <update id="updateSelective"  parameterType="java.util.HashMap">
+        update cl_borrow_risk_business
+          <set>
+            <if test="userId != null and userId != '' ">        
+                user_id = #{userId,jdbcType=BIGINT},                
+            </if>
+            <if test="appid != null and appid != '' ">        
+                appid = #{appid,jdbcType=VARCHAR},                
+            </if>
+            <if test="borrowId != null and borrowId != '' ">        
+                borrow_id = #{borrowId,jdbcType=BIGINT},                
+            </if>
+            <if test="applyTime != null">
+                apply_time = #{applyTime,jdbcType=TIMESTAMP},                
+            </if>
+            <if test="applicationAmount != null and applicationAmount != '' ">        
+                application_amount = #{applicationAmount,jdbcType=DECIMAL},                
+            </if>
+            <if test="applicationTerm != null and applicationTerm != '' ">        
+                application_term = #{applicationTerm,jdbcType=VARCHAR},                
+            </if>
+            <if test="isNew != null and isNew != '' ">        
+                is_new = #{isNew,jdbcType=VARCHAR},                
+            </if>
+            <if test="isAudit != null and isAudit != '' ">        
+                is_audit = #{isAudit,jdbcType=VARCHAR},                
+            </if>
+            <if test="approval != null and approval != '' ">        
+                approval = #{approval,jdbcType=VARCHAR},                
+            </if>
+            <if test="approvalTime != null">
+                approval_time = #{approvalTime,jdbcType=TIMESTAMP},                
+            </if>
+            <if test="loanSuccess != null and loanSuccess != '' ">        
+                loan_success = #{loanSuccess,jdbcType=VARCHAR},                
+            </if>
+            <if test="loanSuccessTime != null">
+                loan_success_time = #{loanSuccessTime,jdbcType=TIMESTAMP},                
+            </if>
+            <if test="lendingAmmount != null and lendingAmmount != '' ">        
+                lending_ammount = #{lendingAmmount,jdbcType=DECIMAL},                
+            </if>
+            <if test="expiryTime != null">
+                expiry_time = #{expiryTime,jdbcType=TIMESTAMP},                
+            </if>
+            <if test="repayTime != null">
+                repay_time = #{repayTime,jdbcType=TIMESTAMP},                
+            </if>
+            <if test="overdueDays != null and overdueDays != '' ">        
+                overdue_days = #{overdueDays,jdbcType=INTEGER},                
+            </if>
+            <if test="repayType != null and repayType != '' ">        
+                repay_type = #{repayType,jdbcType=VARCHAR},                
+            </if>
+            <if test="orderNo != null and orderNo != '' ">        
+                order_no = #{orderNo,jdbcType=VARCHAR},                
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},                
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP}                
+            </if>
+        </set>    
+        where id = #{id ,jdbcType=BIGINT}
+    </update>
+
+
+    <select id="findByPrimary" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List" />
+        from cl_borrow_risk_business
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
+	<select id="findSelective" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+        select
+        <include refid="Base_Column_List" />
+        from cl_borrow_risk_business
+        <include refid="searchBy"/>
+    </select>
+               
+    <select id="listSelective" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+        select
+        <include refid="Base_Column_List" />
+        from cl_borrow_risk_business
+        <include refid="searchBy"/>
+    </select>
+    
+</mapper>

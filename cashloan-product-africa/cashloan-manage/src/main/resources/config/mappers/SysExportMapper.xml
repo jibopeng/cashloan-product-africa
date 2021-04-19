@@ -1,0 +1,543 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- sys_export表:导出统计表模块 -->
+<mapper namespace="com.ajaya.cashloan.manage.mapper.SysExportMapper">
+    <!--返回Map-->        
+    <resultMap id="BaseResultMap" type="com.ajaya.cashloan.manage.domain.SysExport">
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="sys_user_id" property="sysUserId" jdbcType="BIGINT" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+    
+    <!--基本的sql查询字段 公共引用...-->
+    <sql id="Base_Column_List">
+        id,sys_user_id,create_time 
+    </sql>
+    
+    <!-- 基本的sql查询条件公共引用 -->
+    <sql id="searchBy">
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test=" id != null and id != '' ">
+                id  = #{id,jdbcType=BIGINT}
+            </if>
+            <if test="sysUserId != null and sysUserId != '' ">
+                and sys_user_id = #{sysUserId,jdbcType=BIGINT}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime,jdbcType=TIMESTAMP}
+            </if>
+        </trim>
+    </sql>
+    
+    
+    <insert id="save" parameterType="com.ajaya.cashloan.manage.domain.SysExport">
+        insert into sys_export(sys_user_id,create_time)values(#{sysUserId,jdbcType=BIGINT},#{createTime,jdbcType=TIMESTAMP})
+    </insert>
+
+    
+    <update id="update" parameterType="com.ajaya.cashloan.manage.domain.SysExport">
+        update sys_export set 
+            sys_user_id = #{sysUserId,jdbcType=BIGINT},
+            create_time = #{createTime,jdbcType=TIMESTAMP}
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+
+    <update id="updateSelective"  parameterType="java.util.HashMap">
+        update sys_export
+          <set>
+            <if test="sysUserId != null and sysUserId != '' ">        
+                sys_user_id = #{sysUserId,jdbcType=BIGINT},                
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP}                
+            </if>
+        </set>    
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+
+    <select id="findByPrimary" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List" />
+        from sys_export
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+
+	<select id="findSelective" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+        select
+        <include refid="Base_Column_List" />
+        from sys_export
+        <include refid="searchBy"/>
+    </select>
+               
+    <select id="listSelective" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+        select
+        <include refid="Base_Column_List" />
+        from sys_export
+        <include refid="searchBy"/>
+    </select>
+    
+    <!-- 逾期数据 -->
+	 <select id="getOperatorVoicesListBySql" parameterType="java.util.Map" resultType="java.util.Map">
+    	${OperatorVoicesListBySql}
+    </select>
+    
+    <!-- 获取每日数据【注册量】 -->
+    <select id="selectDayRegister" parameterType="java.util.Map" resultType="java.util.Map">
+    	SELECT
+		IFNULL(t1.code,'app') 'code',
+		count(1) 'num'
+		FROM
+			cl_user t0 LEFT JOIN
+			cl_channel t1 on t0.channel_id = t1.id
+		WHERE
+		<![CDATA[regist_time >= #{todayTime,jdbcType=TIMESTAMP} and regist_time < #{tomorrowTime,jdbcType=TIMESTAMP}]]>
+		GROUP BY
+			t0.channel_id
+		order by 
+		t0.channel_id
+    </select>
+    
+    <!-- 获取每日数据【用户申请认证数】 -->
+    <select id="selectDayApplyAuth" parameterType="java.util.Map" resultType="java.util.Map">
+    	select 
+			IFNULL(t1.code,'app') 'code',
+			count(1) 'num'
+		 from 
+			cl_user_apply_log t0 LEFT JOIN
+			cl_channel t1 on t0.channel_id = t1.id
+			WHERE
+			<![CDATA[t0.create_time >= #{todayTime,jdbcType=TIMESTAMP} and t0.create_time < #{tomorrowTime,jdbcType=TIMESTAMP}]]>
+			GROUP BY
+				t0.channel_id
+			order by 
+			t0.channel_id
+    </select>
+    
+    <!-- 获取每日数据【用户认证完成数】 -->
+    <select id="selectDayApplyAuthOver" parameterType="java.util.Map" resultType="java.util.Map">
+    	select 
+			IFNULL(t2.code,'app') 'code',
+			count(1) 'num'
+		from cl_user_auth t0,cl_user t1 LEFT JOIN cl_channel t2
+			ON t1.channel_id = t2.id
+			 where
+			 t0.user_id = t1.id 
+			and t0.id_state = 30
+			and t0.contact_state = 30
+			and t0.contact_state = 30
+			and t0.phone_state = 30
+			and
+			<![CDATA[t1.regist_time >= #{todayTime,jdbcType=TIMESTAMP} and t1.regist_time < #{tomorrowTime,jdbcType=TIMESTAMP}]]>
+			GROUP BY
+				t1.channel_id
+			order by 
+			t1.channel_id
+    </select>
+    
+    <!-- 获取每日数据 【提审数(新贷总数量)】 -->
+    <select id="selectDayNewBorrowTotal" parameterType="java.util.Map" resultType="java.util.Map">
+    	select 
+			IFNULL(t2.code,'app') 'code',
+			count(1) 'num'
+		 from cl_borrow t0
+			LEFT JOIN cl_user t1 on t0.user_id = t1.id
+			LEFT JOIN cl_channel t2 on t1.channel_id = t2.id
+			where t0.user_id not in 
+			(
+					SELECT DISTINCT(t0.user_id) from cl_borrow_repay t0 where t0.state = 10 
+			)
+			and 
+			<![CDATA[t0.create_time >= #{todayTime,jdbcType=TIMESTAMP} and t0.create_time < #{tomorrowTime,jdbcType=TIMESTAMP}]]>
+			GROUP BY
+				t1.channel_id
+			order by 
+				t1.channel_id
+    </select>
+    
+    <!-- 获取每日数据 【新贷(成功放款的)】 -->
+    <select id="selectDayNewMoney" parameterType="java.util.Map" resultType="java.util.Map">
+	    SELECT 		
+		    IFNULL(t2.code,'app') 'code',
+			count(1) 'num'
+		FROM 
+			cl_borrow_progress t 
+			LEFT JOIN cl_user t1 ON t.user_id=t1.id LEFT JOIN cl_channel t2 on t1.channel_id = t2.id
+			WHERE 
+			t.user_id  not in (
+				select DISTINCT(user_id) from (
+									select count(id) cc,user_id 
+									from cl_borrow t where  state  in (20,26,30,40,41,50)  group by user_id 
+								)
+				tt where tt.cc>1
+			)
+			and t.state=30
+			and 
+			<![CDATA[t.create_time >= #{todayTime,jdbcType=TIMESTAMP} and t.create_time < #{tomorrowTime,jdbcType=TIMESTAMP}]]>
+			GROUP BY t1.channel_id
+			ORDER BY t1.channel_id
+    </select>
+    
+    <!-- 获取每日数据 【续贷提审数】 -->
+    <select id="selectDayRefinanceBorrow" parameterType="java.util.Map" resultType="java.util.Map">
+	    select 
+			IFNULL(t2.code,'app') 'code',
+			count(1) 'num'
+	 	from 
+	 		cl_borrow t0
+			LEFT JOIN cl_user t1 on t0.user_id = t1.id
+			LEFT JOIN cl_channel t2 on t1.channel_id = t2.id
+			where t0.user_id  in 
+			(
+					SELECT DISTINCT(t0.user_id) from cl_borrow_repay t0 where t0.state = 10 
+			)
+			and 
+			<![CDATA[t0.create_time >= #{todayTime,jdbcType=TIMESTAMP} and t0.create_time < #{tomorrowTime,jdbcType=TIMESTAMP}]]>
+			GROUP BY
+				t1.channel_id
+			order by 
+				t1.channel_id
+	 </select>
+	 
+	 <!-- 获取每日数据 【当日还款当日续贷】 -->
+	 <select id="selectDayReturnMoneyAndRefinance" parameterType="java.util.Map" resultType="java.util.Map">
+		 select	
+		 	IFNULL(t2.code,'app') 'code',
+			count(1) 'num'
+		from 
+			cl_borrow_progress t0 LEFT JOIN cl_user t1 ON t0.user_id=t1.id LEFT JOIN cl_channel t2 on t1.channel_id = t2.id
+			where t0.state = 30
+			and t0.user_id in
+			(
+				select t0.user_id from cl_borrow_progress t0
+				where t0.state = 40 
+				and
+				<![CDATA[t0.create_time >= #{todayTime,jdbcType=TIMESTAMP} and t0.create_time < #{tomorrowTime,jdbcType=TIMESTAMP}]]>
+			) 
+			and
+			<![CDATA[t0.create_time >= #{todayTime,jdbcType=TIMESTAMP} and t0.create_time < #{tomorrowTime,jdbcType=TIMESTAMP}]]>
+			GROUP BY t1.channel_id
+			ORDER BY t1.channel_id
+	 </select>
+	 
+	 <!-- 获取每日数据 【续贷放款】 -->
+	 <select id="selectDayRefinanceMoney" parameterType="java.util.Map" resultType="java.util.Map">
+		 SELECT 	
+		 	IFNULL(t2.code,'app') 'code',
+			count(1) 'num'
+		FROM 
+			cl_borrow_progress t LEFT JOIN cl_user t1 ON t.user_id=t1.id LEFT JOIN cl_channel t2 on t1.channel_id = t2.id
+			WHERE 
+			t.user_id   in (
+				select DISTINCT(user_id) 
+				from (
+						select count(id) cc,user_id 
+						from cl_borrow t where state in (20,26,30,40,41,50)  group by user_id 
+					)
+				tt where tt.cc>1
+			
+			)
+			and t.state=30
+			AND 
+			<![CDATA[t.create_time >= #{todayTime,jdbcType=TIMESTAMP} and t.create_time < #{tomorrowTime,jdbcType=TIMESTAMP}]]>
+			GROUP BY t1.channel_id
+			ORDER BY t1.channel_id
+	 </select>
+	 
+	 <!-- 获取每日数据 【日活】 -->
+	 <select id="selectDayActive" parameterType="java.util.Map" resultType="java.util.Map">
+	 	select 
+	 		IFNULL(t2.code,'app') 'code',
+			count(1) 'num'
+		FROM
+			cl_day_active_statistics_1 t LEFT JOIN cl_user t1 ON t.user_id=t1.id LEFT JOIN cl_channel t2 on t1.channel_id = t2.id
+			WHERE
+			<![CDATA[t.create_time >= #{todayTime,jdbcType=TIMESTAMP} and t.create_time < #{tomorrowTime,jdbcType=TIMESTAMP}]]>
+			GROUP BY t1.channel_id
+			ORDER BY t1.channel_id
+	 </select>
+	 
+	 <!-- 获取每日数据 【总提审数】 -->
+	 <select id="selectDayborrowAll" parameterType="java.util.Map" resultType="java.util.Map">
+		 select 
+			IFNULL(t2.code,'app') 'code',
+			count(1) 'num'
+		 from cl_borrow t0
+			LEFT JOIN cl_user t1 on t0.user_id = t1.id
+			LEFT JOIN cl_channel t2 on t1.channel_id = t2.id
+			where 
+			<![CDATA[t0.create_time >= #{todayTime,jdbcType=TIMESTAMP} and t0.create_time < #{tomorrowTime,jdbcType=TIMESTAMP}]]>
+			GROUP BY
+				t1.channel_id
+			order by 
+				t1.channel_id
+	 </select>
+	 
+	 <!-- 获取每日数据 【总机审通过数】 -->
+	 <select id="selectDayJiShenAll" parameterType="java.util.Map" resultType="java.util.Map">
+		 SELECT 
+			IFNULL(t2.code,'app') 'code',count(DISTINCT(t.user_id)) 'num'
+		 FROM 
+		 	cl_borrow_progress t LEFT JOIN cl_user t1 ON t.user_id=t1.id LEFT JOIN cl_channel t2 on t1.channel_id = t2.id
+		 WHERE 
+			 t.state in (20,22,26)
+			 AND
+			 <![CDATA[t.create_time >= #{todayTime,jdbcType=TIMESTAMP} and t.create_time < #{tomorrowTime,jdbcType=TIMESTAMP}]]>
+			 GROUP BY t1.channel_id
+			 ORDER BY t1.channel_id
+	 </select>
+	 
+	 <!-- 获取每日数据 【总放款件数】 -->
+	 <select id="selectDayMoneyCountAll" parameterType="java.util.Map" resultType="java.util.Map">
+	 SELECT 
+	 	IFNULL(t2.code,'app') 'code',
+	 	count(1) 'num'
+	 FROM 
+		 cl_borrow_progress t LEFT JOIN cl_user t1 ON t.user_id=t1.id LEFT JOIN cl_channel t2 on t1.channel_id = t2.id
+		 WHERE 
+		  t.state=30
+		 AND
+		 <![CDATA[t.create_time >= #{todayTime,jdbcType=TIMESTAMP} and t.create_time < #{tomorrowTime,jdbcType=TIMESTAMP}]]>
+		 GROUP BY t1.channel_id
+		 ORDER BY t1.channel_id
+	 </select>
+	 
+	 <!-- 获取每日数据【总金额】 -->
+	 <select id="selectDayMoneyAll" parameterType="java.util.Map" resultType="java.util.Map">
+	 	select 
+	 		IFNULL(t2.code,'app') 'code',sum(t.real_amount) 'num'
+		from 
+			cl_borrow t LEFT JOIN cl_user t1 ON t.user_id=t1.id LEFT JOIN cl_channel t2 on t1.channel_id = t2.id
+		where 
+			t.id in (
+				SELECT t.borrow_id FROM 
+				cl_borrow_progress t 
+				WHERE 
+				t.state=30
+				AND 
+				 <![CDATA[t.create_time >= #{todayTime,jdbcType=TIMESTAMP} and t.create_time < #{tomorrowTime,jdbcType=TIMESTAMP}]]>
+				ORDER BY t.user_id
+			)
+			GROUP BY t1.channel_id
+	 </select>
+	 
+	 <!-- 获取每日数据【申请 500元7天】 -->
+	 <select id="selectDayBorrow500And7" parameterType="java.util.Map" resultType="java.lang.Long">
+	 	select 
+	 		count(1) 
+	 	from 
+	 		cl_borrow t0 
+	 	where 
+	 		t0.real_amount = 500 
+	 		and t0.time_limit = 7 
+	 		and
+	 		<![CDATA[t0.create_time >= #{todayTime,jdbcType=TIMESTAMP} and t0.create_time < #{tomorrowTime,jdbcType=TIMESTAMP}]]>
+	 </select>
+	 
+	 <!-- 获取每日数据【放款 500元7天】 -->
+	 <select id="selectDayMoney500And7" parameterType="java.util.Map" resultType="java.lang.Long">
+	 	select 
+	 		count(1) 
+	 	from 
+	 		cl_borrow_progress t0, cl_borrow t1
+		where 
+			t0.borrow_id = t1.id
+		and  
+			t0.state=30
+		and 
+			t1.real_amount = 500
+		and 
+			t1.time_limit = 7
+		and
+			<![CDATA[t0.create_time >= #{todayTime,jdbcType=TIMESTAMP} and t0.create_time < #{tomorrowTime,jdbcType=TIMESTAMP}]]>
+	 </select>
+	 
+	 <!-- 获取每日数据【申请 500元14天】 -->
+	 <select id="selectDayBorrow500And14" parameterType="java.util.Map" resultType="java.lang.Long">
+	 	select 
+	 		count(1) 
+	 	from 
+	 		cl_borrow t0 
+	 	where 
+	 		t0.real_amount = 500 
+	 		and t0.time_limit = 14 
+	 		and
+	 		<![CDATA[t0.create_time >= #{todayTime,jdbcType=TIMESTAMP} and t0.create_time < #{tomorrowTime,jdbcType=TIMESTAMP}]]>
+	 </select>
+	 
+	 <!-- 获取每日数据【放款 500元14天】 -->
+	 <select id="selectDayMoney500And14" parameterType="java.util.Map" resultType="java.lang.Long">
+	 	select 
+	 		count(1) 
+	 	from 
+	 		cl_borrow_progress t0, cl_borrow t1
+		where 
+			t0.borrow_id = t1.id
+		and  
+			t0.state=30
+		and 
+			t1.real_amount = 500
+		and 
+			t1.time_limit = 14
+		and
+			<![CDATA[t0.create_time >= #{todayTime,jdbcType=TIMESTAMP} and t0.create_time < #{tomorrowTime,jdbcType=TIMESTAMP}]]>
+	 </select>
+	 
+	 <!-- 获取每日数据【申请 1000元7天】 -->
+	 <select id="selectDayBorrow1000And7" parameterType="java.util.Map" resultType="java.lang.Long">
+	 	select 
+	 		count(1) 
+	 	from 
+	 		cl_borrow t0 
+	 	where 
+	 		t0.real_amount = 1000 
+	 		and t0.time_limit = 7 
+	 		and
+	 		<![CDATA[t0.create_time >= #{todayTime,jdbcType=TIMESTAMP} and t0.create_time < #{tomorrowTime,jdbcType=TIMESTAMP}]]>
+	 </select>
+	 
+	 <!-- 获取每日数据【放款 1000元7天】 -->
+	 <select id="selectDayMoney1000And7" parameterType="java.util.Map" resultType="java.lang.Long">
+	 	select 
+	 		count(1) 
+	 	from 
+	 		cl_borrow_progress t0, cl_borrow t1
+		where 
+			t0.borrow_id = t1.id
+		and  
+			t0.state=30
+		and 
+			t1.real_amount = 1000
+		and 
+			t1.time_limit = 7
+		and
+			<![CDATA[t0.create_time >= #{todayTime,jdbcType=TIMESTAMP} and t0.create_time < #{tomorrowTime,jdbcType=TIMESTAMP}]]>
+	 </select>
+	 
+	 <!-- 获取每日数据【申请 1000元14天】 -->
+	 <select id="selectDayBorrow1000And14" parameterType="java.util.Map" resultType="java.lang.Long">
+	 	select 
+	 		count(1) 
+	 	from 
+	 		cl_borrow t0 
+	 	where 
+	 		t0.real_amount = 1000 
+	 		and t0.time_limit = 14 
+	 		and
+	 		<![CDATA[t0.create_time >= #{todayTime,jdbcType=TIMESTAMP} and t0.create_time < #{tomorrowTime,jdbcType=TIMESTAMP}]]>
+	 </select>
+	 
+	 <!-- 获取每日数据【放款 1000元14天】 -->
+	 <select id="selectDayMoney1000And14" parameterType="java.util.Map" resultType="java.lang.Long">
+	 	select 
+	 		count(1) 
+	 	from 
+	 		cl_borrow_progress t0, cl_borrow t1
+		where 
+			t0.borrow_id = t1.id
+		and  
+			t0.state=30
+		and 
+			t1.real_amount = 1000
+		and 
+			t1.time_limit = 14
+		and
+			<![CDATA[t0.create_time >= #{todayTime,jdbcType=TIMESTAMP} and t0.create_time < #{tomorrowTime,jdbcType=TIMESTAMP}]]>
+	 </select>
+	 
+	 <!-- 获取每日数据【总放款笔数】 -->
+	 <select id="selectDayTotalAllMoneyCount" parameterType="java.util.Map" resultType="java.lang.Long">
+	 	SELECT 
+	 		count(1) 
+	 	from
+			cl_borrow_progress t
+		where t.state=30
+			AND 
+				<![CDATA[t.create_time >= #{todayTime,jdbcType=TIMESTAMP} and t.create_time < #{tomorrowTime,jdbcType=TIMESTAMP}]]>
+	 </select>
+	 
+	 <!-- 新贷总笔数 -->
+	 <select id="selectDayNewBorrowMoney" parameterType="java.util.Map" resultType="java.lang.Long">
+	 SELECT 
+	 	count(1) 
+	 from
+		 cl_borrow_progress t
+	 WHERE t.user_id not in (
+	 			select DISTINCT(user_id) from (
+							select count(id) cc,user_id 
+							from cl_borrow t where  state  in (20,26,30,40,41,50)  group by user_id 
+							)
+				tt where tt.cc>1
+		 )
+	 and t.state=30
+	 AND 
+	 	<![CDATA[t.create_time >= #{todayTime,jdbcType=TIMESTAMP} and t.create_time < #{tomorrowTime,jdbcType=TIMESTAMP}]]>
+	 </select>
+	 
+	 <!-- 获取每日数据【续贷N笔数】 -->
+	 <select id="selectDayXuDaiBorrowMoney" parameterType="java.util.Map" resultType="java.lang.Long">
+	 	SELECT 
+	 		count(1) 
+	 	from
+		cl_borrow_progress t
+		WHERE t.user_id in (
+					select DISTINCT(user_id) from (
+								select count(id) cc,user_id 
+								from cl_borrow t where  state  in (20,26,30,40,41,50)  group by user_id 
+								)
+					tt where 
+						<![CDATA[tt.cc>#{xudaiStart} and tt.cc<=#{xudaiEnd}]]>
+						
+		)
+		and t.state=30
+		AND 
+		<![CDATA[t.create_time >= #{todayTime,jdbcType=TIMESTAMP} and t.create_time < #{tomorrowTime,jdbcType=TIMESTAMP}]]>
+	 </select>
+	 
+	 <!-- 获取每日数据【续贷总金额】 -->
+	 <select id="selectXudaiMoneyAll" parameterType="java.util.Map" resultType="java.util.Map">
+		 select 
+		 	IFNULL(t2.code,'app') 'code',
+		 	sum(t.real_amount) 'num'
+		 from 
+		 	cl_borrow t
+		 	LEFT JOIN cl_user t1 ON t.user_id=t1.id LEFT JOIN cl_channel t2 on t1.channel_id = t2.id
+		 where 
+			 t.id in (
+				SELECT t.borrow_id FROM 
+				cl_borrow_progress t 
+				WHERE 
+				t.state=30
+				AND
+				<![CDATA[t.create_time >= #{todayTime,jdbcType=TIMESTAMP} and t.create_time < #{tomorrowTime,jdbcType=TIMESTAMP}]]>
+				ORDER BY t.user_id
+			 )
+			 AND
+			 t.user_id in (
+					select DISTINCT(user_id) from (
+									select count(id) cc,user_id 
+									from cl_borrow t where  state  in (20,26,30,40,41,50)  group by user_id 
+									)
+						tt where tt.cc>1
+			 )
+			 GROUP BY t1.channel_id
+	 
+	 </select>
+	 
+	 <!--  -->
+	 <select id="selectRepayMentAllNumAndMoney" parameterType="java.util.Map" resultType="java.util.Map">
+	 	SELECT
+			IFNULL(t2.code,'app') 'code',
+			sum(t0.amount + t0.penalty_amout) 'money',
+			count(t0.id) 'num'
+		FROM
+			cl_borrow_repay_log t0
+		LEFT JOIN cl_user t1 ON t0.user_id = t1.id
+		LEFT JOIN cl_channel t2 ON t1.channel_id = t2.id
+		WHERE
+			<![CDATA[t0.create_time >= #{todayTime,jdbcType=TIMESTAMP} and t0.create_time < #{tomorrowTime,jdbcType=TIMESTAMP}]]>
+		GROUP BY
+			t1.channel_id
+	 </select>
+</mapper>

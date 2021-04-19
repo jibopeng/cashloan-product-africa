@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- cl_paystack_recipient表:PayStack放款联系人模块 -->
+<mapper namespace="com.ajaya.cashloan.cl.mapper.PayStackRecipientMapper">
+    <!--返回Map-->        
+    <resultMap id="BaseResultMap" type="com.ajaya.cashloan.cl.domain.PayStackRecipient">
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="user_id" property="userId" jdbcType="BIGINT" />
+        <result column="account_number" property="accountNumber" jdbcType="VARCHAR" />
+        <result column="account_name" property="accountName" jdbcType="VARCHAR" />
+        <result column="bank_code" property="bankCode" jdbcType="VARCHAR" />
+        <result column="bank_name" property="bankName" jdbcType="VARCHAR" />
+        <result column="active" property="active" jdbcType="BIT" />
+        <result column="created_at" property="createdAt" jdbcType="VARCHAR" />
+        <result column="currency" property="currency" jdbcType="VARCHAR" />
+        <result column="domain" property="domain" jdbcType="VARCHAR" />
+        <result column="integration" property="integration" jdbcType="VARCHAR" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="recipient_code" property="recipientCode" jdbcType="VARCHAR" />
+        <result column="recipient_id" property="recipientId" jdbcType="VARCHAR" />
+        <result column="type" property="type" jdbcType="VARCHAR" />
+        <result column="authorization_code" property="authorizationCode" jdbcType="VARCHAR" />
+        <result column="updated_at" property="updatedAt" jdbcType="VARCHAR" />
+        <result column="is_deleted" property="isDeleted" jdbcType="BIT" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+    
+    <!--基本的sql查询字段 公共引用...-->
+    <sql id="Base_Column_List">
+        authorization_code,id,user_id,account_number,account_name,bank_code,bank_name,active,created_at,currency,domain,integration,name,recipient_code,recipient_id,type,updated_at,is_deleted,create_time,update_time
+    </sql>
+    
+    <!-- 基本的sql查询条件公共引用 -->
+    <sql id="searchBy">
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test=" id != null and id != '' ">
+                id  = #{id,jdbcType=BIGINT}
+            </if>
+            <if test="userId != null and userId != '' ">
+                and user_id = #{userId,jdbcType=BIGINT}
+            </if>
+            <if test="accountNumber != null and accountNumber != '' ">
+                and account_number = #{accountNumber,jdbcType=VARCHAR}
+            </if>
+            <if test="accountName != null and accountName != '' ">
+                and account_name = #{accountName,jdbcType=VARCHAR}
+            </if>
+            <if test="bankCode != null and bankCode != '' ">
+                and bank_code = #{bankCode,jdbcType=VARCHAR}
+            </if>
+            <if test="authorizationCode != null and authorizationCode != '' ">
+                and authorization_code = #{authorizationCode,jdbcType=VARCHAR}
+            </if>
+            <if test="bankName != null and bankName != '' ">
+                and bank_name = #{bankName,jdbcType=VARCHAR}
+            </if>
+            <if test="active != null and active != '' ">
+                and active = #{active,jdbcType=BIT}
+            </if>
+            <if test="createdAt != null and createdAt != '' ">
+                and created_at = #{createdAt,jdbcType=VARCHAR}
+            </if>
+            <if test="currency != null and currency != '' ">
+                and currency = #{currency,jdbcType=VARCHAR}
+            </if>
+            <if test="domain != null and domain != '' ">
+                and domain = #{domain,jdbcType=VARCHAR}
+            </if>
+            <if test="integration != null and integration != '' ">
+                and integration = #{integration,jdbcType=VARCHAR}
+            </if>
+            <if test="name != null and name != '' ">
+                and name = #{name,jdbcType=VARCHAR}
+            </if>
+            <if test="recipientCode != null and recipientCode != '' ">
+                and recipient_code = #{recipientCode,jdbcType=VARCHAR}
+            </if>
+            <if test="recipientId != null and recipientId != '' ">
+                and recipient_id = #{recipientId,jdbcType=VARCHAR}
+            </if>
+            <if test="type != null and type != '' ">
+                and type = #{type,jdbcType=VARCHAR}
+            </if>
+            <if test="updatedAt != null and updatedAt != '' ">
+                and updated_at = #{updatedAt,jdbcType=VARCHAR}
+            </if>
+            <if test="isDeleted != null and isDeleted != '' ">
+                and is_deleted = #{isDeleted,jdbcType=BIT}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="updateTime != null">
+                and update_time = #{updateTime,jdbcType=TIMESTAMP}
+            </if>
+        </trim>
+    </sql>
+    
+    
+    <insert id="save" parameterType="com.ajaya.cashloan.cl.domain.PayStackRecipient">
+        insert into cl_paystack_recipient(authorization_code,user_id,account_number,account_name,bank_code,bank_name,active,created_at,currency,domain,integration,name,recipient_code,recipient_id,type,updated_at,is_deleted,create_time,update_time)values(#{authorizationCode,jdbcType=VARCHAR},#{userId,jdbcType=BIGINT},#{accountNumber,jdbcType=VARCHAR},#{accountName,jdbcType=VARCHAR},#{bankCode,jdbcType=VARCHAR},#{bankName,jdbcType=VARCHAR},#{active,jdbcType=BIT},#{createdAt,jdbcType=VARCHAR},#{currency,jdbcType=VARCHAR},#{domain,jdbcType=VARCHAR},#{integration,jdbcType=VARCHAR},#{name,jdbcType=VARCHAR},#{recipientCode,jdbcType=VARCHAR},#{recipientId,jdbcType=VARCHAR},#{type,jdbcType=VARCHAR},#{updatedAt,jdbcType=VARCHAR},#{isDeleted,jdbcType=BIT},#{createTime,jdbcType=TIMESTAMP},#{updateTime,jdbcType=TIMESTAMP})
+    </insert>
+
+    
+    <update id="update" parameterType="com.ajaya.cashloan.cl.domain.PayStackRecipient">
+        update cl_paystack_recipient set 
+            user_id = #{userId,jdbcType=BIGINT},
+            account_number = #{accountNumber,jdbcType=VARCHAR},
+            account_name = #{accountName,jdbcType=VARCHAR},
+            bank_code = #{bankCode,jdbcType=VARCHAR},
+            authorization_code = #{authorizationCode,jdbcType=VARCHAR},
+            bank_name = #{bankName,jdbcType=VARCHAR},
+            active = #{active,jdbcType=BIT},
+            created_at = #{createdAt,jdbcType=VARCHAR},
+            currency = #{currency,jdbcType=VARCHAR},
+            domain = #{domain,jdbcType=VARCHAR},
+            integration = #{integration,jdbcType=VARCHAR},
+            name = #{name,jdbcType=VARCHAR},
+            recipient_code = #{recipientCode,jdbcType=VARCHAR},
+            recipient_id = #{recipientId,jdbcType=VARCHAR},
+            type = #{type,jdbcType=VARCHAR},
+            updated_at = #{updatedAt,jdbcType=VARCHAR},
+            is_deleted = #{isDeleted,jdbcType=BIT},
+            create_time = #{createTime,jdbcType=TIMESTAMP},
+            update_time = #{updateTime,jdbcType=TIMESTAMP}
+        where id = #{id ,jdbcType=INTEGER}
+    </update>
+
+
+    <update id="updateSelective"  parameterType="java.util.HashMap">
+        update cl_paystack_recipient
+          <set>
+            <if test="userId != null and userId != '' ">        
+                user_id = #{userId,jdbcType=BIGINT},                
+            </if>
+            <if test="accountNumber != null and accountNumber != '' ">        
+                account_number = #{accountNumber,jdbcType=VARCHAR},                
+            </if>
+            <if test="accountName != null and accountName != '' ">        
+                account_name = #{accountName,jdbcType=VARCHAR},                
+            </if>
+            <if test="bankCode != null and bankCode != '' ">        
+                bank_code = #{bankCode,jdbcType=VARCHAR},                
+            </if>
+            <if test="authorizationCode != null and authorizationCode != '' ">
+                authorization_code = #{authorizationCode,jdbcType=VARCHAR},
+            </if>
+              <if test="bankName != null and bankName != '' ">
+                  bank_name = #{bankName,jdbcType=VARCHAR},
+              </if>
+            <if test="active != null and active != '' ">        
+                active = #{active,jdbcType=BIT},                
+            </if>
+            <if test="createdAt != null and createdAt != '' ">        
+                created_at = #{createdAt,jdbcType=VARCHAR},                
+            </if>
+            <if test="currency != null and currency != '' ">        
+                currency = #{currency,jdbcType=VARCHAR},                
+            </if>
+            <if test="domain != null and domain != '' ">        
+                domain = #{domain,jdbcType=VARCHAR},                
+            </if>
+            <if test="integration != null and integration != '' ">        
+                integration = #{integration,jdbcType=VARCHAR},                
+            </if>
+            <if test="name != null and name != '' ">        
+                name = #{name,jdbcType=VARCHAR},                
+            </if>
+            <if test="recipientCode != null and recipientCode != '' ">        
+                recipient_code = #{recipientCode,jdbcType=VARCHAR},                
+            </if>
+            <if test="recipientId != null and recipientId != '' ">        
+                recipient_id = #{recipientId,jdbcType=VARCHAR},                
+            </if>
+            <if test="type != null and type != '' ">        
+                type = #{type,jdbcType=VARCHAR},                
+            </if>
+            <if test="updatedAt != null and updatedAt != '' ">        
+                updated_at = #{updatedAt,jdbcType=VARCHAR},                
+            </if>
+            <if test="isDeleted != null and isDeleted != '' ">        
+                is_deleted = #{isDeleted,jdbcType=BIT},                
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},                
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP}                
+            </if>
+        </set>    
+        where id = #{id ,jdbcType=INTEGER}
+    </update>
+
+
+    <select id="findByPrimary" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List" />
+        from cl_paystack_recipient
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
+	<select id="findSelective" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+        select
+        <include refid="Base_Column_List" />
+        from cl_paystack_recipient
+        <include refid="searchBy"/>
+    </select>
+               
+    <select id="listSelective" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+        select
+        <include refid="Base_Column_List" />
+        from cl_paystack_recipient
+        <include refid="searchBy"/>
+    </select>
+    
+</mapper>

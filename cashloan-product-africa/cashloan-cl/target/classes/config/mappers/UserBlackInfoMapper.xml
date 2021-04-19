@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 黑名单模块 -->
+<mapper namespace="com.ajaya.cashloan.cl.mapper.UserBlackInfoMapper">
+    <!--返回Map-->        
+    <resultMap id="BaseResultMap" type="com.ajaya.cashloan.cl.domain.UserBlackInfo">
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="real_name" property="realName" jdbcType="VARCHAR" />
+        <result column="id_no" property="idNo" jdbcType="VARCHAR" />
+        <result column="type" property="type" jdbcType="VARCHAR" />
+        <result column="phone" property="phone" jdbcType="VARCHAR" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+    
+    <!--基本的sql查询字段 公共引用...-->
+    <sql id="Base_Column_List">
+        id,real_name,id_no,type,phone,create_time
+    </sql>
+    
+    <!-- 基本的sql查询条件公共引用 -->
+    <sql id="searchBy">
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test=" id != null ">
+                id  = #{id,jdbcType=BIGINT}
+            </if>
+            <if test="realName != null and realName != '' ">
+                and real_name like CONCAT('%',#{realName,jdbcType=VARCHAR}, '%')
+            </if>
+            <if test="idNo != null and idNo != '' ">
+                and id_no like CONCAT('%',#{idNo,jdbcType=VARCHAR}, '%')
+            </if>
+            <if test="phone != null and phone != '' ">
+                and phone like CONCAT('%',#{phone,jdbcType=VARCHAR}, '%')
+            </if>
+            <if test="type != null and type != '' ">
+                and type = #{type,jdbcType=VARCHAR}
+            </if>
+        </trim>
+    </sql>
+    
+    
+    <insert id="save" parameterType="com.ajaya.cashloan.cl.domain.UserBlackInfo">
+        insert into cl_user_black_info(real_name,id_no,type,phone,create_time)values(#{realName,jdbcType=VARCHAR},#{idNo,jdbcType=VARCHAR},#{type,jdbcType=VARCHAR},#{phone,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP})
+    </insert>
+
+    
+    <update id="update" parameterType="com.ajaya.cashloan.cl.domain.UserBlackInfo">
+        update cl_user_black_info
+        <set>
+            <if test="realName != null and realName != '' ">        
+                real_name = #{realName,jdbcType=VARCHAR},                
+            </if>
+            <if test="idNo != null and idNo != '' ">        
+                id_no = #{idNo,jdbcType=VARCHAR}  ,              
+            </if>
+            <if test="phone != null and phone != '' ">        
+                phone = #{phone,jdbcType=VARCHAR}  ,              
+            </if>
+            <if test="type != null and type != '' ">        
+                type = #{type,jdbcType=VARCHAR} ,               
+            </if>
+        </set>    
+        where id = #{id ,jdbcType=INTEGER}
+    </update>
+
+
+    <update id="updateSelective"  parameterType="java.util.HashMap">
+        update cl_user_black_info
+        <set>
+            <if test="realName != null and realName != '' ">        
+                real_name = #{realName,jdbcType=VARCHAR},                
+            </if>
+            <if test="idNo != null and idNo != '' ">        
+                id_no = #{idNo,jdbcType=VARCHAR},                
+            </if>
+            <if test="phone != null and phone != '' ">        
+                phone = #{phone,jdbcType=VARCHAR} ,               
+            </if>
+            <if test="type != null and type != '' ">        
+                type = #{type,jdbcType=VARCHAR} ,               
+            </if>
+        </set>    
+        where id = #{id ,jdbcType=INTEGER}
+    </update>
+
+
+    <select id="findByPrimary" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List" />
+        from cl_user_black_info
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
+	<select id="findSelective" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+        select
+        <include refid="Base_Column_List" />
+        from cl_user_black_info
+        <include refid="searchBy"/>
+    </select>
+               
+    <select id="listSelective" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+        select
+        <include refid="Base_Column_List" />
+        from cl_user_black_info
+        <include refid="searchBy"/>
+    </select>
+    
+    <select id="findByIdNo" parameterType="java.lang.String"  resultMap="BaseResultMap">
+    	select * from cl_user_black_info where INSTR(id_no ,#{idNo,jdbcType=VARCHAR}) = 1 and id_no is NOT null  
+    </select>
+    
+    <delete id="deleteByID" parameterType="java.lang.Long">
+    	delete from cl_user_black_info where id = #{id,jdbcType=BIGINT}
+    </delete>
+</mapper>

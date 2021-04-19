@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- cl_rc_simple_voices_count表:风控数据统计-（简）通话记录统计模块 -->
+<mapper namespace="com.ajaya.cashloan.rc.mapper.SimpleVoicesCountMapper">
+    <!--返回Map-->        
+    <resultMap id="BaseResultMap" type="com.ajaya.cashloan.rc.domain.SimpleVoicesCount">
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="user_id" property="userId" jdbcType="INTEGER" />
+        <result column="count_one" property="countOne" jdbcType="INTEGER" />
+         <result column="count_two" property="countTwo" jdbcType="DECIMAL" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+    
+    <!--基本的sql查询字段 公共引用...-->
+    <sql id="Base_Column_List">
+        id,user_id,count_one,create_time,count_two
+    </sql>
+    
+    <insert id="save" parameterType="com.ajaya.cashloan.rc.domain.SimpleVoicesCount">
+        insert into cl_rc_simple_voices_count(user_id,count_one,create_time,count_two)values(#{userId,jdbcType=INTEGER},#{countOne,jdbcType=INTEGER},#{createTime,jdbcType=TIMESTAMP},#{countTwo,jdbcType=DECIMAL})
+    </insert>
+
+	<!-- 通话记录总次数 -->
+    <select id="countOne" resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM ${tableName} WHERE user_id = #{userId,jdbcType=BIGINT}
+    </select>
+    
+    <!-- 统计前6月均话费-->
+    <select id="countTwo" resultType="java.lang.Double">
+        SELECT avg(bill_month_amt) FROM ${tableName} WHERE phone_num = #{phone,jdbcType=VARCHAR} and DATE_FORMAT(gmt_modified, '%Y-%m-%d') &gt; #{avgTime,jdbcType=TIMESTAMP}
+    </select>
+    
+    <!-- -->
+    <select id="findByUserId" resultMap="BaseResultMap">
+     	SELECT  
+     	<include refid="Base_Column_List" /> 
+     	from cl_rc_simple_voices_count where user_id = #{userId,jdbcType=BIGINT} ORDER BY id desc limit 1
+    </select>
+    
+</mapper>

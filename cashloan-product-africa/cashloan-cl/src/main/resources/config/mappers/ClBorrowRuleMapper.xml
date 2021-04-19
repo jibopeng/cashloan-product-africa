@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- cl_borrow_rule表:订单规则表模块 -->
+<mapper namespace="com.ajaya.cashloan.cl.mapper.ClBorrowRuleMapper">
+    <!--返回Map-->        
+    <resultMap id="BaseResultMap" type="com.ajaya.cashloan.cl.domain.ClBorrowRule">
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="user_id" property="userId" jdbcType="BIGINT" />
+        <result column="borrow_id" property="borrowId" jdbcType="BIGINT" />
+        <result column="max_penalty_days" property="maxPenaltyDays" jdbcType="INTEGER" />
+        <result column="contacts_num" property="contactsNum" jdbcType="INTEGER" />
+        <result column="msg_num" property="msgNum" jdbcType="INTEGER" />
+        <result column="app_num" property="appNum" jdbcType="INTEGER" />
+        <result column="msg_app_num" property="msgAppNum" jdbcType="INTEGER" />
+        <result column="imei_is_same" property="imeiIsSame" jdbcType="INTEGER" />
+        <result column="forbidden_area" property="forbiddenArea" jdbcType="INTEGER" />
+        <result column="perm_black_list" property="permBlackList" jdbcType="INTEGER" />
+        <result column="onLoan_order_cnt" property="onLoanOrderCnt" jdbcType="INTEGER" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+    
+    <!--基本的sql查询字段 公共引用...-->
+    <sql id="Base_Column_List">
+       id,user_id,borrow_id,max_penalty_days,contacts_num,app_num,msg_num,msg_app_num,create_time,update_time,perm_black_list,imei_is_same,forbidden_area,onLoan_order_cnt
+    </sql>
+    
+    <!-- 基本的sql查询条件公共引用 -->
+    <sql id="searchBy">
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test=" id != null and id != '' ">
+                id  = #{id,jdbcType=BIGINT}
+            </if>
+            <if test="userId != null and userId != '' ">
+                and user_id = #{userId,jdbcType=BIGINT}
+            </if>
+            <if test="borrowId != null and borrowId != '' ">
+                and borrow_id = #{borrowId,jdbcType=BIGINT}
+            </if>
+            <if test="maxPenaltyDays != null and maxPenaltyDays != '' ">
+                and max_penalty_days = #{maxPenaltyDays,jdbcType=INTEGER}
+            </if>
+            <if test="contactsNum != null and contactsNum != '' ">
+                and contacts_num = #{contactsNum,jdbcType=INTEGER}
+            </if>
+            <if test="msgNum != null and msgNum != '' ">
+                and msg_num = #{msgNum,jdbcType=INTEGER}
+            </if>
+            <if test="appNum != null and appNum != '' ">
+                and app_num = #{appNum,jdbcType=INTEGER}
+            </if>
+            <if test="msgAppNum != null and msgAppNum != '' ">
+                and msg_app_num = #{msgAppNum,jdbcType=INTEGER}
+            </if>
+            <if test="imeiIsSame != null and imeiIsSame != '' ">
+                and imei_is_same = #{imeiIsSame,jdbcType=INTEGER}
+            </if>
+
+            <if test="forbiddenArea != null and forbiddenArea != '' ">
+                and forbidden_area = #{forbiddenArea,jdbcType=INTEGER}
+            </if>
+            <if test="permBlackList != null and permBlackList != '' ">
+                and perm_black_list = #{permBlackList,jdbcType=INTEGER}
+            </if>
+            <if test="onLoanOrderCnt != null and onLoanOrderCnt != '' ">
+                and onLoan_order_cnt = #{onLoanOrderCnt,jdbcType=INTEGER}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="updateTime != null">
+                and update_time = #{updateTime,jdbcType=TIMESTAMP}
+            </if>
+        </trim>
+    </sql>
+    
+    
+    <insert id="save" parameterType="com.ajaya.cashloan.cl.domain.ClBorrowRule">
+        insert into cl_borrow_rule(user_id,borrow_id,max_penalty_days,contacts_num,msg_num,app_num,msg_app_num,imei_is_same,perm_black_list,create_time,update_time,forbidden_area,onLoan_order_cnt)
+        values
+        (#{userId,jdbcType=BIGINT},#{borrowId,jdbcType=BIGINT},#{maxPenaltyDays,jdbcType=INTEGER},#{contactsNum,jdbcType=INTEGER},#{msgNum,jdbcType=INTEGER},#{appNum,jdbcType=INTEGER},#{msgAppNum,jdbcType=INTEGER},#{imeiIsSame,jdbcType=INTEGER},#{permBlackList,jdbcType=INTEGER},#{createTime,jdbcType=TIMESTAMP},#{updateTime,jdbcType=TIMESTAMP},#{forbiddenArea,jdbcType=INTEGER},#{onLoanOrderCnt,jdbcType=INTEGER})
+    </insert>
+
+    
+    <update id="update" parameterType="com.ajaya.cashloan.cl.domain.ClBorrowRule">
+        update cl_borrow_rule set 
+            user_id = #{userId,jdbcType=BIGINT},
+            borrow_id = #{borrowId,jdbcType=BIGINT},
+            max_penalty_days = #{maxPenaltyDays,jdbcType=INTEGER},
+            contacts_num = #{contactsNum,jdbcType=INTEGER},
+            msg_num = #{msgNum,jdbcType=INTEGER},
+            app_num = #{appNum,jdbcType=INTEGER},
+            msg_app_num = #{msgAppNum,jdbcType=INTEGER},
+            imei_is_same = #{imeiIsSame,jdbcType=INTEGER},
+            perm_black_list = #{permBlackList,jdbcType=INTEGER},
+           	forbidden_area= #{forbiddenArea,jdbcType=INTEGER},
+           	onLoan_order_cnt = #{onLoanOrderCnt,jdbcType=INTEGER},
+            create_time = #{createTime,jdbcType=TIMESTAMP},
+            update_time = #{updateTime,jdbcType=TIMESTAMP}
+        where id = #{id ,jdbcType=INTEGER}
+    </update>
+
+
+    <update id="updateSelective"  parameterType="java.util.HashMap">
+        update cl_borrow_rule
+          <set>
+            <if test="userId != null and userId != '' ">        
+                user_id = #{userId,jdbcType=BIGINT},                
+            </if>
+            <if test="borrowId != null and borrowId != '' ">        
+                borrow_id = #{borrowId,jdbcType=BIGINT},                
+            </if>
+            <if test="maxPenaltyDays != null and maxPenaltyDays != '' ">        
+                max_penalty_days = #{maxPenaltyDays,jdbcType=INTEGER},                
+            </if>
+            <if test="contactsNum != null and contactsNum != '' ">        
+                contacts_num = #{contactsNum,jdbcType=INTEGER},                
+            </if>
+            <if test="msgNum != null and msgNum != '' ">        
+                msg_num = #{msgNum,jdbcType=INTEGER},                
+            </if>
+            <if test="appNum != null and appNum != '' ">        
+                app_num = #{appNum,jdbcType=INTEGER},                
+            </if>
+            <if test="msgAppNum != null and msgAppNum != '' ">        
+                msg_app_num = #{msgAppNum,jdbcType=INTEGER},                
+            </if>
+            <if test="imeiIsSame != null and imeiIsSame != '' ">
+                 imei_is_same = #{imeiIsSame,jdbcType=INTEGER},
+            </if>
+            <if test="permBlackList != null and permBlackList != '' ">
+                 perm_black_list = #{permBlackList,jdbcType=INTEGER},
+            </if>
+            <if test="forbiddenArea != null and forbiddenArea != '' ">
+                 forbidden_area = #{forbiddenArea,jdbcType=INTEGER},
+            </if>
+            <if test="onLoanOrderCnt != null and onLoanOrderCnt != '' ">
+            	 onLoan_order_cnt = #{onLoanOrderCnt,jdbcType=INTEGER},
+           	</if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},                
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP}                
+            </if>
+        </set>    
+        where id = #{id ,jdbcType=INTEGER}
+    </update>
+
+
+    <select id="findByPrimary" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List" />
+        from cl_borrow_rule
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
+	<select id="findSelective" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+        select
+        <include refid="Base_Column_List" />
+        from cl_borrow_rule
+        <include refid="searchBy"/>
+    </select>
+               
+    <select id="listSelective" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+        select
+        <include refid="Base_Column_List" />
+        from cl_borrow_rule
+        <include refid="searchBy"/>
+    </select>
+    
+</mapper>

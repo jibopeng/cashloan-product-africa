@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- cl_91zx_detail表:风控数据统计-（简）通话记录统计模块 -->
+<mapper namespace="com.ajaya.cashloan.rc.mapper.Zx91DetailMapper">
+    <!--返回Map-->        
+    <resultMap id="BaseResultMap" type="com.ajaya.cashloan.rc.domain.Zx91Detail">
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="user_id" property="userId" jdbcType="BIGINT" />
+        <result column="trx_no" property="trxNo" jdbcType="VARCHAR" />
+        <result column="borrow_type" property="borrowType" jdbcType="INTEGER" />
+        <result column="borrow_state" property="borrowState" jdbcType="INTEGER" />
+        <result column="borrow_amt_min" property="borrowAmtMin" jdbcType="DECIMAL" />
+        <result column="borrow_amt_max" property="borrowAmtMax" jdbcType="DECIMAL" />
+        <result column="contract_date" property="contractDate" jdbcType="TIMESTAMP" />
+        <result column="loan_period" property="loanPeriod" jdbcType="INTEGER" />
+        <result column="repay_state" property="repayState" jdbcType="INTEGER" />
+        <result column="arrears_amount" property="arrearsAmount" jdbcType="DECIMAL" />
+        <result column="company_code" property="companyCode" jdbcType="VARCHAR" />
+    </resultMap>
+    
+    <!--基本的sql查询字段 公共引用...-->
+    <sql id="Base_Column_List">
+        id,user_id,trx_no,borrow_type,borrow_state,borrow_amt_min,borrow_amt_max,contract_date,loan_period,repay_state,arrears_amount,company_code 
+    </sql>
+    
+    <!-- 基本的sql查询条件公共引用 -->
+    <sql id="searchBy">
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test=" id != null ">
+                id  = #{id,jdbcType=BIGINT}
+            </if>
+            <if test="userId != null ">
+                and user_id = #{userId,jdbcType=BIGINT}
+            </if>
+            <if test="trxNo != null and trxNo != '' ">
+                and trx_no = #{trxNo,jdbcType=VARCHAR}
+            </if>
+            <if test="borrowType != null ">
+                and borrow_type = #{borrowType,jdbcType=INTEGER}
+            </if>
+            <if test="borrowState != null ">
+                and borrow_state = #{borrowState,jdbcType=INTEGER}
+            </if>
+            <if test="borrowAmtMin != null ">
+                and borrow_amt_min = #{borrowAmtMin,jdbcType=DECIMAL}
+            </if>
+            <if test="borrowAmtMax != null ">
+                and borrow_amt_max = #{borrowAmtMax,jdbcType=DECIMAL}
+            </if>
+            <if test="contractDate != null">
+                and contract_date = #{contractDate,jdbcType=TIMESTAMP}
+            </if>
+            <if test="loanPeriod != null ">
+                and loan_period = #{loanPeriod,jdbcType=INTEGER}
+            </if>
+            <if test="repayState != null ">
+                and repay_state = #{repayState,jdbcType=INTEGER}
+            </if>
+            <if test="arrearsAmount != null ">
+                and arrears_amount = #{arrearsAmount,jdbcType=DECIMAL}
+            </if>
+            <if test="companyCode != null and companyCode != '' ">
+                and company_code = #{companyCode,jdbcType=VARCHAR}
+            </if>
+        </trim>
+    </sql>
+    
+    
+    <insert id="save" parameterType="com.ajaya.cashloan.rc.domain.Zx91Detail">
+        insert into cl_91zx_detail(user_id,trx_no,borrow_type,borrow_state,borrow_amt_min,borrow_amt_max,contract_date,loan_period,repay_state,arrears_amount,company_code)values(#{userId,jdbcType=BIGINT},#{trxNo,jdbcType=VARCHAR},#{borrowType,jdbcType=INTEGER},#{borrowState,jdbcType=INTEGER},#{borrowAmtMin,jdbcType=DECIMAL},#{borrowAmtMax,jdbcType=DECIMAL},#{contractDate,jdbcType=TIMESTAMP},#{loanPeriod,jdbcType=INTEGER},#{repayState,jdbcType=INTEGER},#{arrearsAmount,jdbcType=DECIMAL},#{companyCode,jdbcType=VARCHAR})
+    </insert>
+
+    
+    <update id="update" parameterType="com.ajaya.cashloan.rc.domain.Zx91Detail">
+        update cl_91zx_detail
+        <set>
+            <if test="userId != null ">        
+                user_id = #{userId,jdbcType=BIGINT},                
+            </if>
+            <if test="trxNo != null and trxNo != '' ">        
+                trx_no = #{trxNo,jdbcType=VARCHAR},                
+            </if>
+            <if test="borrowType != null ">        
+                borrow_type = #{borrowType,jdbcType=INTEGER},                
+            </if>
+            <if test="borrowState != null ">        
+                borrow_state = #{borrowState,jdbcType=INTEGER},                
+            </if>
+            <if test="borrowAmtMin != null ">        
+                borrow_amt_min = #{borrowAmtMin,jdbcType=DECIMAL},                
+            </if>
+            <if test="borrowAmtMax != null ">        
+                borrow_amt_max = #{borrowAmtMax,jdbcType=DECIMAL},                
+            </if>
+            <if test="contractDate != null">
+                contract_date = #{contractDate,jdbcType=TIMESTAMP},                
+            </if>
+            <if test="loanPeriod != null ">        
+                loan_period = #{loanPeriod,jdbcType=INTEGER},                
+            </if>
+            <if test="repayState != null ">        
+                repay_state = #{repayState,jdbcType=INTEGER},                
+            </if>
+            <if test="arrearsAmount != null ">        
+                arrears_amount = #{arrearsAmount,jdbcType=DECIMAL},                
+            </if>
+            <if test="companyCode != null and companyCode != '' ">        
+                company_code = #{companyCode,jdbcType=VARCHAR}                
+            </if>
+        </set>    
+        where id = #{id ,jdbcType=INTEGER}
+    </update>
+
+
+    <update id="updateSelective"  parameterType="java.util.HashMap">
+        update cl_91zx_detail
+        <set>
+            <if test="userId != null ">        
+                user_id = #{userId,jdbcType=BIGINT},                
+            </if>
+            <if test="trxNo != null and trxNo != '' ">        
+                trx_no = #{trxNo,jdbcType=VARCHAR},                
+            </if>
+            <if test="borrowType != null ">        
+                borrow_type = #{borrowType,jdbcType=INTEGER},                
+            </if>
+            <if test="borrowState != null ">        
+                borrow_state = #{borrowState,jdbcType=INTEGER},                
+            </if>
+            <if test="borrowAmtMin != null ">        
+                borrow_amt_min = #{borrowAmtMin,jdbcType=DECIMAL},                
+            </if>
+            <if test="borrowAmtMax != null ">        
+                borrow_amt_max = #{borrowAmtMax,jdbcType=DECIMAL},                
+            </if>
+            <if test="contractDate != null">
+                contract_date = #{contractDate,jdbcType=TIMESTAMP},                
+            </if>
+            <if test="loanPeriod != null ">        
+                loan_period = #{loanPeriod,jdbcType=INTEGER},                
+            </if>
+            <if test="repayState != null ">        
+                repay_state = #{repayState,jdbcType=INTEGER},                
+            </if>
+            <if test="arrearsAmount != null ">        
+                arrears_amount = #{arrearsAmount,jdbcType=DECIMAL},                
+            </if>
+            <if test="companyCode != null and companyCode != '' ">        
+                company_code = #{companyCode,jdbcType=VARCHAR}                
+            </if>
+        </set>    
+        where id = #{id ,jdbcType=INTEGER}
+    </update>
+
+
+    <select id="findByPrimary" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List" />
+        from cl_91zx_detail
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
+	<select id="findSelective" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+        select
+        <include refid="Base_Column_List" />
+        from cl_91zx_detail
+        <include refid="searchBy"/>
+    </select>
+               
+    <select id="listSelective" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+        select
+        <include refid="Base_Column_List" />
+        from cl_91zx_detail
+        <include refid="searchBy"/>
+    </select>
+    
+</mapper>

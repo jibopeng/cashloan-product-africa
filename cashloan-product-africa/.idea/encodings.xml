@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding" defaultCharsetForPropertiesFiles="UTF-8">
+    <file url="file://$PROJECT_DIR$" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/cashloan-api" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/cashloan-cl" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/cashloan-core" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/cashloan-cr" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/cashloan-manage" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/cashloan-rc" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/cashloan-rule" charset="UTF-8" />
+    <file url="PROJECT" charset="UTF-8" />
+  </component>
+</project>

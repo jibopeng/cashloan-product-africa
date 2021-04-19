@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- cl_user_messages表:用户资料联系人模块 -->
+<mapper namespace="com.ajaya.cashloan.cl.mapper.UserMessagesMapper">
+    <!--返回Map-->
+    <resultMap id="BaseResultMap" type="com.ajaya.cashloan.cl.domain.UserMessages">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="user_id" property="userId" jdbcType="BIGINT"/>
+        <result column="borrow_id" property="borrowId" jdbcType="BIGINT"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="phone" property="phone" jdbcType="VARCHAR"/>
+        <result column="time" property="time" jdbcType="TIMESTAMP"/>
+        <result column="type" property="type" jdbcType="VARCHAR"/>
+        <result column="msg" property="msg" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <resultMap id="UserMsgModel" type="com.ajaya.cashloan.cl.model.UserMessagesModel">
+        <result column="send_name" property="send_name" jdbcType="VARCHAR"/>
+        <result column="msg_time" property="msg_time" jdbcType="TIMESTAMP"/>
+        <result column="msg" property="msg" jdbcType="VARCHAR"/>
+        <result column="create_time" property="create_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <!--基本的sql查询字段 公共引用...-->
+    <sql id="Base_Column_List">
+        id,user_id,borrow_id,name,phone,time,type,msg,create_time,update_time
+    </sql>
+
+    <!-- 基本的sql查询条件公共引用 -->
+    <sql id="searchBy">
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test=" id != null and id != '' ">
+                id = #{id,jdbcType=BIGINT}
+            </if>
+            <if test="userId != null and userId != '' ">
+                and user_id = #{userId,jdbcType=BIGINT}
+            </if>
+            <if test="borrowId != null and borrowId != '' ">
+                and borrow_id = #{borrowId,jdbcType=BIGINT}
+            </if>
+            <if test="name != null and name != '' ">
+                and name = #{name,jdbcType=VARCHAR}
+            </if>
+            <if test="phone != null and phone != '' ">
+                and phone = #{phone,jdbcType=VARCHAR}
+            </if>
+            <if test="time != null">
+                and time = #{time,jdbcType=TIMESTAMP}
+            </if>
+            <if test="type != null and type != '' ">
+                and type = #{type,jdbcType=VARCHAR}
+            </if>
+            <if test="msg != null and msg != '' ">
+                and msg = #{msg,jdbcType=VARCHAR}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="updateTime != null">
+                and update_time = #{updateTime,jdbcType=TIMESTAMP}
+            </if>
+        </trim>
+    </sql>
+
+
+    <insert id="save" parameterType="com.ajaya.cashloan.cl.domain.UserMessages">
+        insert into cl_user_messages(user_id,name,phone,time,type,msg,create_time)values(#{userId,jdbcType=BIGINT},#{name,jdbcType=VARCHAR},#{phone,jdbcType=VARCHAR},#{time,jdbcType=TIMESTAMP},#{type,jdbcType=VARCHAR},#{msg,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP})
+    </insert>
+
+
+    <update id="updateSelective" parameterType="java.util.HashMap">
+        update cl_user_messages
+        <set>
+            <if test="name != null and name != '' ">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="phone != null and phone != '' ">
+                phone = #{phone,jdbcType=VARCHAR},
+            </if>
+            <if test="time != null ">
+                time = #{time,jdbcType=TIMESTAMP},
+            </if>
+            <if test="type != null and type != '' ">
+                type = #{type,jdbcType=VARCHAR},
+            </if>
+            <if test="userId != null and userId != '' ">
+                user_id = #{userId,jdbcType=INTEGER},
+            </if>
+            <if test="msg != null and msg != '' ">
+                msg = #{msg,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP}
+            </if>
+        </set>
+        where id = #{id ,jdbcType=INTEGER}
+    </update>
+
+
+    <select id="findByPrimary" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from cl_user_messages
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <select id="findSelective" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+        select
+        <include refid="Base_Column_List"/>
+        from cl_user_messages
+        <include refid="searchBy"/>
+    </select>
+
+    <select id="listSelective" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+        select
+        <include refid="Base_Column_List"/>
+        from cl_user_messages
+        <include refid="searchBy"/>
+    </select>
+
+    <select id="countTable" resultType="java.lang.Integer" parameterType="java.lang.String">
+        SELECT COUNT(1) FROM information_schema.TABLES WHERE table_name = #{tableName,jdbcType=VARCHAR}
+    </select>
+
+    <!-- 创建分表 -->
+    <select id="createTable">
+        CREATE TABLE ${tableName} (
+          `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
+		  `user_id` bigint(20) DEFAULT NULL COMMENT '用户标识',
+		  `borrow_id` bigint(20) DEFAULT NULL COMMENT '订单标识',
+		  `name` varchar(200) CHARACTER SET utf8mb4 DEFAULT '' COMMENT '短信收发人',
+		  `phone` varchar(20) CHARACTER SET utf8mb4 DEFAULT '' COMMENT '手机号码',
+		  `time` datetime DEFAULT NULL COMMENT '收发时间',
+		  `type` varchar(2) DEFAULT '' COMMENT '收发标识，10发20收',
+		  `msg` text CHARACTER SET utf8mb4 COMMENT '短信内容',
+		  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+		  `update_time` datetime DEFAULT NULL COMMENT '更新时间',
+		  PRIMARY KEY (`id`),
+		  INDEX `user_id` (`user_id`) USING BTREE,
+		  INDEX `borrow_id` (`borrow_id`) USING BTREE
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户短信表';
+    </select>
+
+    <delete id="deleteShardByUserId">
+        delete from ${tableName} where user_id = #{userId,jdbcType=BIGINT} AND borrow_id IS NULL
+    </delete>
+
+    <insert id="saveShard">
+        insert into ${tableName}(
+        user_id,
+        borrow_id,
+        name,
+        phone,
+        type,
+        time,
+        msg,
+        create_time
+        )values(
+        #{item.userId,jdbcType=BIGINT},
+        #{item.borrowId,jdbcType=BIGINT},
+        #{item.name,jdbcType=VARCHAR},
+        #{item.phone,jdbcType=VARCHAR},
+        #{item.type,jdbcType=VARCHAR},
+        #{item.time,jdbcType=TIMESTAMP},
+        #{item.msg,jdbcType=VARCHAR},
+        #{item.createTime,jdbcType=TIMESTAMP}
+        )
+    </insert>
+
+    <select id="listShardSelective" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from ${tableName}
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="params.userId != null">
+                user_id = #{params.userId,jdbcType=BIGINT}
+            </if>
+            order by time desc
+        </trim>
+    </select>
+
+    <select id="findUserIdByuPhone" resultType="java.lang.Long" parameterType="java.lang.String">
+      select DISTINCT user_id from cl_user_messages_1
+      where phone =#{phone,jdbcType=VARCHAR} and user_id &lt;  16000;
+    </select>
+
+    <select id="findListNoBorrowidByUserid" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from ${tableName}
+        where user_id = #{userId,jdbcType=BIGINT} AND borrow_id IS NULL
+    </select>
+
+    <update id="updateShard">
+    	update ${tableName} set 
+            borrow_id = #{item.borrowId,jdbcType=BIGINT},
+            update_time = #{item.updateTime,jdbcType=TIMESTAMP}
+        where id = #{item.id ,jdbcType=INTEGER}
+    </update>
+
+    <select id="listShardByBorrowid" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from ${tableName}
+        where borrow_id = #{borrowId,jdbcType=BIGINT} order by time desc
+    </select>
+
+    <select id="findMaxCreatetimeByUserid" resultType="java.util.Date">
+    	SELECT MAX(create_time) FROM ${tableName} 
+    	WHERE user_id = #{userId,jdbcType=BIGINT}
+    </select>
+
+    <select id="findListByUseridAndCreatetime" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from ${tableName}
+        where user_id = #{userId,jdbcType=BIGINT} and
+        TIMESTAMPDIFF(SECOND,create_time,#{maxCreatetime,jdbcType=TIMESTAMP}) &lt;= 10
+        order by time desc
+    </select>
+
+    <select id="listShardSelectiveTop20" resultType="java.util.Map">
+        select
+        `name`, COUNT(1) 'num'
+        from ${tableName}
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="params.userId != null">
+                user_id = #{params.userId,jdbcType=BIGINT}
+            </if>
+            GROUP BY `name` ORDER BY count(1) desc
+        </trim>
+    </select>
+
+    <select id="findListByUseridAndCreatetimeTop20" resultType="java.util.Map">
+    	select 
+    	`name`, COUNT(1) 'num'
+        from ${tableName} 
+        where user_id = #{userId,jdbcType=BIGINT} and
+        TIMESTAMPDIFF(SECOND,create_time,#{maxCreatetime,jdbcType=TIMESTAMP}) &lt;= 10
+        GROUP BY `name` ORDER BY count(1) desc
+    </select>
+
+
+    <select id="listShardByBorrowidTop20" resultType="java.util.Map">
+    	select `name`, COUNT(1) 'num'
+       	from ${tableName}
+        where borrow_id = #{borrowId,jdbcType=BIGINT} GROUP BY `name` ORDER BY count(1) desc
+    </select>
+
+    <update id="updateByIdsShard">
+        update ${tableName} set
+        borrow_id = #{borrowId,jdbcType=BIGINT},
+        update_time = #{updateTime,jdbcType=TIMESTAMP}
+        where id in
+        <foreach item="item" index="index" collection="ids" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+
+    <select id="selectMessagesListByBorrowIdShard" resultMap="UserMsgModel">
+      select name as 'send_name',DATE_FORMAT(time,'%Y/%m/%d %H:%i:%S') as 'msg_time' ,DATE_FORMAT(create_time,'%Y/%m/%d %H:%i:%S')  as 'create_time',msg
+       from ${tableName}  where type = 20 and msg <![CDATA[REGEXP('^[(.#_/*<>$!~)&%!@a-zA-Z0-9]+')]]>  = 1 and borrow_id = #{borrowId,jdbcType=BIGINT}
+    </select>
+    
+    <select id="selectDataMaxBorrowIdBefore" resultType="java.lang.Long">
+        select max(borrow_id) from ${tableName}  where 
+       	user_id = #{userId,jdbcType=BIGINT} 
+        and msg is not null and type = 20
+        and borrow_id &lt; #{borrowId,jdbcType=BIGINT}
+    </select>
+    
+    <select id="findMaxBorrowidByUserid" resultType="java.lang.Long">
+        SELECT MAX(borrow_id) FROM ${tableName}
+        WHERE user_id = #{userId,jdbcType=BIGINT}
+    </select>
+    
+</mapper>

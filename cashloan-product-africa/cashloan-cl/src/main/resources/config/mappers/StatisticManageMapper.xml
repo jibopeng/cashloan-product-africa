@@ -1,0 +1,406 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 统计管理 -->
+<mapper namespace="com.ajaya.cashloan.cl.mapper.StatisticManageMapper">
+	<!-- 每日收入 -->
+	<sql id="income">
+		select sum(amount) income,repay_time time from (select  amount,DATE_FORMAT(repay_time,'%Y-%m-%d') repay_time from cl_borrow_repay_log ) t GROUP BY repay_time
+		ORDER BY repay_time DESC
+	</sql>
+	<!-- 每日支出 -->
+	<sql id="expend">
+		select sum(t.real_amount) expend,t.create_time time from (select b.real_amount,DATE_FORMAT(bp.create_time,'%Y-%m-%d') create_time from cl_borrow_progress bp LEFT JOIN cl_borrow b on bp.borrow_id = b.id where bp.state = '30' ) t  GROUP BY t.create_time
+		ORDER BY time DESC
+	</sql>
+	
+	<!-- 每日收支统计 -->
+	<select id="repayIncomeAndExpend" resultType="com.ajaya.cashloan.cl.model.IncomeAndExpendModel" parameterType="java.util.Map">
+		select DISTINCT(p.time) date,
+			case when p2.income is null then 0 else p2.income end income,
+			case when p3.expend is null then 0 else p3.expend end expend
+		from (
+			(<include refid="income"></include>) UNION
+			(<include refid="expend"></include>) 
+		) p 
+		LEFT JOIN (<include refid="income"></include>) p2 on p.time = p2.time
+		LEFT JOIN (<include refid="expend"></include>) p3 on p.time = p3.time
+		<where>
+			<if test="startDate!=null and startDate!=''">
+				and p.time >= #{startDate,jdbcType=VARCHAR}
+			</if>
+			<if test="endDate!=null and endDate!=''">
+				<![CDATA[ and p.time <= #{endDate,jdbcType=VARCHAR} ]]> 
+			</if>
+		</where>
+		ORDER BY p.time DESC
+	</select>
+	
+	<!-- 每日未还本金 -->
+	<select id="dayNeedAmount" resultType="com.ajaya.cashloan.cl.model.DayNeedAmountModel" parameterType="java.util.Map">
+		select sum(amount) amount,sum(penalty_amout) penaltyAmount,repay_time date from (select amount,penalty_amout, DATE_FORMAT(repay_time,'%Y-%m-%d') repay_time from cl_borrow_repay where penalty_day > 0 and state = 20) t 
+		<where>
+			<if test="startDate!=null and startDate!=''">
+				and repay_time >= #{startDate,jdbcType=VARCHAR}
+			</if>
+			<if test="endDate!=null and endDate!=''">
+				<![CDATA[ and repay_time <= #{endDate,jdbcType=VARCHAR} ]]> 
+			</if>
+		</where>
+		GROUP BY repay_time
+		ORDER BY repay_time DESC
+	</select>
+	
+	<sql id="incomeSql">
+		select  u.real_name realName,br.amount,DATE_FORMAT(br.repay_time,'%Y-%m-%d %T') date from cl_borrow_repay_log br LEFT JOIN cl_user_base_info u on br.user_id = u.user_id
+		<where>
+			<if test="startDate!=null and startDate!=''">
+				and DATE_FORMAT(br.repay_time,'%Y-%m-%d') >= #{startDate,jdbcType=VARCHAR}
+			</if>
+			<if test="endDate!=null and endDate!=''">
+				<![CDATA[ and DATE_FORMAT(br.repay_time,'%Y-%m-%d') <= #{endDate,jdbcType=VARCHAR} ]]> 
+			</if>
+		</where>
+		ORDER BY br.repay_time DESC
+	</sql>
+	
+	<!-- 收入明细 -->
+	<select id="incomeDetail" resultType="com.ajaya.cashloan.cl.model.IncomeDetailModel" parameterType="java.util.Map">
+		<include refid="incomeSql"></include>
+	</select>
+	<!-- 收入总额 -->
+	<select id="incomeSum" resultType="java.lang.Double" parameterType="java.util.Map">
+		select sum(amount) amount from (<include refid="incomeSql"></include>) t
+	</select>
+	
+	
+	<sql id="expendSql">
+		select u.real_name realName,DATE_FORMAT(bp.create_time,'%Y-%m-%d  %T') date,b.real_amount amount from cl_borrow_progress bp 
+		LEFT JOIN cl_borrow b on bp.borrow_id = b.id
+		LEFT JOIN cl_user_base_info u on u.user_id = bp.user_id
+		<where>
+			bp.state = '30'
+			<if test="startDate!=null and startDate!=''">
+				and DATE_FORMAT(bp.create_time,'%Y-%m-%d') >= #{startDate,jdbcType=VARCHAR}
+			</if>
+			<if test="endDate!=null and endDate!=''">
+				<![CDATA[ and DATE_FORMAT(bp.create_time,'%Y-%m-%d') <= #{endDate,jdbcType=VARCHAR} ]]> 
+			</if>
+		</where>
+		ORDER BY bp.id DESC
+	</sql>
+	<!-- 支出明细 -->
+	<select id="expendDetail" resultType="com.ajaya.cashloan.cl.model.ExpendDetailModel" parameterType="java.util.Map">
+		<include refid="expendSql"></include>
+	</select>
+	<!-- 支出总额 -->
+	<select id="expendSum" resultType="java.lang.Double" parameterType="java.util.Map">
+		select sum(amount) amount from (<include refid="expendSql"></include>) t
+	</select>
+	
+	<select id="pageNewLoan" resultType="com.ajaya.cashloan.cl.model.NewLoanRepPerModel" parameterType="java.util.HashMap">
+		select 
+			date_format(t0.create_time, '%Y-%m-%d') 'loanTime',
+			date_format(t0.repay_time, '%Y-%m-%d') 'repayTime',
+			count(1) 'loanNum',
+			sum(if(t0.state = 10, 1, 0)) 'repaidNum',
+			sum(if(t0.state != 10 and t0.penalty_day > 0, 1, 0)) 'overdueNum',
+			sum(if(t0.state != 10 and t0.penalty_day > 0, 1, 0)) / count(1) 'overduePer',
+			sum(if(t0.penalty_day > 0, 1, 0)) 'd1',
+			sum(if(t0.penalty_day > 0, 1, 0)) / count(1)  'd1per',
+			sum(if(t0.penalty_day > 2, 1, 0)) 'd3',
+			sum(if(t0.penalty_day > 2, 1, 0)) / count(1)  'd3per',
+			sum(if(t0.penalty_day > 4, 1, 0)) 'd5',
+			sum(if(t0.penalty_day > 4, 1, 0)) / count(1)  'd5per',
+			sum(if(t0.penalty_day > 6, 1, 0)) 'd7',
+			sum(if(t0.penalty_day > 6, 1, 0)) / count(1)  'd7per',
+			sum(if(t0.penalty_day > 13, 1, 0)) 'd14',
+			sum(if(t0.penalty_day > 13, 1, 0)) / count(1)  'd14per'
+		from 
+		cl_borrow_repay t0 LEFT JOIN cl_borrow t1 on t0.borrow_id = t1.id
+		where t1.user_type != 0
+		<if test="startTime!=null and startTime!=''">
+				and DATE_FORMAT(t0.repay_time,'%Y-%m-%d') <![CDATA[>=]]> #{startTime,jdbcType=VARCHAR} 
+		</if>
+		<if test="endTime!=null and endTime!=''">
+				and DATE_FORMAT(t0.repay_time,'%Y-%m-%d') <![CDATA[<=]]> #{endTime,jdbcType=VARCHAR} 
+		</if>
+		GROUP BY
+		date_format(t0.repay_time, '%Y-%m-%d')
+		ORDER BY date_format(t0.repay_time, '%Y-%m-%d') desc
+		
+	</select>
+	
+	<select id="pageOldLoan" resultType="com.ajaya.cashloan.cl.model.OldLoanRepPerModel" parameterType="java.util.HashMap">
+		select 
+			date_format(t0.create_time, '%Y-%m-%d') 'loanTime',
+			date_format(t0.repay_time, '%Y-%m-%d') 'repayTime',
+			count(1) 'loanNum',
+			sum(if(t0.state = 10, 1, 0)) 'repaidNum',
+			sum(if(t0.state != 10 and t0.penalty_day > 0, 1, 0)) 'overdueNum',
+			sum(if(t0.state != 10 and t0.penalty_day > 0, 1, 0)) / count(1) 'overduePer',
+			sum(if(t0.penalty_day > 0, 1, 0)) 'd1',
+			sum(if(t0.penalty_day > 0, 1, 0)) / count(1)  'd1per',
+			sum(if(t0.penalty_day > 2, 1, 0)) 'd3',
+			sum(if(t0.penalty_day > 2, 1, 0)) / count(1)  'd3per',
+			sum(if(t0.penalty_day > 4, 1, 0)) 'd5',
+			sum(if(t0.penalty_day > 4, 1, 0)) / count(1)  'd5per',
+			sum(if(t0.penalty_day > 6, 1, 0)) 'd7',
+			sum(if(t0.penalty_day > 6, 1, 0)) / count(1)  'd7per',
+			sum(if(t0.penalty_day > 13, 1, 0)) 'd14',
+			sum(if(t0.penalty_day > 13, 1, 0)) / count(1)  'd14per'
+		from 
+		cl_borrow_repay t0 LEFT JOIN cl_borrow t1 on t0.borrow_id = t1.id
+		where t1.user_type = 0
+		<if test="startTime!=null and startTime!=''">
+				and DATE_FORMAT(t0.repay_time,'%Y-%m-%d') <![CDATA[>=]]> #{startTime,jdbcType=VARCHAR} 
+		</if>
+		<if test="endTime!=null and endTime!=''">
+				and DATE_FORMAT(t0.repay_time,'%Y-%m-%d') <![CDATA[<=]]> #{endTime,jdbcType=VARCHAR} 
+		</if>
+		GROUP BY
+		date_format(t0.repay_time, '%Y-%m-%d')
+		ORDER BY date_format(t0.repay_time, '%Y-%m-%d') desc
+	</select>
+	
+	<select id="pageVerify" resultType="com.ajaya.cashloan.cl.model.StatisticsVerifyModel" parameterType="java.util.HashMap">
+		SELECT 
+		date_format(t0.create_time, '%Y-%m-%d') registerTime,
+		count(1) as 'registerNum',
+		sum(if(t1.personal_info_state=30, 1, 0)) 'personalInformationNum',
+		if(sum(if(t1.personal_info_state=30, 1, 0)) / count(1)=0 or sum(if(t1.personal_info_state=30, 1, 0)) / count(1) is null,0,
+		concat(format(sum(if(t1.personal_info_state=30, 1, 0)) / count(1)*100,2),'%')) as 'personalInformationNumPer',
+
+		sum(if(t1.contact_state=30, 1, 0)) 'contatcInformationNum',
+		if(sum(if(t1.contact_state=30, 1, 0)) / sum(if(t1.personal_info_state=30, 1, 0))=0 or 
+		sum(if(t1.contact_state=30, 1, 0)) / sum(if(t1.personal_info_state=30, 1, 0)) is null,0,
+		concat(format(sum(if(t1.contact_state=30, 1, 0)) / sum(if(t1.personal_info_state=30, 1, 0))*100,2),'%')) 'contatcInformationNumPer',
+
+		sum(if(t1.basic_info_state=30, 1, 0)) 'basicInfomationNum',
+		if(sum(if(t1.basic_info_state=30, 1, 0)) / sum(if(t1.contact_state=30, 1, 0))=0 or 
+		sum(if(t1.basic_info_state=30, 1, 0)) / sum(if(t1.contact_state=30, 1, 0)) is null,0,
+		concat(format(sum(if(t1.basic_info_state=30, 1, 0)) / sum(if(t1.contact_state=30, 1, 0))*100,2),'%')) 'basicInfomationNumPer',
+
+
+		sum(if(t1.bank_account_state=30, 1, 0)) 'bankInformationNum',
+		if(sum(if(t1.bank_account_state=30, 1, 0)) / sum(if(t1.basic_info_state=30, 1, 0))=0 or 
+		sum(if(t1.bank_account_state=30, 1, 0)) / sum(if(t1.basic_info_state=30, 1, 0)) is null,0,
+		concat(format(sum(if(t1.bank_account_state=30, 1, 0)) / sum(if(t1.basic_info_state=30, 1, 0))*100,2),'%')) 'bankInformationNumPer'
+
+		 from cl_user_base_info t0 LEFT JOIN cl_user_auth t1 on t0.user_id = t1.user_id
+		<trim prefix="where" prefixOverrides="and|or">
+            <if test="startTime != null">
+                and DATE_FORMAT(t0.create_time,'%Y-%m-%d') &gt;= #{startTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="endTime  != null">
+                and DATE_FORMAT(t0.create_time,'%Y-%m-%d') &lt;= #{endTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="startTime == null and endTime == null">
+            	and DATE_FORMAT(t0.create_time,'%Y-%m-%d') &gt;= DATE_FORMAT(DATE_ADD(NOW(),INTERVAL -30 DAY),'%Y-%m-%d')
+            	and DATE_FORMAT(t0.create_time,'%Y-%m-%d') &lt;= DATE_FORMAT(NOW(),'%Y-%m-%d')
+            </if>
+        </trim>
+		GROUP BY
+		date_format(t0.create_time, '%Y-%m-%d') desc 
+	</select>
+	
+		<!-- 按照催收订单生成时间查询催收情况 -->
+	<select id="colStaByCreateTime" resultType="com.ajaya.cashloan.cl.model.ColStaModel" parameterType="java.util.HashMap">
+		SELECT  
+			user_name userName,
+			 concat(#{createStartTime,jdbcType=VARCHAR},'~',#{createEndTime,jdbcType=VARCHAR}) as createTime,
+			count(1) allOrder,
+			sum(if(state = 40 
+			<if test="successStartTime!=null and createStartTime!=''">
+				and DATE_FORMAT(success_time,'%Y-%m-%d') >= #{successStartTime,jdbcType=VARCHAR} 
+			</if>
+			<if test="successEndTime!=null and successEndTime!=''">
+				and DATE_FORMAT(success_time,'%Y-%m-%d') <![CDATA[<=]]> #{successEndTime,jdbcType=VARCHAR} 
+			</if>
+			, 1, 0)) todayOrder,
+			if(sum(if(state = 40 
+			<if test="successStartTime!=null and createStartTime!=''">
+				and DATE_FORMAT(success_time,'%Y-%m-%d') >= #{successStartTime,jdbcType=VARCHAR}
+			</if>
+			<if test="successEndTime!=null and successEndTime!=''">
+				and DATE_FORMAT(success_time,'%Y-%m-%d') <![CDATA[<=]]> #{successEndTime,jdbcType=VARCHAR} 
+			</if>
+			, 1, 0)) / count(1)=0 or 
+			sum(if(state = 40 
+			<if test="successStartTime!=null and createStartTime!=''">
+				and DATE_FORMAT(success_time,'%Y-%m-%d') >= #{successStartTime,jdbcType=VARCHAR}
+			</if>
+			<if test="successEndTime!=null and successEndTime!=''">
+				and DATE_FORMAT(success_time,'%Y-%m-%d') <![CDATA[<=]]> #{successEndTime,jdbcType=VARCHAR} 
+			</if>
+			, 1, 0)) / count(1) is null,0,
+			concat(format(sum(if(state = 40 
+			<if test="successStartTime!=null and createStartTime!=''">
+				and DATE_FORMAT(success_time,'%Y-%m-%d') >= #{successStartTime,jdbcType=VARCHAR}
+			</if>
+			<if test="successEndTime!=null and successEndTime!=''">
+				and DATE_FORMAT(success_time,'%Y-%m-%d') <![CDATA[<=]]> #{successEndTime,jdbcType=VARCHAR} 
+			</if>
+			, 1, 0)) / count(1)*100,2),'%')) ratioRecall
+			from cl_urge_repay_order 
+			where  user_name IS NOT NULL
+			<if test="createStartTime!=null and createStartTime!=''">
+				and DATE_FORMAT(create_time,'%Y-%m-%d') >= #{createStartTime,jdbcType=VARCHAR} 
+			</if>
+			<if test="createEndTime!=null and createEndTime!=''">
+				and DATE_FORMAT(create_time,'%Y-%m-%d') <![CDATA[<=]]> #{createEndTime,jdbcType=VARCHAR} 
+			</if>
+			GROUP BY 
+		 user_name;
+	</select>
+	
+	<!-- 按照回款时间查询催收情况 -->
+	<select id="colStaBySuccessTime" resultType="com.ajaya.cashloan.cl.model.ColStaModel" parameterType="java.util.HashMap">
+		SELECT  
+		user_name userName,
+		 concat(#{successStartTime,jdbcType=VARCHAR},'~',#{successEndTime,jdbcType=VARCHAR}) as successTime,
+		sum(if(state = 40, 1, 0)) successOrder
+		from cl_urge_repay_order 
+		where  user_name IS NOT NULL
+		<if test="successStartTime!=null and successStartTime!=''">
+			and DATE_FORMAT(success_time,'%Y-%m-%d') >= #{successStartTime,jdbcType=VARCHAR}
+		</if>
+		<if test="successEndTime!=null and successEndTime!=''">
+			and DATE_FORMAT(success_time,'%Y-%m-%d') <![CDATA[<=]]> #{successEndTime,jdbcType=VARCHAR}
+		</if>
+		GROUP BY 
+		 user_name;
+	</select>
+	
+	<!-- 查询外包催收情况 -->
+	<select id="colStaByChannel" resultType="com.ajaya.cashloan.cl.model.ColStaModel" parameterType="java.util.HashMap">
+		SELECT 
+		date_format(create_time, '%Y-%m-%d') createTime,
+		user_name userName,
+		count(1) allOrder,
+		sum(if(state = 40, 1, 0)) todayOrder,
+		(SELECT 
+		sum(if(state = 40, 1, 0)) 
+		from cl_urge_repay_order 
+		where user_name = 'BPO-Armeka' and date_format(success_time, '%Y-%m-%d') = 
+		<choose>
+			<when test="startTime!=null and startTime!=''">
+				#{startTime,jdbcType=VARCHAR}
+			</when>
+			<otherwise>
+				date_format(now(),'%Y-%m-%d')
+			</otherwise>
+		</choose>
+		) successOrder
+		from cl_urge_repay_order 
+		where user_name = 'BPO-Armeka' and date_format(create_time, '%Y-%m-%d') = 
+		<choose>
+			<when test="startTime!=null and startTime!=''">
+				#{startTime,jdbcType=VARCHAR}
+			</when>
+			<otherwise>
+				date_format(now(),'%Y-%m-%d')
+			</otherwise>
+		</choose>
+		group by date_format(create_time,'%Y-%m-%d')
+		UNION
+		SELECT 
+		date_format(create_time, '%Y-%m-%d') createTime,
+		user_name userName,
+		count(1) allOrder,
+		sum(if(state = 40, 1, 0)) todayOrder,
+		(SELECT 
+		sum(if(state = 40, 1, 0)) total
+		from cl_urge_repay_order 
+		where user_name = 'BPO-Max' and date_format(success_time, '%Y-%m-%d') = 
+		<choose>
+			<when test="startTime!=null and startTime!=''">
+				#{startTime,jdbcType=VARCHAR}
+			</when>
+			<otherwise>
+				date_format(now(),'%Y-%m-%d')
+			</otherwise>
+		</choose>
+		) successOrder
+		from cl_urge_repay_order 
+		where user_name = 'BPO-Max' and date_format(create_time, '%Y-%m-%d') = 
+		<choose>
+			<when test="startTime!=null and startTime!=''">
+				#{startTime,jdbcType=VARCHAR}
+			</when>
+			<otherwise>
+				date_format(now(),'%Y-%m-%d')
+			</otherwise>
+		</choose>
+		group by date_format(create_time,'%Y-%m-%d')
+		UNION
+		SELECT 
+		date_format(create_time, '%Y-%m-%d') createTime,
+		 '内催' userName,
+		count(1) allOrder,
+		sum(if(state = 40, 1, 0)) todayOrder,
+		(SELECT 
+		sum(if(state = 40, 1, 0)) 
+		from cl_urge_repay_order 
+		where user_name not in ( 'BPO-Max','BPO-Armeka') and user_name is not null and date_format(success_time, '%Y-%m-%d') = 
+		<choose>
+			<when test="startTime!=null and startTime!=''">
+				#{startTime,jdbcType=VARCHAR}
+			</when>
+			<otherwise>
+				date_format(now(),'%Y-%m-%d')
+			</otherwise>
+		</choose>
+		) successOrder
+		from cl_urge_repay_order 
+		where user_name not in ( 'BPO-Max','BPO-Armeka') and user_name is not null and date_format(create_time, '%Y-%m-%d') = 
+		<choose>
+			<when test="startTime!=null and startTime!=''">
+				#{startTime,jdbcType=VARCHAR}
+			</when>
+			<otherwise>
+				date_format(now(),'%Y-%m-%d')
+			</otherwise>
+		</choose>
+		group by date_format(create_time,'%Y-%m-%d')
+	</select>
+	<!-- 查询今日数据 -->
+	<select id="colStaTodayData" resultType="com.ajaya.cashloan.cl.model.ColStaTodayDataModel" parameterType="java.util.HashMap">
+		SELECT 
+		count(1) totalData, sum(if(state = 40 and user_name is null,1,0)) repayment,
+		sum(if(user_name is not null, 1, 0)) colOrder
+		from cl_urge_repay_order where date_format(create_time,'%Y-%m-%d') = 
+		<choose>
+			<when test="startTime!=null and startTime!=''">
+				#{startTime,jdbcType=VARCHAR}
+			</when>
+			<otherwise>
+				date_format(now(),'%Y-%m-%d')
+			</otherwise>
+		</choose>
+		group by date_format(create_time,'%Y-%m-%d')
+	</select>
+	<!-- 查询老案件回款情况 -->
+	<select id="colStaOldOrder" resultType="com.ajaya.cashloan.cl.model.ColStaOldOrderModel" parameterType="java.util.HashMap">
+		SELECT user_name userName, t0.order_no orderNo, t0.penalty_day penaltyDay, t1.amount + t1.penalty_amout realAmount , t0.success_time repaymentTime from cl_urge_repay_order t0 LEFT JOIN cl_borrow_repay_log t1 on t0.borrow_id = t1.borrow_id
+		where 1 = 1
+		 	<if test="userName!=null and userName!=''">
+		 		and t0.user_name = #{userName,jdbcType=VARCHAR}
+		 	</if>
+		 	<choose>
+		 		<when test="startTime!=null and startTime!=''">
+		 			and date_format(t0.success_time,'%Y-%m-%d') >= #{startTime,jdbcType=VARCHAR}
+		 		</when>
+		 		<when test="startTime==null or startTime==''">
+					and date_format(t0.success_time,'%Y-%m-%d') >= date_format(now(),'%Y-%m-%d')
+		 		</when>
+		 	</choose>
+		 	<choose>
+		 	<when test="endTime!=null and endTime!=''">
+		 			and date_format(t0.success_time,'%Y-%m-%d') <![CDATA[<=]]> #{endTime,jdbcType=VARCHAR}
+		 		</when>
+		 		<when test="endTime==null or endTime==''">
+					and date_format(t0.success_time,'%Y-%m-%d') <![CDATA[<=]]> date_format(now(),'%Y-%m-%d')
+		 		</when>
+		 	</choose>
+	</select>
+</mapper>

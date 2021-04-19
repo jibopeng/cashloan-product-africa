@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- cl_borrow_product表:'产品信息配置表模块 -->
+<mapper namespace="com.ajaya.cashloan.core.mapper.BorrowProductMapper">
+    <!--返回Map-->        
+    <resultMap id="BaseResultMap" type="com.ajaya.cashloan.core.domain.BorrowProduct">
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="quota" property="quota" jdbcType="DECIMAL" />
+        <result column="term" property="term" jdbcType="INTEGER" />
+        <result column="term_unit" property="termUnit" jdbcType="INTEGER" />
+        <result column="status" property="status" jdbcType="BIT" />
+        <result column="rate" property="rate" jdbcType="DECIMAL" />
+        <result column="behead_fee" property="beheadFee" jdbcType="BIT" />
+        <result column="fee" property="fee" jdbcType="DECIMAL" />
+        <result column="behead_money" property="beheadMoney" jdbcType="DECIMAL" />
+        <result column="user_type" property="userType" jdbcType="VARCHAR" />
+        <result column="penalty_fee" property="penaltyFee" jdbcType="VARCHAR" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+    
+    <!--基本的sql查询字段 公共引用...-->
+    <sql id="Base_Column_List">
+        id,name,quota,term,term_unit,status,rate,behead_fee,fee,behead_money,user_type,penalty_fee,create_time,update_time 
+    </sql>
+    
+    <!-- 基本的sql查询条件公共引用 -->
+    <sql id="searchBy">
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test=" id != null and id != '' ">
+                id  = #{id,jdbcType=BIGINT}
+            </if>
+            <if test="name != null and name != '' ">
+                and name = #{name,jdbcType=VARCHAR}
+            </if>
+            <if test="quota != null and quota != '' ">
+                and quota = #{quota,jdbcType=DECIMAL}
+            </if>
+            <if test="term != null and term != '' ">
+                and term = #{term,jdbcType=INTEGER}
+            </if>
+            <if test="termUnit != null and termUnit != '' ">
+                and term_unit = #{termUnit,jdbcType=INTEGER}
+            </if>
+            <if test="status != null and status != '' ">
+                and status = #{status,jdbcType=BIT}
+            </if>
+            <if test="rate != null and rate != '' ">
+                and rate = #{rate,jdbcType=DECIMAL}
+            </if>
+            <if test="beheadFee != null and beheadFee != '' ">
+                and behead_fee = #{beheadFee,jdbcType=BIT}
+            </if>
+            <if test="fee != null and fee != '' ">
+                and fee = #{fee,jdbcType=DECIMAL}
+            </if>
+            <if test="beheadMoney != null and beheadMoney != '' ">
+                and behead_money = #{beheadMoney,jdbcType=DECIMAL}
+            </if>
+            <if test="userType != null and userType != '' ">
+                and user_type = #{userType,jdbcType=VARCHAR}
+            </if>
+            <if test="penaltyFee != null and penaltyFee != '' ">
+                and penalty_fee = #{penaltyFee,jdbcType=VARCHAR}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="updateTime != null">
+                and update_time = #{updateTime,jdbcType=TIMESTAMP}
+            </if>
+        </trim>
+    </sql>
+    
+    
+    <insert id="save" parameterType="com.ajaya.cashloan.core.domain.BorrowProduct">
+        insert into cl_borrow_product(name,quota,term,term_unit,status,rate,behead_fee,fee,behead_money,user_type,penalty_fee,create_time,update_time)values(#{name,jdbcType=VARCHAR},#{quota,jdbcType=DECIMAL},#{term,jdbcType=INTEGER},#{termUnit,jdbcType=INTEGER},#{status,jdbcType=BIT},#{rate,jdbcType=DECIMAL},#{beheadFee,jdbcType=BIT},#{fee,jdbcType=DECIMAL},#{beheadMoney,jdbcType=DECIMAL},#{userType,jdbcType=VARCHAR},#{penaltyFee,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP},#{updateTime,jdbcType=TIMESTAMP})
+    </insert>
+
+    
+    <update id="update" parameterType="com.ajaya.cashloan.core.domain.BorrowProduct">
+        update cl_borrow_product set 
+            name = #{name,jdbcType=VARCHAR},
+            quota = #{quota,jdbcType=DECIMAL},
+            term = #{term,jdbcType=INTEGER},
+            term_unit = #{termUnit,jdbcType=INTEGER},
+            status = #{status,jdbcType=BIT},
+            rate = #{rate,jdbcType=DECIMAL},
+            behead_fee = #{beheadFee,jdbcType=BIT},
+            fee = #{fee,jdbcType=DECIMAL},
+            behead_money = #{beheadMoney,jdbcType=DECIMAL},
+            user_type = #{userType,jdbcType=VARCHAR},
+            penalty_fee = #{penaltyFee,jdbcType=VARCHAR},
+            create_time = #{createTime,jdbcType=TIMESTAMP},
+            update_time = #{updateTime,jdbcType=TIMESTAMP}
+        where id = #{id ,jdbcType=INTEGER}
+    </update>
+
+
+    <update id="updateSelective"  parameterType="java.util.HashMap">
+        update cl_borrow_product
+          <set>
+            <if test="name != null and name != '' ">        
+                name = #{name,jdbcType=VARCHAR},                
+            </if>
+            <if test="quota != null and quota != '' ">        
+                quota = #{quota,jdbcType=DECIMAL},                
+            </if>
+            <if test="term != null and term != '' ">        
+                term = #{term,jdbcType=INTEGER},                
+            </if>
+            <if test="termUnit != null and termUnit != '' ">        
+                term_unit = #{termUnit,jdbcType=INTEGER},                
+            </if>
+            <if test="status != null and status != '' ">        
+                status = #{status,jdbcType=BIT},                
+            </if>
+            <if test="rate != null and rate != '' ">        
+                rate = #{rate,jdbcType=DECIMAL},                
+            </if>
+            <if test="beheadFee != null and beheadFee != '' ">        
+                behead_fee = #{beheadFee,jdbcType=BIT},                
+            </if>
+            <if test="fee != null and fee != '' ">        
+                fee = #{fee,jdbcType=DECIMAL},                
+            </if>
+            <if test="beheadMoney != null and beheadMoney != '' ">        
+                behead_money = #{beheadMoney,jdbcType=DECIMAL},                
+            </if>
+            <if test="userType != null and userType != '' ">        
+                user_type = #{userType,jdbcType=VARCHAR},                
+            </if>
+            <if test="penaltyFee != null and penaltyFee != '' ">        
+                penalty_fee = #{penaltyFee,jdbcType=VARCHAR},                
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},                
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP}                
+            </if>
+        </set>    
+        where id = #{id ,jdbcType=INTEGER}
+    </update>
+
+
+    <select id="findByPrimary" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List" />
+        from cl_borrow_product
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
+	<select id="findSelective" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+        select
+        <include refid="Base_Column_List" />
+        from cl_borrow_product
+        <include refid="searchBy"/>
+    </select>
+               
+    <select id="listSelective" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+        select
+        <include refid="Base_Column_List" />
+        from cl_borrow_product
+        <include refid="searchBy"/>
+    </select>
+    
+</mapper>

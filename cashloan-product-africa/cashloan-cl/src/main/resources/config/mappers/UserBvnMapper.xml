@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- cl_user_bvn表:'用户bvn记录表模块 -->
+<mapper namespace="com.ajaya.cashloan.cl.mapper.UserBvnMapper">
+    <!--返回Map-->        
+    <resultMap id="BaseResultMap" type="com.ajaya.cashloan.cl.domain.UserBvn">
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="user_id" property="userId" jdbcType="BIGINT" />
+        <result column="first_name" property="firstName" jdbcType="VARCHAR" />
+        <result column="last_name" property="lastName" jdbcType="VARCHAR" />
+        <result column="dob" property="dob" jdbcType="VARCHAR" />
+        <result column="formatted_dob" property="formattedDob" jdbcType="VARCHAR" />
+        <result column="mobile" property="mobile" jdbcType="VARCHAR" />
+        <result column="bvn" property="bvn" jdbcType="VARCHAR" />
+        <result column="message" property="message" jdbcType="VARCHAR" />
+        <result column="status" property="status" jdbcType="VARCHAR" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+    
+    <!--基本的sql查询字段 公共引用...-->
+    <sql id="Base_Column_List">
+        id,user_id,first_name,last_name,dob,formatted_dob,mobile,bvn,message,status,create_time,update_time 
+    </sql>
+    
+    <!-- 基本的sql查询条件公共引用 -->
+    <sql id="searchBy">
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test=" id != null and id != '' ">
+                id  = #{id,jdbcType=BIGINT}
+            </if>
+            <if test="userId != null and userId != '' ">
+                and user_id = #{userId,jdbcType=BIGINT}
+            </if>
+            <if test="firstName != null and firstName != '' ">
+                and first_name = #{firstName,jdbcType=VARCHAR}
+            </if>
+            <if test="lastName != null and lastName != '' ">
+                and last_name = #{lastName,jdbcType=VARCHAR}
+            </if>
+            <if test="dob != null and dob != '' ">
+                and dob = #{dob,jdbcType=VARCHAR}
+            </if>
+            <if test="formattedDob != null and formattedDob != '' ">
+                and formatted_dob = #{formattedDob,jdbcType=VARCHAR}
+            </if>
+            <if test="mobile != null and mobile != '' ">
+                and mobile = #{mobile,jdbcType=VARCHAR}
+            </if>
+            <if test="bvn != null and bvn != '' ">
+                and bvn = #{bvn,jdbcType=VARCHAR}
+            </if>
+            <if test="message != null and message != '' ">
+                and message = #{message,jdbcType=VARCHAR}
+            </if>
+            <if test="status != null and status != '' ">
+                and status = #{status,jdbcType=VARCHAR}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="updateTime != null">
+                and update_time = #{updateTime,jdbcType=TIMESTAMP}
+            </if>
+        </trim>
+    </sql>
+    
+    
+    <insert id="save" parameterType="com.ajaya.cashloan.cl.domain.UserBvn">
+        insert into cl_user_bvn(user_id,first_name,last_name,dob,formatted_dob,mobile,bvn,message,status,create_time,update_time)values(#{userId,jdbcType=BIGINT},#{firstName,jdbcType=VARCHAR},#{lastName,jdbcType=VARCHAR},#{dob,jdbcType=VARCHAR},#{formattedDob,jdbcType=VARCHAR},#{mobile,jdbcType=VARCHAR},#{bvn,jdbcType=VARCHAR},#{message,jdbcType=VARCHAR},#{status,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP},#{updateTime,jdbcType=TIMESTAMP})
+    </insert>
+
+    
+    <update id="update" parameterType="com.ajaya.cashloan.cl.domain.UserBvn">
+        update cl_user_bvn set 
+            user_id = #{userId,jdbcType=BIGINT},
+            first_name = #{firstName,jdbcType=VARCHAR},
+            last_name = #{lastName,jdbcType=VARCHAR},
+            dob = #{dob,jdbcType=VARCHAR},
+            formatted_dob = #{formattedDob,jdbcType=VARCHAR},
+            mobile = #{mobile,jdbcType=VARCHAR},
+            bvn = #{bvn,jdbcType=VARCHAR},
+            message = #{message,jdbcType=VARCHAR},
+            status = #{status,jdbcType=VARCHAR},
+            create_time = #{createTime,jdbcType=TIMESTAMP},
+            update_time = #{updateTime,jdbcType=TIMESTAMP}
+        where id = #{id ,jdbcType=INTEGER}
+    </update>
+
+
+    <update id="updateSelective"  parameterType="java.util.HashMap">
+        update cl_user_bvn
+          <set>
+            <if test="userId != null and userId != '' ">        
+                user_id = #{userId,jdbcType=BIGINT},                
+            </if>
+            <if test="firstName != null and firstName != '' ">        
+                first_name = #{firstName,jdbcType=VARCHAR},                
+            </if>
+            <if test="lastName != null and lastName != '' ">        
+                last_name = #{lastName,jdbcType=VARCHAR},                
+            </if>
+            <if test="dob != null and dob != '' ">        
+                dob = #{dob,jdbcType=VARCHAR},                
+            </if>
+            <if test="formattedDob != null and formattedDob != '' ">        
+                formatted_dob = #{formattedDob,jdbcType=VARCHAR},                
+            </if>
+            <if test="mobile != null and mobile != '' ">        
+                mobile = #{mobile,jdbcType=VARCHAR},                
+            </if>
+            <if test="bvn != null and bvn != '' ">        
+                bvn = #{bvn,jdbcType=VARCHAR},                
+            </if>
+            <if test="message != null and message != '' ">        
+                message = #{message,jdbcType=VARCHAR},                
+            </if>
+            <if test="status != null and status != '' ">        
+                status = #{status,jdbcType=VARCHAR},                
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},                
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP}                
+            </if>
+        </set>    
+        where id = #{id ,jdbcType=INTEGER}
+    </update>
+
+
+    <select id="findByPrimary" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List" />
+        from cl_user_bvn
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
+	<select id="findSelective" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+        select
+        <include refid="Base_Column_List" />
+        from cl_user_bvn
+        <include refid="searchBy"/>
+    </select>
+               
+    <select id="listSelective" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+        select
+        <include refid="Base_Column_List" />
+        from cl_user_bvn
+        <include refid="searchBy"/>
+    </select>
+    <select id="findBvnByUserId" resultMap="BaseResultMap" resultType="long">
+        SELECT    <include refid="Base_Column_List" />
+        from cl_user_bvn where  user_id = #{userId,jdbcType=BIGINT};
+    </select>
+</mapper>

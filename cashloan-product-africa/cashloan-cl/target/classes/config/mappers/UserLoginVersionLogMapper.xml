@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- cl_user_login_version_log表:'用户登录版本记录表模块 -->
+<mapper namespace="com.ajaya.cashloan.cl.mapper.UserLoginVersionLogMapper">
+    <!--返回Map-->        
+    <resultMap id="BaseResultMap" type="com.ajaya.cashloan.cl.domain.UserLoginVersionLog">
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="user_id" property="userId" jdbcType="BIGINT" />
+        <result column="product_name" property="productName" jdbcType="VARCHAR" />
+        <result column="login_time" property="loginTime" jdbcType="VARCHAR" />
+        <result column="version" property="version" jdbcType="VARCHAR" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+    
+    <!--基本的sql查询字段 公共引用...-->
+    <sql id="Base_Column_List">
+        id,user_id,product_name,login_time,version,create_time 
+    </sql>
+    
+    <!-- 基本的sql查询条件公共引用 -->
+    <sql id="searchBy">
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test=" id != null and id != '' ">
+                id  = #{id,jdbcType=BIGINT}
+            </if>
+            <if test="userId != null and userId != '' ">
+                and user_id = #{userId,jdbcType=BIGINT}
+            </if>
+            <if test="productName != null and productName != '' ">
+                and product_name = #{productName,jdbcType=VARCHAR}
+            </if>
+            <if test="loginTime != null and loginTime != '' ">
+                and login_time = #{loginTime,jdbcType=VARCHAR}
+            </if>
+            <if test="version != null and version != '' ">
+                and version = #{version,jdbcType=VARCHAR}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime,jdbcType=TIMESTAMP}
+            </if>
+        </trim>
+    </sql>
+    
+    
+    <insert id="save" parameterType="com.ajaya.cashloan.cl.domain.UserLoginVersionLog">
+        insert into cl_user_login_version_log(user_id,product_name,login_time,version,create_time)values(#{userId,jdbcType=BIGINT},#{productName,jdbcType=VARCHAR},#{loginTime,jdbcType=VARCHAR},#{version,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP})
+    </insert>
+
+    
+    <update id="update" parameterType="com.ajaya.cashloan.cl.domain.UserLoginVersionLog">
+        update cl_user_login_version_log set 
+            user_id = #{userId,jdbcType=BIGINT},
+            product_name = #{productName,jdbcType=VARCHAR},
+            login_time = #{loginTime,jdbcType=VARCHAR},
+            version = #{version,jdbcType=VARCHAR},
+            create_time = #{createTime,jdbcType=TIMESTAMP}
+        where id = #{id ,jdbcType=INTEGER}
+    </update>
+
+
+    <update id="updateSelective"  parameterType="java.util.HashMap">
+        update cl_user_login_version_log
+          <set>
+            <if test="userId != null and userId != '' ">        
+                user_id = #{userId,jdbcType=BIGINT},                
+            </if>
+            <if test="productName != null and productName != '' ">        
+                product_name = #{productName,jdbcType=VARCHAR},                
+            </if>
+            <if test="loginTime != null and loginTime != '' ">        
+                login_time = #{loginTime,jdbcType=VARCHAR},                
+            </if>
+            <if test="version != null and version != '' ">        
+                version = #{version,jdbcType=VARCHAR},                
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP}                
+            </if>
+        </set>    
+        where id = #{id ,jdbcType=INTEGER}
+    </update>
+
+
+    <select id="findByPrimary" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List" />
+        from cl_user_login_version_log
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
+	<select id="findSelective" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+        select
+        <include refid="Base_Column_List" />
+        from cl_user_login_version_log
+        <include refid="searchBy"/>
+    </select>
+               
+    <select id="listSelective" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+        select
+        <include refid="Base_Column_List" />
+        from cl_user_login_version_log
+        <include refid="searchBy"/>
+    </select>
+    
+</mapper>

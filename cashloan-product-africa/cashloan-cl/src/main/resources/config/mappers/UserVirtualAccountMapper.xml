@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- cl_user_virtual_account表:用户虚拟账户表模块 -->
+<mapper namespace="com.ajaya.cashloan.cl.mapper.UserVirtualAccountMapper">
+    <!--返回Map-->
+    <resultMap id="BaseResultMap" type="com.ajaya.cashloan.cl.domain.UserVirtualAccount">
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="user_id" property="userId" jdbcType="BIGINT" />
+        <result column="account_reference" property="accountReference" jdbcType="VARCHAR" />
+        <result column="account_name" property="accountName" jdbcType="VARCHAR" />
+        <result column="currency_code" property="currencyCode" jdbcType="VARCHAR" />
+        <result column="customer_email" property="customerEmail" jdbcType="VARCHAR" />
+        <result column="account_number" property="accountNumber" jdbcType="VARCHAR" />
+        <result column="bank_code" property="bankCode" jdbcType="VARCHAR" />
+        <result column="bank_name" property="bankName" jdbcType="VARCHAR" />
+        <result column="reservation_reference" property="reservationReference" jdbcType="VARCHAR" />
+        <result column="customer_bvn" property="customerBvn" jdbcType="VARCHAR" />
+        <result column="created_on" property="createdOn" jdbcType="VARCHAR" />
+        <result column="status" property="status" jdbcType="VARCHAR" />
+        <result column="last_use_time" property="lastUseTime" jdbcType="TIMESTAMP" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <!--基本的sql查询字段 公共引用...-->
+    <sql id="Base_Column_List">
+        id,user_id,account_reference,account_name,currency_code,customer_email,account_number,bank_code,bank_name,reservation_reference,customer_bvn,created_on,status,last_use_time,create_time,update_time
+    </sql>
+
+    <!-- 基本的sql查询条件公共引用 -->
+    <sql id="searchBy">
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test=" id != null and id != '' ">
+                id  = #{id,jdbcType=BIGINT}
+            </if>
+            <if test="userId != null and userId != '' ">
+                and user_id = #{userId,jdbcType=BIGINT}
+            </if>
+            <if test="accountReference != null and accountReference != '' ">
+                and account_reference = #{accountReference,jdbcType=VARCHAR}
+            </if>
+            <if test="accountName != null and accountName != '' ">
+                and account_name = #{accountName,jdbcType=VARCHAR}
+            </if>
+            <if test="currencyCode != null and currencyCode != '' ">
+                and currency_code = #{currencyCode,jdbcType=VARCHAR}
+            </if>
+            <if test="customerEmail != null and customerEmail != '' ">
+                and customer_email = #{customerEmail,jdbcType=VARCHAR}
+            </if>
+            <if test="accountNumber != null and accountNumber != '' ">
+                and account_number = #{accountNumber,jdbcType=VARCHAR}
+            </if>
+            <if test="bankCode != null and bankCode != '' ">
+                and bank_code = #{bankCode,jdbcType=VARCHAR}
+            </if>
+            <if test="bankName != null and bankName != '' ">
+                and bank_name = #{bankName,jdbcType=VARCHAR}
+            </if>
+            <if test="reservationReference != null and reservationReference != '' ">
+                and reservation_reference = #{reservationReference,jdbcType=VARCHAR}
+            </if>
+            <if test="customerBvn != null and customerBvn != '' ">
+                and customer_bvn = #{customerBvn,jdbcType=VARCHAR}
+            </if>
+            <if test="createdOn != null and createdOn != '' ">
+                and created_on = #{createdOn,jdbcType=VARCHAR}
+            </if>
+            <if test="status != null and status != '' ">
+                and status = #{status,jdbcType=VARCHAR}
+            </if>
+            <if test="lastUseTime != null">
+                and last_use_time = #{lastUseTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="updateTime != null">
+                and update_time = #{updateTime,jdbcType=TIMESTAMP}
+            </if>
+        </trim>
+    </sql>
+
+
+    <insert id="save" parameterType="com.ajaya.cashloan.cl.domain.UserVirtualAccount">
+        insert into cl_user_virtual_account(user_id,account_reference,account_name,currency_code,customer_email,account_number,bank_code,bank_name,reservation_reference,customer_bvn,created_on,status,last_use_time,create_time,update_time)values(#{userId,jdbcType=BIGINT},#{accountReference,jdbcType=VARCHAR},#{accountName,jdbcType=VARCHAR},#{currencyCode,jdbcType=VARCHAR},#{customerEmail,jdbcType=VARCHAR},#{accountNumber,jdbcType=VARCHAR},#{bankCode,jdbcType=VARCHAR},#{bankName,jdbcType=VARCHAR},#{reservationReference,jdbcType=VARCHAR},#{customerBvn,jdbcType=VARCHAR},#{createdOn,jdbcType=VARCHAR},#{status,jdbcType=VARCHAR},#{lastUseTime,jdbcType=TIMESTAMP},#{createTime,jdbcType=TIMESTAMP},#{updateTime,jdbcType=TIMESTAMP})
+    </insert>
+
+
+    <update id="update" parameterType="com.ajaya.cashloan.cl.domain.UserVirtualAccount">
+        update cl_user_virtual_account set
+        user_id = #{userId,jdbcType=BIGINT},
+        account_reference = #{accountReference,jdbcType=VARCHAR},
+        account_name = #{accountName,jdbcType=VARCHAR},
+        currency_code = #{currencyCode,jdbcType=VARCHAR},
+        customer_email = #{customerEmail,jdbcType=VARCHAR},
+        account_number = #{accountNumber,jdbcType=VARCHAR},
+        bank_code = #{bankCode,jdbcType=VARCHAR},
+        bank_name = #{bankName,jdbcType=VARCHAR},
+        reservation_reference = #{reservationReference,jdbcType=VARCHAR},
+        customer_bvn = #{customerBvn,jdbcType=VARCHAR},
+        created_on = #{createdOn,jdbcType=VARCHAR},
+        status = #{status,jdbcType=VARCHAR},
+        last_use_time = #{lastUseTime,jdbcType=TIMESTAMP},
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+        update_time = #{updateTime,jdbcType=TIMESTAMP}
+        where id = #{id ,jdbcType=INTEGER}
+    </update>
+
+
+    <update id="updateSelective"  parameterType="java.util.HashMap">
+        update cl_user_virtual_account
+        <set>
+            <if test="userId != null and userId != '' ">
+                user_id = #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="accountReference != null and accountReference != '' ">
+                account_reference = #{accountReference,jdbcType=VARCHAR},
+            </if>
+            <if test="accountName != null and accountName != '' ">
+                account_name = #{accountName,jdbcType=VARCHAR},
+            </if>
+            <if test="currencyCode != null and currencyCode != '' ">
+                currency_code = #{currencyCode,jdbcType=VARCHAR},
+            </if>
+            <if test="customerEmail != null and customerEmail != '' ">
+                customer_email = #{customerEmail,jdbcType=VARCHAR},
+            </if>
+            <if test="accountNumber != null and accountNumber != '' ">
+                account_number = #{accountNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="bankCode != null and bankCode != '' ">
+                bank_code = #{bankCode,jdbcType=VARCHAR},
+            </if>
+            <if test="bankName != null and bankName != '' ">
+                bank_name = #{bankName,jdbcType=VARCHAR},
+            </if>
+            <if test="reservationReference != null and reservationReference != '' ">
+                reservation_reference = #{reservationReference,jdbcType=VARCHAR},
+            </if>
+            <if test="customerBvn != null and customerBvn != '' ">
+                customer_bvn = #{customerBvn,jdbcType=VARCHAR},
+            </if>
+            <if test="createdOn != null and createdOn != '' ">
+                created_on = #{createdOn,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null and status != '' ">
+                status = #{status,jdbcType=VARCHAR},
+            </if>
+            <if test="lastUseTime != null">
+                last_use_time = #{lastUseTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP}
+            </if>
+        </set>
+        where id = #{id ,jdbcType=INTEGER}
+    </update>
+
+
+    <select id="findByPrimary" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List" />
+        from cl_user_virtual_account
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <select id="findSelective" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+        select
+        <include refid="Base_Column_List" />
+        from cl_user_virtual_account
+        <include refid="searchBy"/>
+    </select>
+
+    <select id="listSelective" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+        select
+        <include refid="Base_Column_List" />
+        from cl_user_virtual_account
+        <include refid="searchBy"/>
+    </select>
+    <select id="findByUserId" resultMap="BaseResultMap" parameterType="long">
+         select
+            <include refid="Base_Column_List" />
+           from cl_user_virtual_account where  user_id = #{userId,jdbcType=BIGINT}
+    </select>
+    <select id="findByAccountReference" resultMap="BaseResultMap" parameterType="string">
+         select
+            <include refid="Base_Column_List" />
+           from cl_user_virtual_account where  account_reference = #{accountReference,jdbcType=BIGINT}
+    </select>
+</mapper>

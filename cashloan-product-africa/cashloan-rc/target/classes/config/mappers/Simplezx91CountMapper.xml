@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- cl_rc_simple_91zx_count表:风控数据统计-（简）通话记录统计模块 -->
+<mapper namespace="com.ajaya.cashloan.rc.mapper.Simplezx91CountMapper">
+    <!--返回Map-->        
+    <resultMap id="BaseResultMap" type="com.ajaya.cashloan.rc.domain.Simplezx91Count">
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="user_id" property="userId" jdbcType="BIGINT" />
+        <result column="borrow_count" property="borrowCount" jdbcType="INTEGER" />
+        <result column="overdue_amt" property="overdueAmt" jdbcType="DECIMAL" />
+        <result column="amt_min" property="amtMin" jdbcType="DECIMAL" />
+        <result column="amt_max" property="amtMax" jdbcType="DECIMAL" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+    
+    <!--基本的sql查询字段 公共引用...-->
+    <sql id="Base_Column_List">
+        id,user_id,borrow_count,overdue_amt,amt_min,amt_max,create_time 
+    </sql>
+    
+    <!-- 基本的sql查询条件公共引用 -->
+    <sql id="searchBy">
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test=" id != null ">
+                id  = #{id,jdbcType=BIGINT}
+            </if>
+            <if test="userId != null ">
+                and user_id = #{userId,jdbcType=BIGINT}
+            </if>
+            <if test="borrowCount != null">
+                and borrow_count = #{borrowCount,jdbcType=INTEGER}
+            </if>
+            <if test="overdueAmt != null ">
+                and overdue_amt = #{overdueAmt,jdbcType=DECIMAL}
+            </if>
+            <if test="amtMin != null">
+                and amt_min = #{amtMin,jdbcType=DECIMAL}
+            </if>
+            <if test="amtMax != null">
+                and amt_max = #{amtMax,jdbcType=DECIMAL}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime,jdbcType=TIMESTAMP}
+            </if>
+        </trim>
+    </sql>
+    
+    
+    <insert id="save" parameterType="com.ajaya.cashloan.rc.domain.Simplezx91Count" keyProperty="id" useGeneratedKeys="true">
+        insert into cl_rc_simple_91zx_count(user_id,borrow_count,overdue_amt,amt_min,amt_max,create_time)values(#{userId,jdbcType=BIGINT},#{borrowCount,jdbcType=INTEGER},#{overdueAmt,jdbcType=DECIMAL},#{amtMin,jdbcType=DECIMAL},#{amtMax,jdbcType=DECIMAL},#{createTime,jdbcType=TIMESTAMP})
+    </insert>
+
+    
+    <update id="update" parameterType="com.ajaya.cashloan.rc.domain.Simplezx91Count">
+        update cl_rc_simple_91zx_count
+        <set>
+            <if test="userId != null ">        
+                user_id = #{userId,jdbcType=BIGINT},                
+            </if>
+            <if test="borrowCount != null ">        
+                borrow_count = #{borrowCount,jdbcType=INTEGER},                
+            </if>
+            <if test="overdueAmt != null ">        
+                overdue_amt = #{overdueAmt,jdbcType=DECIMAL},                
+            </if>
+            <if test="amtMin != null ">        
+                amt_min = #{amtMin,jdbcType=DECIMAL},                
+            </if>
+            <if test="amtMax != null ">        
+                amt_max = #{amtMax,jdbcType=DECIMAL},                
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP}                
+            </if>
+        </set>    
+        where id = #{id ,jdbcType=INTEGER}
+    </update>
+
+
+    <update id="updateSelective"  parameterType="java.util.HashMap">
+        update cl_rc_simple_91zx_count
+        <set>
+            <if test="userId != null ">        
+                user_id = #{userId,jdbcType=BIGINT},                
+            </if>
+            <if test="borrowCount != null ">        
+                borrow_count = #{borrowCount,jdbcType=INTEGER},                
+            </if>
+            <if test="overdueAmt != null ">        
+                overdue_amt = #{overdueAmt,jdbcType=DECIMAL},                
+            </if>
+            <if test="amtMin != null ">        
+                amt_min = #{amtMin,jdbcType=DECIMAL},                
+            </if>
+            <if test="amtMax != null ">        
+                amt_max = #{amtMax,jdbcType=DECIMAL},                
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP}                
+            </if>
+        </set>    
+        where id = #{id ,jdbcType=INTEGER}
+    </update>
+
+
+    <select id="findByPrimary" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List" />
+        from cl_rc_simple_91zx_count
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
+	<select id="findSelective" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+        select
+        <include refid="Base_Column_List" />
+        from cl_rc_simple_91zx_count
+        <include refid="searchBy"/>
+    </select>
+               
+    <select id="listSelective" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+        select
+        <include refid="Base_Column_List" />
+        from cl_rc_simple_91zx_count
+        <include refid="searchBy"/>
+    </select>
+    
+</mapper>

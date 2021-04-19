@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- cl_urge_repay_extend表:催收扩展表模块 -->
+<mapper namespace="com.ajaya.cashloan.cl.mapper.UrgeRepayExtendMapper">
+    <!--返回Map-->        
+    <resultMap id="BaseResultMap" type="com.ajaya.cashloan.cl.domain.UrgeRepayExtend">
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="cl_user_id" property="clUserId" jdbcType="BIGINT" />
+        <result column="user_id" property="userId" jdbcType="BIGINT" />
+        <result column="phone" property="phone" jdbcType="VARCHAR" />
+        <result column="borrow_id" property="borrowId" jdbcType="BIGINT" />
+        <result column="urge_order_id" property="urgeOrderId" jdbcType="BIGINT" />
+        <result column="urge_log_id" property="urgeLogId" jdbcType="INTEGER" />
+        <result column="answer_state" property="answerState" jdbcType="VARCHAR" />
+        <result column="extend_1" property="extend1" jdbcType="VARCHAR" />
+        <result column="extend_2" property="extend2" jdbcType="VARCHAR" />
+        <result column="extend_3" property="extend3" jdbcType="VARCHAR" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+    
+    <!--基本的sql查询字段 公共引用...-->
+    <sql id="Base_Column_List">
+        id,cl_user_id,user_id,phone,borrow_id,urge_order_id,urge_log_id,answer_state,extend_1,extend_2,extend_3,create_time,update_time
+    </sql>
+    
+    <!-- 基本的sql查询条件公共引用 -->
+    <sql id="searchBy">
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test=" id != null and id != '' ">
+                id  = #{id,jdbcType=BIGINT}
+            </if>
+            <if test="clUserId != null and clUserId != '' ">
+                and cl_user_id = #{clUserId,jdbcType=BIGINT}
+            </if>
+            <if test="userId != null and userId != '' ">
+                and user_id = #{userId,jdbcType=BIGINT}
+            </if>
+            <if test="phone != null and phone != '' ">
+                and phone = #{phone,jdbcType=VARCHAR}
+            </if>
+            <if test="borrowId != null and borrowId != '' ">
+                and borrow_id = #{borrowId,jdbcType=BIGINT}
+            </if>
+            <if test="urgeOrderId != null and urgeOrderId != '' ">
+                and urge_order_id = #{urgeOrderId,jdbcType=BIGINT}
+            </if>
+            <if test="urgeLogId != null and urgeLogId != '' ">
+                and urge_log_id = #{urgeLogId,jdbcType=INTEGER}
+            </if>
+            <if test="answerState != null and answerState != '' ">
+                and answer_state = #{answerState,jdbcType=VARCHAR}
+            </if>
+            <if test="extend1 != null and extend1 != '' ">
+                and extend_1 = #{extend1,jdbcType=VARCHAR}
+            </if>
+            <if test="extend2 != null and extend2 != '' ">
+                and extend_2 = #{extend2,jdbcType=VARCHAR}
+            </if>
+            <if test="extend3 != null and extend3 != '' ">
+                and extend_3 = #{extend3,jdbcType=VARCHAR}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="updateTime != null">
+                and update_time = #{updateTime,jdbcType=TIMESTAMP}
+            </if>
+        </trim>
+    </sql>
+    
+    
+    <insert id="save" parameterType="com.ajaya.cashloan.cl.domain.UrgeRepayExtend">
+        insert into cl_urge_repay_extend(cl_user_id,user_id,phone,borrow_id,urge_order_id,urge_log_id,answer_state,extend_1,extend_2,extend_3,create_time,update_time)values(#{clUserId,jdbcType=BIGINT},#{userId,jdbcType=BIGINT},#{phone,jdbcType=VARCHAR},#{borrowId,jdbcType=BIGINT},#{urgeOrderId,jdbcType=BIGINT},#{urgeLogId,jdbcType=INTEGER},#{answerState,jdbcType=VARCHAR},#{extend1,jdbcType=VARCHAR},#{extend2,jdbcType=VARCHAR},#{extend3,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP},#{updateTime,jdbcType=TIMESTAMP})
+    </insert>
+
+    
+    <update id="update" parameterType="com.ajaya.cashloan.cl.domain.UrgeRepayExtend">
+        update cl_urge_repay_extend set 
+            cl_user_id = #{clUserId,jdbcType=BIGINT},
+            user_id = #{userId,jdbcType=BIGINT},
+            phone = #{phone,jdbcType=VARCHAR},
+            borrow_id = #{borrowId,jdbcType=BIGINT},
+            urge_order_id = #{urgeOrderId,jdbcType=BIGINT},
+            urge_log_id = #{urgeLogId,jdbcType=INTEGER},
+            answer_state = #{answerState,jdbcType=VARCHAR},
+            extend_1 = #{extend1,jdbcType=VARCHAR},
+            extend_2 = #{extend2,jdbcType=VARCHAR},
+            extend_3 = #{extend3,jdbcType=VARCHAR},
+            create_time = #{createTime,jdbcType=TIMESTAMP},
+            update_time = #{updateTime,jdbcType=TIMESTAMP}
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+
+    <update id="updateSelective"  parameterType="java.util.HashMap">
+        update cl_urge_repay_extend
+          <set>
+            <if test="clUserId != null and clUserId != '' ">        
+                cl_user_id = #{clUserId,jdbcType=BIGINT},                
+            </if>
+            <if test="userId != null and userId != '' ">        
+                user_id = #{userId,jdbcType=BIGINT},                
+            </if>
+            <if test="phone != null and phone != '' ">        
+                phone = #{phone,jdbcType=VARCHAR},                
+            </if>
+            <if test="borrowId != null and borrowId != '' ">        
+                borrow_id = #{borrowId,jdbcType=BIGINT},                
+            </if>
+            <if test="urgeOrderId != null and urgeOrderId != '' ">        
+                urge_order_id = #{urgeOrderId,jdbcType=BIGINT},                
+            </if>
+            <if test="urgeLogId != null and urgeLogId != '' ">        
+                urge_log_id = #{urgeLogId,jdbcType=INTEGER},                
+            </if>
+            <if test="answerState != null and answerState != '' ">        
+                answer_state = #{answerState,jdbcType=VARCHAR},                
+            </if>
+            <if test="extend1 != null and extend1 != '' ">        
+                extend_1 = #{extend1,jdbcType=VARCHAR},                
+            </if>
+            <if test="extend2 != null and extend2 != '' ">        
+                extend_2 = #{extend2,jdbcType=VARCHAR},                
+            </if>
+            <if test="extend3 != null and extend3 != '' ">        
+                extend_3 = #{extend3,jdbcType=VARCHAR},                
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},                
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP}                
+            </if>
+        </set>    
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+
+    <select id="findByPrimary" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List" />
+        from cl_urge_repay_extend
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+
+	<select id="findSelective" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+        select
+        <include refid="Base_Column_List" />
+        from cl_urge_repay_extend
+        <include refid="searchBy"/>
+    </select>
+               
+    <select id="listSelective" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+        select
+        <include refid="Base_Column_List" />
+        from cl_urge_repay_extend
+        <include refid="searchBy"/>
+    </select>
+    
+</mapper>

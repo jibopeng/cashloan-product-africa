@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- cl_borrow_repay_log_fq表:分期还款记录表模块 -->
+<mapper namespace="com.ajaya.cashloan.cl.mapper.BorrowRepayLogFqMapper">
+    <!--返回Map-->        
+    <resultMap id="BaseResultMap" type="com.ajaya.cashloan.cl.domain.BorrowRepayLogFq">
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="repay_fq_id" property="repayFqId" jdbcType="BIGINT" />
+        <result column="borrow_id" property="borrowId" jdbcType="BIGINT" />
+        <result column="user_id" property="userId" jdbcType="BIGINT" />
+        <result column="amount" property="amount" jdbcType="DECIMAL" />
+        <result column="penalty_day" property="penaltyDay" jdbcType="INTEGER" />
+        <result column="penalty_amout" property="penaltyAmout" jdbcType="DECIMAL" />
+        <result column="repay_way" property="repayWay" jdbcType="VARCHAR" />
+        <result column="pay_fee" property="payFee" jdbcType="DECIMAL" />
+        <result column="repay_account" property="repayAccount" jdbcType="VARCHAR" />
+        <result column="serial_number" property="serialNumber" jdbcType="VARCHAR" />
+        <result column="refund_deduction" property="refundDeduction" jdbcType="DECIMAL" />
+        <result column="pay_time" property="payTime" jdbcType="TIMESTAMP" />
+        <result column="repay_time" property="repayTime" jdbcType="TIMESTAMP" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="periods" property="periods" jdbcType="VARCHAR" />
+    </resultMap>
+    
+    <!--基本的sql查询字段 公共引用...-->
+    <sql id="Base_Column_List">
+        id,repay_fq_id,borrow_id,user_id,amount,penalty_day,penalty_amout,repay_way,pay_fee,repay_account,serial_number,refund_deduction,pay_time,repay_time,create_time,periods 
+    </sql>
+    
+    <!-- 基本的sql查询条件公共引用 -->
+    <sql id="searchBy">
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test=" id != null and id != '' ">
+                id  = #{id,jdbcType=BIGINT}
+            </if>
+            <if test="repayFqId != null and repayFqId != '' ">
+                and repay_fq_id = #{repayFqId,jdbcType=BIGINT}
+            </if>
+            <if test="borrowId != null and borrowId != '' ">
+                and borrow_id = #{borrowId,jdbcType=BIGINT}
+            </if>
+            <if test="userId != null and userId != '' ">
+                and user_id = #{userId,jdbcType=BIGINT}
+            </if>
+            <if test="amount != null and amount != '' ">
+                and amount = #{amount,jdbcType=DECIMAL}
+            </if>
+            <if test="penaltyDay != null and penaltyDay != '' ">
+                and penalty_day = #{penaltyDay,jdbcType=INTEGER}
+            </if>
+            <if test="penaltyAmout != null and penaltyAmout != '' ">
+                and penalty_amout = #{penaltyAmout,jdbcType=DECIMAL}
+            </if>
+            <if test="repayWay != null and repayWay != '' ">
+                and repay_way = #{repayWay,jdbcType=VARCHAR}
+            </if>
+            <if test="payFee != null and payFee != '' ">
+                and pay_fee = #{payFee,jdbcType=DECIMAL}
+            </if>
+            <if test="repayAccount != null and repayAccount != '' ">
+                and repay_account = #{repayAccount,jdbcType=VARCHAR}
+            </if>
+            <if test="serialNumber != null and serialNumber != '' ">
+                and serial_number = #{serialNumber,jdbcType=VARCHAR}
+            </if>
+            <if test="refundDeduction != null and refundDeduction != '' ">
+                and refund_deduction = #{refundDeduction,jdbcType=DECIMAL}
+            </if>
+            <if test="payTime != null">
+                and pay_time = #{payTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="repayTime != null">
+                and repay_time = #{repayTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="periods != null and periods != '' ">
+                and periods = #{periods,jdbcType=VARCHAR}
+            </if>
+        </trim>
+    </sql>
+    
+    
+    <insert id="save" parameterType="com.ajaya.cashloan.cl.domain.BorrowRepayLogFq">
+        insert into cl_borrow_repay_log_fq(repay_fq_id,borrow_id,user_id,amount,penalty_day,penalty_amout,repay_way,pay_fee,repay_account,serial_number,refund_deduction,pay_time,repay_time,create_time,periods)values(#{repayFqId,jdbcType=BIGINT},#{borrowId,jdbcType=BIGINT},#{userId,jdbcType=BIGINT},#{amount,jdbcType=DECIMAL},#{penaltyDay,jdbcType=INTEGER},#{penaltyAmout,jdbcType=DECIMAL},#{repayWay,jdbcType=VARCHAR},#{payFee,jdbcType=DECIMAL},#{repayAccount,jdbcType=VARCHAR},#{serialNumber,jdbcType=VARCHAR},#{refundDeduction,jdbcType=DECIMAL},#{payTime,jdbcType=TIMESTAMP},#{repayTime,jdbcType=TIMESTAMP},#{createTime,jdbcType=TIMESTAMP},#{periods,jdbcType=VARCHAR})
+    </insert>
+
+    
+    <update id="update" parameterType="com.ajaya.cashloan.cl.domain.BorrowRepayLogFq">
+        update cl_borrow_repay_log_fq set 
+            repay_fq_id = #{repayFqId,jdbcType=BIGINT},
+            borrow_id = #{borrowId,jdbcType=BIGINT},
+            user_id = #{userId,jdbcType=BIGINT},
+            amount = #{amount,jdbcType=DECIMAL},
+            penalty_day = #{penaltyDay,jdbcType=INTEGER},
+            penalty_amout = #{penaltyAmout,jdbcType=DECIMAL},
+            repay_way = #{repayWay,jdbcType=VARCHAR},
+            pay_fee = #{payFee,jdbcType=DECIMAL},
+            repay_account = #{repayAccount,jdbcType=VARCHAR},
+            serial_number = #{serialNumber,jdbcType=VARCHAR},
+            refund_deduction = #{refundDeduction,jdbcType=DECIMAL},
+            pay_time = #{payTime,jdbcType=TIMESTAMP},
+            repay_time = #{repayTime,jdbcType=TIMESTAMP},
+            create_time = #{createTime,jdbcType=TIMESTAMP},
+            periods = #{periods,jdbcType=VARCHAR}
+        where id = #{id ,jdbcType=INTEGER}
+    </update>
+
+
+    <update id="updateSelective"  parameterType="java.util.HashMap">
+        update cl_borrow_repay_log_fq
+          <set>
+            <if test="repayFqId != null and repayFqId != '' ">        
+                repay_fq_id = #{repayFqId,jdbcType=BIGINT},                
+            </if>
+            <if test="borrowId != null and borrowId != '' ">        
+                borrow_id = #{borrowId,jdbcType=BIGINT},                
+            </if>
+            <if test="userId != null and userId != '' ">        
+                user_id = #{userId,jdbcType=BIGINT},                
+            </if>
+            <if test="amount != null and amount != '' ">        
+                amount = #{amount,jdbcType=DECIMAL},                
+            </if>
+            <if test="penaltyDay != null and penaltyDay != '' ">        
+                penalty_day = #{penaltyDay,jdbcType=INTEGER},                
+            </if>
+            <if test="penaltyAmout != null and penaltyAmout != '' ">        
+                penalty_amout = #{penaltyAmout,jdbcType=DECIMAL},                
+            </if>
+            <if test="repayWay != null and repayWay != '' ">        
+                repay_way = #{repayWay,jdbcType=VARCHAR},                
+            </if>
+            <if test="payFee != null and payFee != '' ">        
+                pay_fee = #{payFee,jdbcType=DECIMAL},                
+            </if>
+            <if test="repayAccount != null and repayAccount != '' ">        
+                repay_account = #{repayAccount,jdbcType=VARCHAR},                
+            </if>
+            <if test="serialNumber != null and serialNumber != '' ">        
+                serial_number = #{serialNumber,jdbcType=VARCHAR},                
+            </if>
+            <if test="refundDeduction != null and refundDeduction != '' ">        
+                refund_deduction = #{refundDeduction,jdbcType=DECIMAL},                
+            </if>
+            <if test="payTime != null">
+                pay_time = #{payTime,jdbcType=TIMESTAMP},                
+            </if>
+            <if test="repayTime != null">
+                repay_time = #{repayTime,jdbcType=TIMESTAMP},                
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},                
+            </if>
+            <if test="periods != null and periods != '' ">        
+                periods = #{periods,jdbcType=VARCHAR}                
+            </if>
+        </set>    
+        where id = #{id ,jdbcType=INTEGER}
+    </update>
+
+
+    <select id="findByPrimary" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List" />
+        from cl_borrow_repay_log_fq
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
+	<select id="findSelective" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+        select
+        <include refid="Base_Column_List" />
+        from cl_borrow_repay_log_fq
+        <include refid="searchBy"/>
+    </select>
+               
+    <select id="listSelective" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+        select
+        <include refid="Base_Column_List" />
+        from cl_borrow_repay_log_fq
+        <include refid="searchBy"/>
+    </select>
+    
+    <select id="getLastBorrowRepayLogFq" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from cl_borrow_repay_log_fq
+        where borrow_id = #{borrowId,jdbcType=BIGINT} order by create_time desc limit 1
+    </select>
+    
+</mapper>

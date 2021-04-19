@@ -1,0 +1,348 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 首页数据统计 -->
+<mapper namespace="com.ajaya.cashloan.cl.mapper.SystemCountMapper">
+    <resultMap id="mapResult" type="HashMap">  
+        <result property="key" column="ks" />  
+        <result property="value" column="vs" />  
+    </resultMap>  
+    
+    <!-- 刘晓亮 为渠道用户统计所有用户量 userId 和 channelId 的对应关系,存储map集合,便于程序使用  -->
+    <select id="countRegisterForChannleAll" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+    	select id as userId,channel_id as channelId from cl_user
+    </select>
+    
+    <!-- 统计当日注册用户数量 -->
+    <select id="countRegister" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+    	select count(id) from cl_user 
+    	where TO_DAYS(regist_time)-TO_DAYS(SYSDATE())=0  
+    </select>
+    
+    <!-- 刘晓亮 为渠道用户统计当日注册量  -->
+    <select id="countRegisterForChannle" resultType="java.lang.Long" parameterType="java.util.HashMap">
+    	select  channel_id from cl_user 
+    	where TO_DAYS(regist_time)-TO_DAYS(SYSDATE())=0
+    </select>
+    
+    <!-- 统计当日登陆用户数量 -->
+    <select id="countLogin" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+    	select count(id) from cl_user 
+    	where  TO_DAYS(login_time)-TO_DAYS(SYSDATE())=0    
+    </select>
+    
+    <!-- 刘晓亮 为渠道用户统计当日登陆用户数量 -->
+    <select id="countLoginForChannel" resultType="java.lang.Long" parameterType="java.util.HashMap">
+    	select channel_id from cl_user 
+    	where  TO_DAYS(login_time)-TO_DAYS(SYSDATE())=0 
+    </select>
+    
+    <!-- 统计当日借款申请的数量 -->
+    <select id="countBorrow" resultType="java.lang.Double" parameterType="java.util.HashMap">
+    	select count(id) from cl_borrow 
+    	where TO_DAYS(create_time)-TO_DAYS(SYSDATE())=0 
+    </select>
+    
+    <!-- 刘晓亮 为渠道用户统计 当日借款申请的数量-->
+    <select id="countBorrowForChannel" resultType="java.lang.Long" parameterType="java.util.HashMap">
+    	select user_id from cl_borrow 
+    	where TO_DAYS(create_time)-TO_DAYS(SYSDATE())=0
+    </select>
+    
+    <!-- 统计当日借款申请通过的数量 -->
+    <select id="countBorrowPass" resultType="java.lang.Double" parameterType="java.util.HashMap">
+    	select count(id) from cl_borrow_progress 
+    	where TO_DAYS(create_time)-TO_DAYS(SYSDATE())=0 
+    		and state in ('20','26') 
+    </select>
+    
+    <!-- 刘晓亮 为渠道管理员统计当日借款申请通过的数量  -->
+    <select id="countBorrowPassForChannel" resultType="java.lang.Long" parameterType="java.util.HashMap">
+    	select user_id from cl_borrow_progress 
+    	where TO_DAYS(create_time)-TO_DAYS(SYSDATE())=0
+    		and state in ('20','26') 
+    </select>
+    
+    <!-- 统计当日借款申请放款数量 -->
+  	<select id="countBorrowLoan" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+    	select count(id) from cl_borrow_progress 
+    	where TO_DAYS(create_time)-TO_DAYS(SYSDATE())=0
+    	and state = '30'
+    </select>
+    
+    <!-- 刘晓亮 为渠道管理员统计当日借款申请放款数量 -->
+    <select id="countBorrowLoanForChannel" resultType="java.lang.Long" parameterType="java.util.HashMap">
+    	select user_id from cl_borrow_progress 
+    	where TO_DAYS(create_time)-TO_DAYS(SYSDATE())=0
+    	and state = '30'
+    </select>
+    
+    <!-- 统计当日还款量 -->
+    <select id="countBorrowRepay" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+    	select count(id) from cl_borrow_repay_log
+    	where TO_DAYS(repay_time)-TO_DAYS(SYSDATE())=0  
+    </select>
+    
+    <!-- 刘晓亮 为渠道用户统计当日还款量-->
+    <select id="countBorrowRepayForChannel" resultType="java.lang.Long" parameterType="java.util.HashMap">
+    	select user_id from cl_borrow_repay_log
+    	where TO_DAYS(repay_time)-TO_DAYS(SYSDATE())=0
+    </select>
+    
+    
+    <!-- 统计历史放款总量 -->
+    <select id="countBorrowLoanHistory" resultType="java.lang.Integer">
+    	select count(id) from cl_borrow_progress where state = '30'
+    </select>
+    
+     <!-- 刘晓亮 为渠道管理员统计历史放款总量 -->
+    <select id="countBorrowLoanHistoryForChannel" resultType="java.lang.Long">
+    	select user_id from cl_borrow_progress where state = '30'
+    </select>
+    
+    <!-- 统计历史还款总量 -->
+    <select id="countBorrowRepayHistory" resultType="java.lang.Integer">
+    	select count(id) from cl_borrow_repay where state = '10'
+    </select>
+    
+    <!-- 刘晓亮 为渠道管理员统计历史还款总量 -->
+    <select id="countBorrowRepayHistoryForChannelId" resultType="java.lang.Long">
+    	select user_id from cl_borrow_repay where state = '10'
+    </select>
+    
+    <!-- 待还款总额 -->
+    <select id="sumBorrowNeedRepay" resultType="java.lang.Double">
+    	select sum(amount+penalty_amout) from cl_borrow_repay where state = '20'
+    </select>
+    
+    <!-- 刘晓亮 为渠道管理员查询待还款总额  -->
+    <select id="sumBorrowNeedRepayForChannel" resultType="java.util.HashMap">
+    	select id,user_id, amount+penalty_amout as money from cl_borrow_repay where state = '20'
+    </select>
+    
+    <!-- 逾期未还款总额 -->
+    <select id="sumBorrowOverdueRepay" resultType="java.lang.Double">
+    	select sum(amount+penalty_amout) from cl_borrow_repay where state = '20' and penalty_day>0
+    </select>
+    
+    <!-- 刘晓亮 为渠道管理员查询逾期未还款总额 -->
+    <select id="sumBorrowOverdueRepayForChannel" parameterType="java.util.List" resultType="java.lang.Double">
+    	select 
+    		sum(amount+penalty_amout) 
+    	from 
+    		cl_borrow_repay t0,cl_user t1,cl_channel t2
+    	where 
+    		t0.user_id = t1.id
+    		and t1.channel_id = t2.id
+    		and 
+    			<foreach collection="list" item="value" open="t2.id in (" close=")" separator=",">
+    				#{value}
+    			</foreach>
+    		and t0.state = '20' 
+    		and t0.penalty_amout>0
+    </select>
+    
+    <!-- 累计成功借款金额(按地区分组) -->
+    <select id="sumBorrowAmtByProvince" resultType="java.lang.String">
+    	SELECT SUM(amount) FROM `cl_borrow` WHERE state NOT IN (10,20,22,21,26,27) AND address LIKE #{address}
+    </select>
+    
+    <!--刘晓亮 为渠道管理员 累计成功借款金额(按地区分组) -->
+    <select id="sumBorrowAmtByProvinceForChannel" parameterType="java.util.Map" resultType="java.lang.String">
+    	SELECT SUM(t0.amount) FROM `cl_borrow` t0,cl_user t1,cl_channel t2
+			WHERE 
+				t0.user_id = t1.id
+				and t1.channel_id = t2.id
+				and t0.state NOT IN (10,20,22,21,26,27) 
+				and 
+						<foreach collection="list" item="value" open="t2.id in (" close=")" separator=",">
+	    					#{value}
+	    				</foreach>
+				AND t0.address LIKE #{address}
+    </select>
+
+    <!-- 累计还款金额(按地区分组) -->
+    <select id="sumBorrowRepayByProvince" resultType="java.lang.String">
+    	SELECT SUM(brl.amount) FROM `cl_borrow_repay_log` brl LEFT JOIN cl_borrow b ON brl.borrow_id = b.id WHERE b.address LIKE #{address}
+    </select>
+    
+    <!-- 刘晓亮  累计还款金额(按地区分组)-->
+    <select id="sumBorrowRepayByProvinceForChannel" parameterType="java.util.Map" resultType="java.lang.String">
+   		 SELECT SUM(brl.amount) 
+    		FROM `cl_borrow_repay_log` brl LEFT JOIN cl_borrow b ON brl.borrow_id = b.id 
+			left join cl_user t1 on b.user_id = t1.id 
+			LEFT JOIN cl_channel t2 on t1.channel_id = t2.id
+			WHERE b.address LIKE #{address}
+			AND
+				<foreach collection="list" item="value" open="t2.id in (" close=")" separator=",">
+	    				#{value}
+	    		</foreach>
+    </select>
+    
+    <!-- 累计注册用户(按地区分组) -->
+    <select id="countRegisterByProvince" resultType="java.lang.String">
+    	SELECT COUNT(1) FROM cl_user_base_info WHERE register_addr LIKE #{address}
+    </select>
+    
+     <!-- 刘晓亮 累计注册用户(按地区分组) -->
+    <select id="countRegisterByProvinceForChannel" parameterType="java.util.Map" resultType="java.lang.String">
+    	SELECT count(t0.user_id) FROM cl_user_base_info t0
+    	left join cl_user t1 on t0.user_id = t1.id
+    	left join cl_channel t2 on t1.channel_id = t2.id
+    	 WHERE
+    	 	<foreach collection="list" item="value" open="t2.id in (" close=")" separator=",">
+	    				#{value}
+	    	</foreach>
+    	 	and t0.register_addr LIKE #{address}
+    </select>
+    
+    <!-- 最近15日每天放款量  -->
+    <select id="countFifteenDaysLoan"  resultType="map">
+    	select create_time 'key',count(id) 'value' from 
+    		(select id,DATE_FORMAT(create_time,'%Y-%m-%d') create_time 
+    			from cl_borrow_progress 
+    			where state = '30' 
+    			<![CDATA[ and TO_DAYS(SYSDATE()) - TO_DAYS(create_time) <= 15  ]]>
+    		) t 
+    	GROUP BY create_time
+    </select>
+    
+    <!-- 刘晓亮  最近15日每天放款量-->
+    <select id="countFifteenDaysLoanForChannel" parameterType="java.util.List" resultType="map">
+    	select create_time 'key',count(id) 'value' from 
+    		(select t0.id as id,DATE_FORMAT(t0.create_time,'%Y-%m-%d') as create_time 
+    			from cl_borrow_progress t0, cl_user t1, cl_channel t2
+    			where 
+    			t0.user_id = t1.id
+    			and t1.channel_id = t2.id
+    			and t0.state = '30' and
+    			<foreach collection="list" item="value" open="t2.id in (" close=")" separator=",">
+    				#{value}
+    			</foreach>
+    			<![CDATA[ and TO_DAYS(SYSDATE()) - TO_DAYS(t0.create_time) <= 15  ]]>
+    		) t 
+    	GROUP BY create_time
+    </select>
+    
+    <!-- 还款来源 10代扣，20银行卡转账，30支付宝转账， 40认证支付 -->
+    <select id="countRepaySource" resultType="map">
+    	select repay_way 'key',count(id) 'value' from (select id,case when repay_way = '10' then '自动代扣' when repay_way = '20' then '银行卡转账'  when repay_way = '30' then '支付宝转账' when repay_way = '40' then '认证支付'  end  repay_way from cl_borrow_repay_log ) t GROUP BY repay_way
+    </select>
+    
+    <!-- 刘晓亮 还款来源 10代扣，20银行卡转账，30支付宝转账， 40认证支付 -->
+    <select id="countRepaySourceForChannel" parameterType="java.util.List" resultType="map">
+    	SELECT
+			repay_way 'key',
+			count(id) 'value'
+			FROM
+				(
+					SELECT
+						t0.id,
+						CASE
+					WHEN t0.repay_way = '10' THEN
+						'自动代扣'
+					WHEN t0.repay_way = '20' THEN
+						'银行卡转账'
+					WHEN t0.repay_way = '30' THEN
+						'支付宝转账'
+					WHEN t0.repay_way = '40' THEN
+						'认证支付'
+					END repay_way
+					FROM
+						cl_borrow_repay_log t0,cl_user t1,cl_channel t2
+					where 
+		    			t0.user_id = t1.id
+		    			and t1.channel_id = t2.id and
+		    			<foreach collection="list" item="value" open="t2.id in (" close=")" separator=",">
+		    				#{value}
+		    			</foreach>
+				) t
+			GROUP BY
+		repay_way
+    	
+    </select>
+    
+    <!-- 最近15日应还款量 -->
+    <select id="countFifteenDaysNeedRepay"  resultType="map">
+    	<!-- select repay_time 'key',count(id) 'value' from 
+    		(select id,DATE_FORMAT(repay_time,'%Y-%m-%d') repay_time 
+				from cl_borrow_repay
+				where 
+				<![CDATA[  TO_DAYS(SYSDATE()) - TO_DAYS(repay_time) <= 15  and TO_DAYS(repay_time)-TO_DAYS(SYSDATE()) <=0 ]]>	
+			) t 
+		GROUP BY repay_time -->
+		SELECT
+			DATE_FORMAT(repay_time, '%Y-%m-%d') 'key',
+			count(id) 'value',
+			NOW()
+		FROM
+			(
+				SELECT
+					id,
+					DATE_FORMAT(repay_time, '%Y-%m-%d') repay_time
+				FROM
+					cl_borrow_repay
+				WHERE
+					DATE_FORMAT(NOW(), '%Y-%m-%d') >= DATE_FORMAT(repay_time, '%Y-%m-%d')
+			) t
+		GROUP BY
+			repay_time
+    </select>
+    
+     <!-- 刘晓亮 最近15日应还款量 -->
+    <select id="countFifteenDaysNeedRepayForChannel" parameterType="java.util.List" resultType="map">
+    	<!-- select repay_time 'key',count(id) 'value' from 
+    		(select id,DATE_FORMAT(repay_time,'%Y-%m-%d') repay_time 
+				from cl_borrow_repay
+				where 
+				<![CDATA[  TO_DAYS(SYSDATE()) - TO_DAYS(repay_time) <= 15  and TO_DAYS(repay_time)-TO_DAYS(SYSDATE()) <=0 ]]>	
+			) t 
+		GROUP BY repay_time -->
+		SELECT
+			DATE_FORMAT(repay_time, '%Y-%m-%d') 'key',
+			count(id) 'value',
+			NOW()
+		FROM
+			(
+				SELECT
+					t0.id as id,
+					DATE_FORMAT(t0.repay_time, '%Y-%m-%d') repay_time
+				FROM
+					cl_borrow_repay t0,cl_user t1, cl_channel t2
+				WHERE
+					t0.user_id = t1.id
+    				and t1.channel_id = t2.id and
+    				<foreach collection="list" item="value" open="t2.id in (" close=")" separator=",">
+    					#{value}
+    				</foreach>
+					and DATE_FORMAT(NOW(), '%Y-%m-%d') >= DATE_FORMAT(t0.repay_time, '%Y-%m-%d')
+			) t
+		GROUP BY
+			repay_time
+    </select>
+    
+    <!-- 最近15日实际还款量 -->
+    <select id="countFifteenDaysRealRepay" resultType="map">
+    	select create_time 'key',count(id) 'value' from 
+    		(select id,DATE_FORMAT(repay_time,'%Y-%m-%d') create_time 
+    			from cl_borrow_repay_log 
+    			where TO_DAYS(SYSDATE()) - TO_DAYS(repay_time) <![CDATA[<=]]> 15
+    		) t 
+    	GROUP BY create_time
+    </select>
+    
+     <!-- 刘晓亮 最近15日实际还款量 -->
+    <select id="countFifteenDaysRealRepayForChannel" parameterType="java.util.List" resultType="map">
+    	select create_time 'key',count(id) 'value' from 
+    		(select t0.id as id,DATE_FORMAT(t0.repay_time,'%Y-%m-%d') create_time 
+    			from cl_borrow_repay_log t0,cl_user t1,cl_channel t2
+    			where 
+	    			t0.user_id = t1.id
+	    			and t1.channel_id = t2.id and
+	    				<foreach collection="list" item="value" open="t2.id in (" close=")" separator=",">
+	    					#{value}
+	    				</foreach>
+	    			and TO_DAYS(SYSDATE()) - TO_DAYS(t0.repay_time) <![CDATA[<=]]> 15
+    		) t 
+    	GROUP BY create_time
+    </select>
+</mapper>

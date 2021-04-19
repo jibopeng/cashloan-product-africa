@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- sys_user_operation_record表:系统人员操作记录表模块 -->
+<mapper namespace="com.ajaya.cashloan.cl.mapper.SysUserOperationRecordMapper">
+    <!--返回Map-->        
+    <resultMap id="BaseResultMap" type="com.ajaya.cashloan.cl.domain.SysUserOperationRecord">
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="sys_user_id" property="sysUserId" jdbcType="BIGINT" />
+        <result column="sys_user_name" property="sysUserName" jdbcType="VARCHAR" />
+        <result column="borrow_id" property="borrowId" jdbcType="BIGINT" />
+        <result column="sys_user_remark" property="sysUserRemark" jdbcType="VARCHAR" />
+        <result column="sys_user_result" property="sysUserResult" jdbcType="VARCHAR" />
+        <result column="sys_user_operation_source" property="sysUserOperationSource" jdbcType="VARCHAR" />
+        <result column="sys_user_prepare1" property="sysUserPrepare1" jdbcType="VARCHAR" />
+        <result column="sys_user_prepare2" property="sysUserPrepare2" jdbcType="VARCHAR" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+    
+    <!--基本的sql查询字段 公共引用...-->
+    <sql id="Base_Column_List">
+        id,sys_user_id,sys_user_name,borrow_id,sys_user_remark,sys_user_result,sys_user_operation_source,sys_user_prepare1,sys_user_prepare2,create_time 
+    </sql>
+    
+    <!-- 基本的sql查询条件公共引用 -->
+    <sql id="searchBy">
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test=" id != null and id != '' ">
+                id  = #{id,jdbcType=BIGINT}
+            </if>
+            <if test="sysUserId != null and sysUserId != '' ">
+                and sys_user_id = #{sysUserId,jdbcType=BIGINT}
+            </if>
+            <if test="sysUserName != null and sysUserName != '' ">
+                and sys_user_name = #{sysUserName,jdbcType=VARCHAR}
+            </if>
+            <if test="borrowId != null and borrowId != '' ">
+                and borrow_id = #{borrowId,jdbcType=BIGINT}
+            </if>
+            <if test="sysUserRemark != null and sysUserRemark != '' ">
+                and sys_user_remark = #{sysUserRemark,jdbcType=VARCHAR}
+            </if>
+            <if test="sysUserResult != null and sysUserResult != '' ">
+                and sys_user_result = #{sysUserResult,jdbcType=VARCHAR}
+            </if>
+            <if test="sysUserOperationSource != null and sysUserOperationSource != '' ">
+                and sys_user_operation_source = #{sysUserOperationSource,jdbcType=VARCHAR}
+            </if>
+            <if test="sysUserPrepare1 != null and sysUserPrepare1 != '' ">
+                and sys_user_prepare1 = #{sysUserPrepare1,jdbcType=VARCHAR}
+            </if>
+            <if test="sysUserPrepare2 != null and sysUserPrepare2 != '' ">
+                and sys_user_prepare2 = #{sysUserPrepare2,jdbcType=VARCHAR}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime,jdbcType=TIMESTAMP}
+            </if>
+        </trim>
+    </sql>
+    
+    
+    <insert id="save" parameterType="com.ajaya.cashloan.cl.domain.SysUserOperationRecord">
+        insert into sys_user_operation_record(sys_user_id,sys_user_name,borrow_id,sys_user_remark,sys_user_result,sys_user_operation_source,sys_user_prepare1,sys_user_prepare2,create_time)values(#{sysUserId,jdbcType=BIGINT},#{sysUserName,jdbcType=VARCHAR},#{borrowId,jdbcType=BIGINT},#{sysUserRemark,jdbcType=VARCHAR},#{sysUserResult,jdbcType=VARCHAR},#{sysUserOperationSource,jdbcType=VARCHAR},#{sysUserPrepare1,jdbcType=VARCHAR},#{sysUserPrepare2,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP})
+    </insert>
+
+    
+    <update id="update" parameterType="com.ajaya.cashloan.cl.domain.SysUserOperationRecord">
+        update sys_user_operation_record set 
+            sys_user_id = #{sysUserId,jdbcType=BIGINT},
+            sys_user_name = #{sysUserName,jdbcType=VARCHAR},
+            borrow_id = #{borrowId,jdbcType=BIGINT},
+            sys_user_remark = #{sysUserRemark,jdbcType=VARCHAR},
+            sys_user_result = #{sysUserResult,jdbcType=VARCHAR},
+            sys_user_operation_source = #{sysUserOperationSource,jdbcType=VARCHAR},
+            sys_user_prepare1 = #{sysUserPrepare1,jdbcType=VARCHAR},
+            sys_user_prepare2 = #{sysUserPrepare2,jdbcType=VARCHAR},
+            create_time = #{createTime,jdbcType=TIMESTAMP}
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+
+    <update id="updateSelective"  parameterType="java.util.HashMap">
+        update sys_user_operation_record
+          <set>
+            <if test="sysUserId != null and sysUserId != '' ">        
+                sys_user_id = #{sysUserId,jdbcType=BIGINT},                
+            </if>
+            <if test="sysUserName != null and sysUserName != '' ">        
+                sys_user_name = #{sysUserName,jdbcType=VARCHAR},                
+            </if>
+            <if test="borrowId != null and borrowId != '' ">        
+                borrow_id = #{borrowId,jdbcType=BIGINT},                
+            </if>
+            <if test="sysUserRemark != null and sysUserRemark != '' ">        
+                sys_user_remark = #{sysUserRemark,jdbcType=VARCHAR},                
+            </if>
+            <if test="sysUserResult != null and sysUserResult != '' ">        
+                sys_user_result = #{sysUserResult,jdbcType=VARCHAR},                
+            </if>
+            <if test="sysUserOperationSource != null and sysUserOperationSource != '' ">        
+                sys_user_operation_source = #{sysUserOperationSource,jdbcType=VARCHAR},                
+            </if>
+            <if test="sysUserPrepare1 != null and sysUserPrepare1 != '' ">        
+                sys_user_prepare1 = #{sysUserPrepare1,jdbcType=VARCHAR},                
+            </if>
+            <if test="sysUserPrepare2 != null and sysUserPrepare2 != '' ">        
+                sys_user_prepare2 = #{sysUserPrepare2,jdbcType=VARCHAR}                
+            </if>
+             <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},                
+            </if>
+        </set>    
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+
+    <select id="findByPrimary" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List" />
+        from sys_user_operation_record
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+
+	<select id="findSelective" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+        select
+        <include refid="Base_Column_List" />
+        from sys_user_operation_record
+        <include refid="searchBy"/>
+    </select>
+               
+    <select id="listSelective" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+        select
+        <include refid="Base_Column_List" />
+        from sys_user_operation_record
+        <include refid="searchBy"/>
+    </select>
+    
+</mapper>

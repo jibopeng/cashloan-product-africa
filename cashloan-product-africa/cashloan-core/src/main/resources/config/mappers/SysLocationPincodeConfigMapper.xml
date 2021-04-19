@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- sys_location_pincode_config表:城市邮编配置表模块 -->
+<mapper namespace="com.ajaya.cashloan.core.mapper.SysLocationPincodeConfigMapper">
+    <!--返回Map-->        
+    <resultMap id="BaseResultMap" type="com.ajaya.cashloan.core.domain.SysLocationPincodeConfig">
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="location" property="location" jdbcType="VARCHAR" />
+        <result column="pincode" property="pincode" jdbcType="VARCHAR" />
+        <result column="state" property="state" jdbcType="VARCHAR" />
+        <result column="district" property="district" jdbcType="VARCHAR" />
+    </resultMap>
+    
+    <!--基本的sql查询字段 公共引用...-->
+    <sql id="Base_Column_List">
+        id,location,pincode,state,district 
+    </sql>
+    
+    <!-- 基本的sql查询条件公共引用 -->
+    <sql id="searchBy">
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test=" id != null and id != '' ">
+                id  = #{id,jdbcType=BIGINT}
+            </if>
+            <if test="location != null and location != '' ">
+                and location = #{location,jdbcType=VARCHAR}
+            </if>
+            <if test="pincode != null and pincode != '' ">
+                and pincode = #{pincode,jdbcType=VARCHAR}
+            </if>
+            <if test="state != null and state != '' ">
+                and state = #{state,jdbcType=VARCHAR}
+            </if>
+            <if test="district != null and district != '' ">
+                and district = #{district,jdbcType=VARCHAR}
+            </if>
+        </trim>
+    </sql>
+    
+    
+    <insert id="save" parameterType="com.ajaya.cashloan.core.domain.SysLocationPincodeConfig">
+        insert into sys_location_pincode_config(location,pincode,state,district)values(#{location,jdbcType=VARCHAR},#{pincode,jdbcType=VARCHAR},#{state,jdbcType=VARCHAR},#{district,jdbcType=VARCHAR})
+    </insert>
+
+    
+    <update id="update" parameterType="com.ajaya.cashloan.core.domain.SysLocationPincodeConfig">
+        update sys_location_pincode_config set 
+            location = #{location,jdbcType=VARCHAR},
+            pincode = #{pincode,jdbcType=VARCHAR},
+            state = #{state,jdbcType=VARCHAR},
+            district = #{district,jdbcType=VARCHAR}
+        where id = #{id ,jdbcType=INTEGER}
+    </update>
+
+
+    <update id="updateSelective"  parameterType="java.util.HashMap">
+        update sys_location_pincode_config
+          <set>
+            <if test="location != null and location != '' ">        
+                location = #{location,jdbcType=VARCHAR},                
+            </if>
+            <if test="pincode != null and pincode != '' ">        
+                pincode = #{pincode,jdbcType=VARCHAR},                
+            </if>
+            <if test="state != null and state != '' ">        
+                state = #{state,jdbcType=VARCHAR},                
+            </if>
+            <if test="district != null and district != '' ">        
+                district = #{district,jdbcType=VARCHAR}                
+            </if>
+        </set>    
+        where id = #{id ,jdbcType=INTEGER}
+    </update>
+
+
+    <select id="findByPrimary" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List" />
+        from sys_location_pincode_config
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
+	<select id="findSelective" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+        select
+        <include refid="Base_Column_List" />
+        from sys_location_pincode_config
+        <include refid="searchBy"/>
+    </select>
+               
+    <select id="listSelective" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+        select
+        <include refid="Base_Column_List" />
+        from sys_location_pincode_config
+        <include refid="searchBy"/>
+    </select>
+    
+    <select id="findPincodesByStateAndDistrict" resultType="java.lang.String">
+    	SELECT DISTINCT t.pincode FROM sys_location_pincode_config t 
+		WHERE REPLACE(LOWER(t.state), ' ', '') = REPLACE(LOWER(#{state,jdbcType=VARCHAR}), ' ', '') 
+		AND (REPLACE(LOWER(t.district), ' ', '') = REPLACE(LOWER(#{district,jdbcType=VARCHAR}), ' ', '') OR REPLACE(LOWER(t.location), ' ', '') = REPLACE(LOWER(#{district,jdbcType=VARCHAR}), ' ', ''));
+    </select>
+    
+</mapper>

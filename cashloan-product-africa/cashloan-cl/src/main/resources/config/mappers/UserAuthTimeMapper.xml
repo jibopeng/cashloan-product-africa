@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- cl_user_auth_time表:用户认证时间记录表模块 -->
+<mapper namespace="com.ajaya.cashloan.cl.mapper.UserAuthTimeMapper">
+    <!--返回Map-->
+    <resultMap id="BaseResultMap" type="com.ajaya.cashloan.cl.domain.UserAuthTime">
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="user_id" property="userId" jdbcType="BIGINT" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="basic_info_auth_over_time" property="basicInfoAuthOverTime" jdbcType="TIMESTAMP" />
+        <result column="basic_info_auth_update_time" property="basicInfoAuthUpdateTime" jdbcType="TIMESTAMP" />
+        <result column="personal_info_auth_over_time" property="personalInfoAuthOverTime" jdbcType="TIMESTAMP" />
+        <result column="personal_info_auth_update_time" property="personalInfoAutUpdateTime" jdbcType="TIMESTAMP" />
+        <result column="contact_auth_over_time" property="contactAuthOverTime" jdbcType="TIMESTAMP" />
+        <result column="contact_auth_update_time" property="contactAuthUpdateTime" jdbcType="TIMESTAMP" />
+        <result column="bank_account_auth_over_time" property="bankAccountAuthOverTime" jdbcType="TIMESTAMP" />
+        <result column="bank_account_auth_update_time" property="bankAccountAuthUpdateTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+    <!--基本的sql查询字段 公共引用...-->
+    <sql id="Base_Column_List">
+        id,user_id,create_time,basic_info_auth_over_time,basic_info_auth_update_time,contact_auth_over_time,contact_auth_update_time,personal_info_auth_over_time,personal_info_auth_update_time,bank_account_auth_over_time,bank_account_auth_update_time
+    </sql>
+
+    <!-- 基本的sql查询条件公共引用 -->
+    <sql id="searchBy">
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test=" id != null and id != '' ">
+                id  = #{id,jdbcType=BIGINT}
+            </if>
+            <if test="userId != null and userId != '' ">
+                and user_id = #{userId,jdbcType=BIGINT}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="basicInfoAuthOverTime != null">
+                and basic_info_auth_over_time = #{basicInfoAuthOverTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="basicInfoAuthUpdateTime != null">
+                and basic_info_auth_update_time = #{basicInfoAuthUpdateTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="contactAuthOverTime != null">
+                and contact_auth_over_time = #{contactAuthOverTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="contactAuthUpdateTime != null">
+                and contact_auth_update_time = #{contactAuthUpdateTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="personalInfoAuthOverTime != null">
+                and personal_info_auth_over_time = #{personalInfoAuthOverTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="personalInfoAutUpdateTime != null">
+                and personal_info_auth_update_time = #{personalInfoAutUpdateTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="bankAccountAuthOverTime != null">
+                and bank_account_auth_over_time = #{bankAccountAuthOverTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="bankAccountAuthUpdateTime != null">
+                and bank_account_auth_update_time = #{bankAccountAuthUpdateTime,jdbcType=TIMESTAMP}
+            </if>
+        </trim>
+    </sql>
+
+
+    <insert id="save" parameterType="com.ajaya.cashloan.cl.domain.UserAuthTime">
+        insert into cl_user_auth_time(user_id,create_time,id_auth_over_time,id_auth_update_time,contact_auth_over_time,contact_auth_update_time,phone_auth_over_time,phone_auth_update_time,zhima_auth_over_time,zhima_auth_update_time,acc_fund_auth_over_time,acc_fund_auth_update_time,work_info_auth_over_time,work_info_auth_update_time,other_info_auth_over_time,other_info_auth_update_time,bank_account_auth_over_time,bank_account_auth_update_time)values(#{userId,jdbcType=BIGINT},#{createTime,jdbcType=TIMESTAMP},#{idAuthOverTime,jdbcType=TIMESTAMP},#{idAuthUpdateTime,jdbcType=TIMESTAMP},#{contactAuthOverTime,jdbcType=TIMESTAMP},#{contactAuthUpdateTime,jdbcType=TIMESTAMP},#{phoneAuthOverTime,jdbcType=TIMESTAMP},#{phoneAuthUpdateTime,jdbcType=TIMESTAMP},#{zhimaAuthOverTime,jdbcType=TIMESTAMP},#{zhimaAuthUpdateTime,jdbcType=TIMESTAMP},#{accFundAuthOverTime,jdbcType=TIMESTAMP},#{accFundAuthUpdateTime,jdbcType=TIMESTAMP},#{workInfoAuthOverTime,jdbcType=TIMESTAMP},#{workInfoAuthUpdateTime,jdbcType=TIMESTAMP},#{otherInfoAuthOverTime,jdbcType=TIMESTAMP},#{otherInfoAuthUpdateTime,jdbcType=TIMESTAMP},#{bankAccountAuthOverTime,jdbcType=TIMESTAMP},#{bankAccountAuthUpdateTime,jdbcType=TIMESTAMP})
+    </insert>
+    <update id="update" parameterType="com.ajaya.cashloan.cl.domain.UserAuthTime">
+        update cl_user_auth_time set
+        user_id = #{userId,jdbcType=BIGINT},
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+        basic_info_auth_over_time = #{basicInfoAuthOverTime,jdbcType=TIMESTAMP},
+        basic_info_auth_update_time = #{basicInfoAuthUpdateTime,jdbcType=TIMESTAMP},
+        contact_auth_over_time = #{contactAuthOverTime,jdbcType=TIMESTAMP},
+        contact_auth_update_time = #{contactAuthUpdateTime,jdbcType=TIMESTAMP},
+        personal_info_auth_over_time = #{personalInfoAuthOverTime,jdbcType=TIMESTAMP},
+        personal_info_auth_update_time = #{personalInfoAutUpdateTime,jdbcType=TIMESTAMP},
+        bank_account_auth_over_time = #{bankAccountAuthOverTime,jdbcType=TIMESTAMP},
+        bank_account_auth_update_time = #{bankAccountAuthUpdateTime,jdbcType=TIMESTAMP}
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <update id="updateSelective"  parameterType="java.util.HashMap">
+        update cl_user_auth_time
+        <set>
+            <if test="userId != null and userId != '' ">
+                user_id = #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="basicInfoAuthOverTime != null">
+                basic_info_auth_over_time = #{basicInfoAuthOverTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="basicInfoAuthUpdateTime != null">
+                basic_info_auth_update_time = #{basicInfoAuthUpdateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="contactAuthOverTime != null">
+                contact_auth_over_time = #{contactAuthOverTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="contactAuthUpdateTime != null">
+                contact_auth_update_time = #{contactAuthUpdateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="personalInfoAuthOverTime != null">
+                personal_info_auth_over_time = #{personalInfoAuthOverTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="personalInfoAutUpdateTime != null">
+                personal_info_auth_update_time = #{personalInfoAutUpdateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="bankAccountAuthOverTime != null">
+                bank_account_auth_over_time = #{bankAccountAuthOverTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="bankAccountAuthUpdateTime != null">
+                bank_account_auth_update_time = #{bankAccountAuthUpdateTime,jdbcType=TIMESTAMP}
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+
+    <update id="updateSelectiveByObject"  parameterType="com.ajaya.cashloan.cl.domain.UserAuthTime">
+        update cl_user_auth_time
+        <set>
+            <if test="userId != null and userId != '' ">
+                user_id = #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="basicInfoAuthOverTime != null">
+                basic_info_auth_over_time = #{basicInfoAuthOverTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="basicInfoAuthUpdateTime != null">
+                basic_info_auth_update_time = #{basicInfoAuthUpdateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="contactAuthOverTime != null">
+                contact_auth_over_time = #{contactAuthOverTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="contactAuthUpdateTime != null">
+                contact_auth_update_time = #{contactAuthUpdateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="personalInfoAuthOverTime != null">
+                personal_info_auth_over_time = #{personalInfoAuthOverTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="personalInfoAutUpdateTime != null">
+                personal_info_auth_update_time = #{personalInfoAutUpdateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="bankAccountAuthOverTime != null">
+                bank_account_auth_over_time = #{bankAccountAuthOverTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="bankAccountAuthUpdateTime != null">
+                bank_account_auth_update_time = #{bankAccountAuthUpdateTime,jdbcType=TIMESTAMP}
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+
+    <select id="findByPrimary" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List" />
+        from cl_user_auth_time
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <select id="findSelective" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+        select
+        <include refid="Base_Column_List" />
+        from cl_user_auth_time
+        <include refid="searchBy"/>
+    </select>
+
+    <select id="listSelective" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+        select
+        <include refid="Base_Column_List" />
+        from cl_user_auth_time
+        <include refid="searchBy"/>
+    </select>
+
+</mapper>

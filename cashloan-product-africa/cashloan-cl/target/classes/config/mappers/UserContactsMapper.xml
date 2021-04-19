@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- cl_user_contacts表:用户资料联系人模块 -->
+<mapper namespace="com.ajaya.cashloan.cl.mapper.UserContactsMapper">
+    <!--返回Map-->        
+    <resultMap id="BaseResultMap" type="com.ajaya.cashloan.cl.domain.UserContacts">
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="borrow_id" property="borrowId" jdbcType="BIGINT" />
+        <result column="user_id" property="userId" jdbcType="BIGINT" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="phone" property="phone" jdbcType="VARCHAR" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+        <result column="type" property="type" jdbcType="INTEGER" />
+    </resultMap>
+    
+
+    
+    <!--基本的sql查询字段 公共引用...-->
+    <sql id="Base_Column_List">
+        id,borrow_id,user_id,name,phone,create_time,update_time,type 
+    </sql>
+    
+    <!-- 基本的sql查询条件公共引用 -->
+    <sql id="searchBy">
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test=" id != null and id != '' ">
+                id  = #{id,jdbcType=BIGINT}
+            </if>
+            <if test="borrowId != null and borrowId != '' ">
+                and borrow_id = #{borrowId,jdbcType=BIGINT}
+            </if>
+            <if test="userId != null and userId != '' ">
+                and user_id = #{userId,jdbcType=BIGINT}
+            </if>
+            <if test="name != null and name != '' ">
+                and name = #{name,jdbcType=VARCHAR}
+            </if>
+            <if test="phone != null and phone != '' ">
+                and phone = #{phone,jdbcType=VARCHAR}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="updateTime != null">
+                and update_time = #{updateTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="type != null and type != '' ">
+                and type = #{type,jdbcType=INTEGER}
+            </if>
+        </trim>
+    </sql>
+    
+    <select id="countTable" resultType="java.lang.Integer" parameterType="java.lang.String">
+    	SELECT COUNT(1) FROM information_schema.TABLES WHERE table_name = #{tableName,jdbcType=VARCHAR}
+    </select>
+    
+    <!-- 创建分表 -->
+    <select id="createTable">
+    	CREATE TABLE ${tableName} (
+		  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
+		  `borrow_id` bigint(20) DEFAULT NULL COMMENT '订单标识',
+		  `user_id` bigint(20) DEFAULT NULL COMMENT '用户标识',
+		  `name` varchar(512) DEFAULT '' COMMENT '姓名',
+		  `phone` varchar(512) DEFAULT '' COMMENT '手机号码',
+		  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+		  `update_time` datetime DEFAULT NULL COMMENT '更新时间',
+		  `type` int(2) DEFAULT NULL COMMENT '区分认证紧急联系人前后抓取数据，1：完善紧急联系人前；2：完善紧急联系人后',  
+		  PRIMARY KEY (`id`),
+		  INDEX `user_id` (`user_id`) USING BTREE,
+		  INDEX `borrow_id` (`borrow_id`) USING BTREE
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户通讯录表';
+    </select> 
+    
+    <!-- 创建分表  createContactRemarkTable -->
+    <select id="createContactRemarkTable">
+    	CREATE TABLE ${tableName} (
+		  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
+		  `user_id` bigint(20) DEFAULT NULL COMMENT '用户标识',
+		  `contact_name` varchar(200) DEFAULT '' COMMENT '姓名',
+		  `contact_phone` varchar(20) DEFAULT '' COMMENT '手机号码',
+		  `contact_remark` varchar(20) DEFAULT '' COMMENT '备注信息',
+		  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+		  `update_time` datetime DEFAULT NULL COMMENT '更新时间',
+		  PRIMARY KEY (`id`),
+		  INDEX `user_id` (`user_id`) USING BTREE 
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户通讯录备注表';
+    </select>
+    
+    <!--查询通讯录备注表 selectContactRemarkBySql -->
+    <select id="selectContactRemarkCountBySql" parameterType="java.lang.String" resultType="java.lang.Integer">
+    	${contactRemarkCountBySelectSql}
+    </select>
+    
+    <select id="selectContactRemarkBySql" parameterType="java.lang.String" resultType="java.lang.String">
+    	${contactRemarkBySelectSql}
+    </select>
+    
+    <!--更新通讯录备注表 contactRemarkByUpdateSql -->
+    <select id="updateContactRemarkBySql" parameterType="java.lang.String" resultType="java.lang.Integer">
+    	${contactRemarkByUpdateSql}
+    </select>
+    
+    <!--新增通讯录备注表 saveContactRemarkBySql -->
+    <select id="saveContactRemarkBySql" parameterType="java.lang.String" resultType="java.lang.Integer">
+    	${contactRemarkByInsertSql}
+    </select>
+    
+     <select id="getContact" parameterType="java.lang.String" resultType="java.util.Map">
+    	${getContact}
+    </select>
+    
+    <insert id="saveShard">
+        insert into ${tableName}(name,phone,user_id,borrow_id,create_time,type)values(
+        	#{item.name,jdbcType=VARCHAR},
+        	#{item.phone,jdbcType=VARCHAR},
+        	#{item.userId,jdbcType=INTEGER},
+        	#{item.borrowId,jdbcType=INTEGER},
+        	#{item.createTime,jdbcType=TIMESTAMP},
+        	#{item.type,jdbcType=INTEGER}
+        )
+    </insert>
+    
+    <!-- 
+    <delete id="deleteShardByUserId">
+        DELETE FROM ${tableName} WHERE user_id = #{userId,jdbcType=BIGINT} AND borrow_id IS NULL AND create_time IS NOT NULL
+    </delete>
+     -->
+    <delete id="deleteShardByUserId">
+        DELETE FROM ${tableName}
+        <trim prefix="where" prefixOverrides="and|or">
+        	user_id = #{userId,jdbcType=BIGINT} AND borrow_id IS NULL
+        	<if test="type != null and type != '' ">
+        		AND type = #{type,jdbcType=INTEGER}
+        	</if>
+        </trim>
+    </delete>
+    
+    <select id="listShardSelective" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from ${tableName} 
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="params.userId != null">
+                user_id = #{params.userId,jdbcType=BIGINT}
+            </if>
+        </trim>
+    </select>
+    
+    <select id="listShardSelectiveLike" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from ${tableName} 
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="params.userId != null">
+                user_id = #{params.userId,jdbcType=BIGINT}
+            </if>
+            <if test="params.name != null">
+                and name like concat('%',#{params.name,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="params.phone != null">
+               and phone like concat('%',#{params.phone,jdbcType=VARCHAR},'%')
+            </if>
+        </trim>
+    </select>
+    
+    <select id="listShardSelectiveCount" resultType="int">
+        select count(1) from ${tableName} 
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="params.userId != null">
+                user_id = #{params.userId,jdbcType=BIGINT}
+            </if>
+        </trim>
+    </select>
+    
+    <select id="findListNoBorrowidByUserid" resultMap="BaseResultMap">
+		SELECT <include refid="Base_Column_List" />
+        FROM ${tableName} 
+        WHERE user_id = #{userId,jdbcType=BIGINT} AND borrow_id IS NULL
+    </select>
+    
+    <update id="updateShard">
+    	update ${tableName} set 
+            borrow_id = #{item.borrowId,jdbcType=BIGINT},
+            update_time = #{item.updateTime,jdbcType=TIMESTAMP}
+        where id = #{item.id ,jdbcType=INTEGER}
+    </update>
+    
+    <select id="listShardByBorrowid" resultMap="BaseResultMap">
+    	select <include refid="Base_Column_List" />
+        from ${tableName} 
+        where borrow_id = #{borrowId,jdbcType=BIGINT}
+    </select>
+    
+    <select id="findMaxBorrowidByUserid" resultType="java.lang.Long">
+    	SELECT MAX(borrow_id) FROM ${tableName} 
+    	WHERE user_id = #{userId,jdbcType=BIGINT}
+    </select>
+    
+    <select id="findMaxCreatetimeByUserid" resultType="java.util.Date">
+    	SELECT MAX(create_time) FROM ${tableName} 
+    	WHERE user_id = #{userId,jdbcType=BIGINT}
+    </select>
+    
+    <select id="findListByUseridAndCreatetime" resultMap="BaseResultMap">
+    	select <include refid="Base_Column_List" />
+        from ${tableName} 
+        where user_id = #{userId,jdbcType=BIGINT} and create_time = #{maxCreatetime,jdbcType=TIMESTAMP}
+    </select>
+    
+    <update id="updateByIdsShard">
+     	update ${tableName} set 
+            borrow_id = #{borrowId,jdbcType=BIGINT},
+            update_time = #{updateTime,jdbcType=TIMESTAMP}
+        where id in
+        <foreach item="item" index="index" collection="ids" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+    
+    <select id="selectDataMaxBorrowIdBefore" resultType="java.lang.Long">
+        select max(borrow_id) from ${tableName}  where 
+       	user_id = #{userId,jdbcType=BIGINT} 
+        and name is not null
+        and borrow_id &lt; #{borrowId,jdbcType=BIGINT}
+    </select>
+</mapper>

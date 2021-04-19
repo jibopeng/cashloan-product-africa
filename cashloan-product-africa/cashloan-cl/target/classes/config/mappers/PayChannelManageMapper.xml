@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- arc_pay_channel_manage表:支付渠道管理表模块 -->
+<mapper namespace="com.ajaya.cashloan.cl.mapper.PayChannelManageMapper">
+    <!--返回Map-->        
+    <resultMap id="BaseResultMap" type="com.ajaya.cashloan.cl.domain.PayChannelManage">
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="razpay_account" property="razpayAccount" jdbcType="VARCHAR" />
+        <result column="razpay_id" property="razpayId" jdbcType="VARCHAR" />
+        <result column="razpay_key" property="razpayKey" jdbcType="VARCHAR" />
+        <result column="channel_name" property="channelName" jdbcType="VARCHAR" />
+        <result column="chennel_code" property="chennelCode" jdbcType="VARCHAR" />
+        <result column="pay_level" property="level" jdbcType="VARCHAR" />
+        <result column="pay_limit" property="limit" jdbcType="INTEGER" />
+        <result column="company_name" property="companyName" jdbcType="VARCHAR" />
+        <result column="company_addr" property="companyAddr" jdbcType="VARCHAR" />
+        <result column="state" property="state" jdbcType="VARCHAR" />
+        <result column="protocol_information" property="protocolInformation" jdbcType="VARCHAR" />
+    </resultMap>
+    
+    <!--基本的sql查询字段 公共引用...-->
+    <sql id="Base_Column_List">
+        id,razpay_account,razpay_id,razpay_key,channel_name,chennel_code,pay_level,pay_limit,company_name,company_addr,state,protocol_information
+    </sql>
+    
+    <!-- 基本的sql查询条件公共引用 -->
+    <sql id="searchBy">
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test=" id != null and id != '' ">
+                id  = #{id,jdbcType=BIGINT}
+            </if>
+            <if test="razpayAccount != null and razpayAccount != '' ">
+                and razpay_account = #{razpayAccount,jdbcType=VARCHAR}
+            </if>
+            <if test="razpayId != null and razpayId != '' ">
+                and razpay_id = #{razpayId,jdbcType=VARCHAR}
+            </if>
+            <if test="razpayKey != null and razpayKey != '' ">
+                and razpay_key = #{razpayKey,jdbcType=VARCHAR}
+            </if>
+            <if test="channelName != null and channelName != '' ">
+                and channel_name = #{channelName,jdbcType=VARCHAR}
+            </if>
+            <if test="chennelCode != null and chennelCode != '' ">
+                and chennel_code = #{chennelCode,jdbcType=VARCHAR}
+            </if>
+            <if test="level != null and level != '' ">
+                and pay_level = #{level,jdbcType=VARCHAR}
+            </if>
+            <if test="limit != null and limit != '' ">
+                and pay_limit = #{limit,jdbcType=INTEGER}
+            </if>
+            <if test="companyName != null and companyName != '' ">
+                and company_name = #{companyName,jdbcType=VARCHAR}
+            </if>
+            <if test="companyAddr != null and companyAddr != '' ">
+                and company_addr = #{companyAddr,jdbcType=VARCHAR}
+            </if>
+            <if test="state != null and state != '' ">
+                and state = #{state,jdbcType=VARCHAR}
+            </if>
+            <if test="protocolInformation != null and protocolInformation != '' ">
+                and protocol_information = #{protocolInformation,jdbcType=VARCHAR}
+            </if>
+        </trim>
+    </sql>
+    
+    
+    <insert id="save" parameterType="com.ajaya.cashloan.cl.domain.PayChannelManage">
+        insert into arc_pay_channel_manage(razpay_account,razpay_id,razpay_key,channel_name,chennel_code,pay_level,pay_limit,company_name,company_addr,state,protocol_information)values(#{razpayAccount,jdbcType=VARCHAR},#{razpayId,jdbcType=VARCHAR},#{razpayKey,jdbcType=VARCHAR},#{channelName,jdbcType=VARCHAR},#{chennelCode,jdbcType=VARCHAR},#{level,jdbcType=VARCHAR},#{limit,jdbcType=INTEGER},#{companyName,jdbcType=VARCHAR},#{companyAddr,jdbcType=VARCHAR},#{state,jdbcType=VARCHAR},#{protocolInformation,jdbcType=VARCHAR})
+    </insert>
+
+    
+    <update id="update" parameterType="com.ajaya.cashloan.cl.domain.PayChannelManage">
+        update arc_pay_channel_manage set 
+            razpay_account = #{razpayAccount,jdbcType=VARCHAR},
+            razpay_id = #{razpayId,jdbcType=VARCHAR},
+            razpay_key = #{razpayKey,jdbcType=VARCHAR},
+            channel_name = #{channelName,jdbcType=VARCHAR},
+            chennel_code = #{chennelCode,jdbcType=VARCHAR},
+            pay_level = #{level,jdbcType=VARCHAR},
+            pay_limit = #{limit,jdbcType=INTEGER},
+            company_name = #{companyName,jdbcType=VARCHAR},
+            company_addr = #{companyAddr,jdbcType=VARCHAR},
+            protocol_information = #{protocolInformation,jdbcType=VARCHAR},
+            state = #{state,jdbcType=VARCHAR}
+        where id = #{id ,jdbcType=INTEGER}
+    </update>
+
+
+    <update id="updateSelective"  parameterType="java.util.HashMap">
+        update arc_pay_channel_manage
+          <set>
+            <if test="razpayAccount != null and razpayAccount != '' ">        
+                razpay_account = #{razpayAccount,jdbcType=VARCHAR},                
+            </if>
+            <if test="razpayId != null and razpayId != '' ">        
+                razpay_id = #{razpayId,jdbcType=VARCHAR},                
+            </if>
+            <if test="razpayKey != null and razpayKey != '' ">        
+                razpay_key = #{razpayKey,jdbcType=VARCHAR},                
+            </if>
+            <if test="channelName != null and channelName != '' ">        
+                channel_name = #{channelName,jdbcType=VARCHAR},                
+            </if>
+            <if test="chennelCode != null and chennelCode != '' ">        
+                chennel_code = #{chennelCode,jdbcType=VARCHAR},                
+            </if>
+            <if test="level != null and level != '' ">        
+                pay_level = #{level,jdbcType=VARCHAR},                
+            </if>
+            <if test="limit != null and limit != '' ">        
+                pay_limit = #{limit,jdbcType=INTEGER},                
+            </if>
+            <if test="companyName != null and companyName != '' ">        
+                company_name = #{companyName,jdbcType=VARCHAR},                
+            </if>
+            <if test="companyAddr != null and companyAddr != '' ">        
+                company_addr = #{companyAddr,jdbcType=VARCHAR},                
+            </if>
+            <if test="state != null and state != '' ">        
+                state = #{state,jdbcType=VARCHAR}  ,
+            </if>
+              <if test="protocolInformation != null and protocolInformation != '' ">
+                  protocol_information = #{protocolInformation,jdbcType=VARCHAR}
+            </if>
+        </set>    
+        where id = #{id ,jdbcType=INTEGER}
+    </update>
+
+
+    <select id="findByPrimary" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List" />
+        from arc_pay_channel_manage
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
+	<select id="findSelective" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+        select
+        <include refid="Base_Column_List" />
+        from arc_pay_channel_manage
+        <include refid="searchBy"/>
+    </select>
+               
+    <select id="listSelective" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+        select
+        <include refid="Base_Column_List" />
+        from arc_pay_channel_manage
+        <include refid="searchBy"/>
+    </select>
+    
+    <select id="getAllPayChannel" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from arc_pay_channel_manage
+        where state = 1 order by pay_level 
+    </select>
+    
+</mapper>

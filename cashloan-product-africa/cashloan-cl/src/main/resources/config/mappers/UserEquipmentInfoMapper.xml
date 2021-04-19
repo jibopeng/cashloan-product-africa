@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- cl_user_equipment_info表:用户设备信息表模块 -->
+<mapper namespace="com.ajaya.cashloan.cl.mapper.UserEquipmentInfoMapper">
+    <!--返回Map-->
+    <resultMap id="BaseResultMap" type="com.ajaya.cashloan.cl.domain.UserEquipmentInfo">
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="user_id" property="userId" jdbcType="BIGINT" />
+        <result column="black_box" property="blackBox" jdbcType="VARCHAR" />
+        <result column="operating_system" property="operatingSystem" jdbcType="VARCHAR" />
+        <result column="system_versions" property="systemVersions" jdbcType="VARCHAR" />
+        <result column="phone_type" property="phoneType" jdbcType="VARCHAR" />
+        <result column="phone_brand" property="phoneBrand" jdbcType="VARCHAR" />
+        <result column="phone_mark" property="phoneMark" jdbcType="VARCHAR" />
+        <result column="mac" property="mac" jdbcType="VARCHAR" />
+        <result column="imei" property="imei" jdbcType="VARCHAR" />
+        <result column="version_name" property="versionName" jdbcType="VARCHAR" />
+        <result column="version_code" property="versionCode" jdbcType="VARCHAR" />
+        <result column="app_install_time" property="appInstallTime" jdbcType="TIMESTAMP" />
+        <result column="android_id" property="androidId" jdbcType="VARCHAR" />
+        <result column="app_market" property="appMarket" jdbcType="VARCHAR" />
+        <result column="gpsad_id" property="gpsadId" jdbcType="VARCHAR" />
+        <result column="device_width" property="deviceWidth" jdbcType="VARCHAR" />
+        <result column="device_height" property="deviceHeight" jdbcType="VARCHAR" />
+        <result column="telephony" property="telephony" jdbcType="VARCHAR" />
+        <result column="default_language" property="defaultLanguage" jdbcType="VARCHAR" />
+        <result column="security_patch" property="securityPatch" jdbcType="VARCHAR" />
+        <result column="sdk_version" property="sdkVersion" jdbcType="VARCHAR" />
+        <result column="rooted" property="rooted" jdbcType="VARCHAR" />
+        <result column="production_date" property="productionDate" jdbcType="VARCHAR" />
+        <result column="serial" property="serial" jdbcType="VARCHAR" />
+        <result column="contain_sd" property="containSd" jdbcType="VARCHAR" />
+        <result column="ram_can_use" property="ramCanUse" jdbcType="VARCHAR" />
+        <result column="ram_total" property="ramTotal" jdbcType="VARCHAR" />
+        <result column="cash_can_use" property="cashCanUse" jdbcType="VARCHAR" />
+        <result column="cash_total" property="cashTotal" jdbcType="VARCHAR" />
+        <result column="extra_sd" property="extraSd" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <!--基本的sql查询字段 公共引用...-->
+    <sql id="Base_Column_List">
+        id,user_id,black_box,operating_system,system_versions,phone_type,phone_brand,phone_mark,mac,imei,version_name,version_code,app_install_time,android_id,app_market,gpsad_id,device_width,device_height,telephony,default_language,security_patch,sdk_version,rooted,production_date,serial,contain_sd,ram_can_use,ram_total,cash_can_use,cash_total,extra_sd
+    </sql>
+
+    <!-- 基本的sql查询条件公共引用 -->
+    <sql id="searchBy">
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test=" id != null and id != '' ">
+                id  = #{id,jdbcType=BIGINT}
+            </if>
+            <if test="userId != null and userId != '' ">
+                and user_id = #{userId,jdbcType=BIGINT}
+            </if>
+            <if test="blackBox != null and blackBox != '' ">
+                and black_box = #{blackBox,jdbcType=VARCHAR}
+            </if>
+            <if test="operatingSystem != null and operatingSystem != '' ">
+                and operating_system = #{operatingSystem,jdbcType=VARCHAR}
+            </if>
+            <if test="systemVersions != null and systemVersions != '' ">
+                and system_versions = #{systemVersions,jdbcType=VARCHAR}
+            </if>
+            <if test="phoneType != null and phoneType != '' ">
+                and phone_type = #{phoneType,jdbcType=VARCHAR}
+            </if>
+            <if test="phoneBrand != null and phoneBrand != '' ">
+                and phone_brand = #{phoneBrand,jdbcType=VARCHAR}
+            </if>
+            <if test="phoneMark != null and phoneMark != '' ">
+                and phone_mark = #{phoneMark,jdbcType=VARCHAR}
+            </if>
+            <if test="mac != null and mac != '' ">
+                and mac = #{mac,jdbcType=VARCHAR}
+            </if>
+            <if test="imei != null and imei != '' ">
+                and imei = #{imei,jdbcType=VARCHAR}
+            </if>
+            <if test="versionName != null and versionName != '' ">
+                and version_name = #{versionName,jdbcType=VARCHAR}
+            </if>
+            <if test="versionCode != null and versionCode != '' ">
+                and version_code = #{versionCode,jdbcType=VARCHAR}
+            </if>
+            <if test="appInstallTime != null">
+                and app_install_time = #{appInstallTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="androidId != null and androidId != '' ">
+                and android_id = #{androidId,jdbcType=VARCHAR}
+            </if>
+            <if test="appMarket != null and appMarket != '' ">
+                and app_market = #{appMarket,jdbcType=VARCHAR}
+            </if>
+            <if test="gpsadId != null and gpsadId != '' ">
+                and gpsad_id = #{gpsadId,jdbcType=VARCHAR}
+            </if>
+            <if test="deviceWidth != null and deviceWidth != '' ">
+                and device_width = #{deviceWidth,jdbcType=VARCHAR}
+            </if>
+            <if test="deviceHeight != null and deviceHeight != '' ">
+                and device_height = #{deviceHeight,jdbcType=VARCHAR}
+            </if>
+            <if test="telephony != null and telephony != '' ">
+                and telephony = #{telephony,jdbcType=VARCHAR}
+            </if>
+            <if test="defaultLanguage != null and defaultLanguage != '' ">
+                and default_language = #{defaultLanguage,jdbcType=VARCHAR}
+            </if>
+            <if test="securityPatch != null and securityPatch != '' ">
+                and security_patch = #{securityPatch,jdbcType=VARCHAR}
+            </if>
+            <if test="sdkVersion != null and sdkVersion != '' ">
+                and sdk_version = #{sdkVersion,jdbcType=VARCHAR}
+            </if>
+            <if test="rooted != null and rooted != '' ">
+                and rooted = #{rooted,jdbcType=VARCHAR}
+            </if>
+            <if test="productionDate != null and productionDate != '' ">
+                and production_date = #{productionDate,jdbcType=VARCHAR}
+            </if>
+            <if test="serial != null and serial != '' ">
+                and serial = #{serial,jdbcType=VARCHAR}
+            </if>
+            <if test="containSd != null and containSd != '' ">
+                and contain_sd = #{containSd,jdbcType=VARCHAR}
+            </if>
+            <if test="ramCanUse != null and ramCanUse != '' ">
+                and ram_can_use = #{ramCanUse,jdbcType=VARCHAR}
+            </if>
+            <if test="ramTotal != null and ramTotal != '' ">
+                and ram_total = #{ramTotal,jdbcType=VARCHAR}
+            </if>
+            <if test="cashCanUse != null and cashCanUse != '' ">
+                and cash_can_use = #{cashCanUse,jdbcType=VARCHAR}
+            </if>
+            <if test="cashTotal != null and cashTotal != '' ">
+                and cash_total = #{cashTotal,jdbcType=VARCHAR}
+            </if>
+            <if test="extraSd != null and extraSd != '' ">
+                and extra_sd = #{extraSd,jdbcType=VARCHAR}
+            </if>
+        </trim>
+    </sql>
+
+
+    <insert id="save" parameterType="com.ajaya.cashloan.cl.domain.UserEquipmentInfo">
+        insert into cl_user_equipment_info(user_id,black_box,operating_system,system_versions,phone_type,phone_brand,phone_mark,mac,imei,version_name,version_code,app_install_time,android_id,app_market,gpsad_id,device_width,device_height,telephony,default_language,security_patch,sdk_version,rooted,production_date,serial,contain_sd,ram_can_use,ram_total,cash_can_use,cash_total,extra_sd)values(#{userId,jdbcType=BIGINT},#{blackBox,jdbcType=VARCHAR},#{operatingSystem,jdbcType=VARCHAR},#{systemVersions,jdbcType=VARCHAR},#{phoneType,jdbcType=VARCHAR},#{phoneBrand,jdbcType=VARCHAR},#{phoneMark,jdbcType=VARCHAR},#{mac,jdbcType=VARCHAR},#{imei,jdbcType=VARCHAR},#{versionName,jdbcType=VARCHAR},#{versionCode,jdbcType=VARCHAR},#{appInstallTime,jdbcType=TIMESTAMP},#{androidId,jdbcType=VARCHAR},#{appMarket,jdbcType=VARCHAR},#{gpsadId,jdbcType=VARCHAR},#{deviceWidth,jdbcType=VARCHAR},#{deviceHeight,jdbcType=VARCHAR},#{telephony,jdbcType=VARCHAR},#{defaultLanguage,jdbcType=VARCHAR},#{securityPatch,jdbcType=VARCHAR},#{sdkVersion,jdbcType=VARCHAR},#{rooted,jdbcType=VARCHAR},#{productionDate,jdbcType=VARCHAR},#{serial,jdbcType=VARCHAR},#{containSd,jdbcType=VARCHAR},#{ramCanUse,jdbcType=VARCHAR},#{ramTotal,jdbcType=VARCHAR},#{cashCanUse,jdbcType=VARCHAR},#{cashTotal,jdbcType=VARCHAR},#{extraSd,jdbcType=VARCHAR})
+    </insert>
+
+
+    <update id="update" parameterType="com.ajaya.cashloan.cl.domain.UserEquipmentInfo">
+        update cl_user_equipment_info set
+        user_id = #{userId,jdbcType=BIGINT},
+        black_box = #{blackBox,jdbcType=VARCHAR},
+        operating_system = #{operatingSystem,jdbcType=VARCHAR},
+        system_versions = #{systemVersions,jdbcType=VARCHAR},
+        phone_type = #{phoneType,jdbcType=VARCHAR},
+        phone_brand = #{phoneBrand,jdbcType=VARCHAR},
+        phone_mark = #{phoneMark,jdbcType=VARCHAR},
+        mac = #{mac,jdbcType=VARCHAR},
+        imei = #{imei,jdbcType=VARCHAR},
+        version_name = #{versionName,jdbcType=VARCHAR},
+        version_code = #{versionCode,jdbcType=VARCHAR},
+        app_install_time = #{appInstallTime,jdbcType=TIMESTAMP},
+        android_id = #{androidId,jdbcType=VARCHAR},
+        app_market = #{appMarket,jdbcType=VARCHAR},
+        gpsad_id = #{gpsadId,jdbcType=VARCHAR},
+        device_width = #{deviceWidth,jdbcType=VARCHAR},
+        device_height = #{deviceHeight,jdbcType=VARCHAR},
+        telephony = #{telephony,jdbcType=VARCHAR},
+        default_language = #{defaultLanguage,jdbcType=VARCHAR},
+        security_patch = #{securityPatch,jdbcType=VARCHAR},
+        sdk_version = #{sdkVersion,jdbcType=VARCHAR},
+        rooted = #{rooted,jdbcType=VARCHAR},
+        production_date = #{productionDate,jdbcType=VARCHAR},
+        serial = #{serial,jdbcType=VARCHAR},
+        contain_sd = #{containSd,jdbcType=VARCHAR},
+        ram_can_use = #{ramCanUse,jdbcType=VARCHAR},
+        ram_total = #{ramTotal,jdbcType=VARCHAR},
+        cash_can_use = #{cashCanUse,jdbcType=VARCHAR},
+        cash_total = #{cashTotal,jdbcType=VARCHAR},
+        extra_sd = #{extraSd,jdbcType=VARCHAR}
+        where id = #{id ,jdbcType=INTEGER}
+    </update>
+
+
+    <update id="updateSelective" parameterType="java.util.HashMap">
+        update cl_user_equipment_info
+        <set>
+            <if test="userId != null and userId != '' ">
+                user_id = #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="blackBox != null and blackBox != '' ">
+                black_box = #{blackBox,jdbcType=VARCHAR},
+            </if>
+            <if test="operatingSystem != null and operatingSystem != '' ">
+                operating_system = #{operatingSystem,jdbcType=VARCHAR},
+            </if>
+            <if test="systemVersions != null and systemVersions != '' ">
+                system_versions = #{systemVersions,jdbcType=VARCHAR},
+            </if>
+            <if test="phoneType != null and phoneType != '' ">
+                phone_type = #{phoneType,jdbcType=VARCHAR},
+            </if>
+            <if test="phoneBrand != null and phoneBrand != '' ">
+                phone_brand = #{phoneBrand,jdbcType=VARCHAR},
+            </if>
+            <if test="phoneMark != null and phoneMark != '' ">
+                phone_mark = #{phoneMark,jdbcType=VARCHAR},
+            </if>
+            <if test="mac != null and mac != '' ">
+                mac = #{mac,jdbcType=VARCHAR},
+            </if>
+            <if test="imei != null and imei != '' ">
+                imei = #{imei,jdbcType=VARCHAR},
+            </if>
+            <if test="versionName != null and versionName != '' ">
+                version_name = #{versionName,jdbcType=VARCHAR},
+            </if>
+            <if test="versionCode != null and versionCode != '' ">
+                version_code = #{versionCode,jdbcType=VARCHAR},
+            </if>
+            <if test="appInstallTime != null">
+                app_install_time = #{appInstallTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="androidId != null and androidId != '' ">
+                android_id = #{androidId,jdbcType=VARCHAR},
+            </if>
+            <if test="appMarket != null and appMarket != '' ">
+                app_market = #{appMarket,jdbcType=VARCHAR},
+            </if>
+            <if test="gpsadId != null and gpsadId != '' ">
+                gpsad_id = #{gpsadId,jdbcType=VARCHAR},
+            </if>
+            <if test="deviceWidth != null and deviceWidth != '' ">
+                device_width = #{deviceWidth,jdbcType=VARCHAR},
+            </if>
+            <if test="deviceHeight != null and deviceHeight != '' ">
+                device_height = #{deviceHeight,jdbcType=VARCHAR},
+            </if>
+            <if test="telephony != null and telephony != '' ">
+                telephony = #{telephony,jdbcType=VARCHAR},
+            </if>
+            <if test="defaultLanguage != null and defaultLanguage != '' ">
+                default_language = #{defaultLanguage,jdbcType=VARCHAR},
+            </if>
+            <if test="securityPatch != null and securityPatch != '' ">
+                security_patch = #{securityPatch,jdbcType=VARCHAR},
+            </if>
+            <if test="sdkVersion != null and sdkVersion != '' ">
+                sdk_version = #{sdkVersion,jdbcType=VARCHAR},
+            </if>
+            <if test="rooted != null and rooted != '' ">
+                rooted = #{rooted,jdbcType=VARCHAR},
+            </if>
+            <if test="productionDate != null and productionDate != '' ">
+                production_date = #{productionDate,jdbcType=VARCHAR},
+            </if>
+            <if test="serial != null and serial != '' ">
+                serial = #{serial,jdbcType=VARCHAR},
+            </if>
+            <if test="containSd != null and containSd != '' ">
+                contain_sd = #{containSd,jdbcType=VARCHAR},
+            </if>
+            <if test="ramCanUse != null and ramCanUse != '' ">
+                ram_can_use = #{ramCanUse,jdbcType=VARCHAR},
+            </if>
+            <if test="ramTotal != null and ramTotal != '' ">
+                ram_total = #{ramTotal,jdbcType=VARCHAR},
+            </if>
+            <if test="cashCanUse != null and cashCanUse != '' ">
+                cash_can_use = #{cashCanUse,jdbcType=VARCHAR},
+            </if>
+            <if test="cashTotal != null and cashTotal != '' ">
+                cash_total = #{cashTotal,jdbcType=VARCHAR},
+            </if>
+            <if test="extraSd != null and extraSd != '' ">
+                extra_sd = #{extraSd,jdbcType=VARCHAR}
+            </if>
+        </set>
+        where id = #{id ,jdbcType=INTEGER}
+    </update>
+
+
+    <select id="findByPrimary" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from cl_user_equipment_info
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <select id="findSelective" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+        select
+        <include refid="Base_Column_List"/>
+        from cl_user_equipment_info
+        <include refid="searchBy"/>
+    </select>
+
+    <select id="listSelective" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+        select
+        <include refid="Base_Column_List"/>
+        from cl_user_equipment_info
+        <include refid="searchBy"/>
+    </select>
+
+    <select id="findRegisterSameImei" resultType="java.lang.Integer" parameterType="java.lang.String">
+      select  count(1) from cl_user_equipment_info where imei = #{imei,jdbcType=VARCHAR}
+    </select>
+    <select id="findLastUserEquipment" resultMap="BaseResultMap"  parameterType="java.util.HashMap">
+        select
+        <include refid="Base_Column_List"/>
+        from cl_user_equipment_info
+        <include refid="searchBy"/> order by id desc  limit 1
+    </select>
+</mapper>

@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- cl_bank_card_log表:银行卡记录表模块 -->
+<mapper namespace="com.ajaya.cashloan.cl.mapper.BankCardLogMapper">
+    <!--返回Map-->        
+    <resultMap id="BaseResultMap" type="com.ajaya.cashloan.cl.domain.BankCardLog">
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="borrow_id" property="borrowId" jdbcType="BIGINT" />
+        <result column="user_id" property="userId" jdbcType="BIGINT" />
+        <result column="status" property="status" jdbcType="VARCHAR" />
+        <result column="reference" property="reference" jdbcType="VARCHAR" />
+        <result column="access_code" property="accessCode" jdbcType="VARCHAR" />
+        <result column="authorization_url" property="authorizationUrl" jdbcType="VARCHAR" />
+        <result column="type" property="type" jdbcType="VARCHAR" />
+        <result column="webhook_data" property="webhookData" jdbcType="VARCHAR" />
+        <result column="data" property="data" jdbcType="VARCHAR" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+    
+    <!--基本的sql查询字段 公共引用...-->
+    <sql id="Base_Column_List">
+        id,borrow_id,user_id,status,reference,access_code,authorization_url,type,webhook_data,data,create_time,update_time 
+    </sql>
+    
+    <!-- 基本的sql查询条件公共引用 -->
+    <sql id="searchBy">
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test=" id != null and id != '' ">
+                id  = #{id,jdbcType=BIGINT}
+            </if>
+            <if test="borrowId != null and borrowId != '' ">
+                and borrow_id = #{borrowId,jdbcType=BIGINT}
+            </if>
+            <if test="userId != null and userId != '' ">
+                and user_id = #{userId,jdbcType=BIGINT}
+            </if>
+            <if test="status != null and status != '' ">
+                and status = #{status,jdbcType=VARCHAR}
+            </if>
+            <if test="reference != null and reference != '' ">
+                and reference = #{reference,jdbcType=VARCHAR}
+            </if>
+            <if test="accessCode != null and accessCode != '' ">
+                and access_code = #{accessCode,jdbcType=VARCHAR}
+            </if>
+            <if test="authorizationUrl != null and authorizationUrl != '' ">
+                and authorization_url = #{authorizationUrl,jdbcType=VARCHAR}
+            </if>
+            <if test="type != null and type != '' ">
+                and type = #{type,jdbcType=VARCHAR}
+            </if>
+            <if test="webhookData != null and webhookData != '' ">
+                and webhook_data = #{webhookData,jdbcType=VARCHAR}
+            </if>
+            <if test="data != null and data != '' ">
+                and data = #{data,jdbcType=VARCHAR}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="updateTime != null">
+                and update_time = #{updateTime,jdbcType=TIMESTAMP}
+            </if>
+        </trim>
+    </sql>
+    
+    
+    <insert id="save" parameterType="com.ajaya.cashloan.cl.domain.BankCardLog">
+        insert into cl_bank_card_log(borrow_id,user_id,status,reference,access_code,authorization_url,type,webhook_data,data,create_time,update_time)values(#{borrowId,jdbcType=BIGINT},#{userId,jdbcType=BIGINT},#{status,jdbcType=VARCHAR},#{reference,jdbcType=VARCHAR},#{accessCode,jdbcType=VARCHAR},#{authorizationUrl,jdbcType=VARCHAR},#{type,jdbcType=VARCHAR},#{webhookData,jdbcType=VARCHAR},#{data,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP},#{updateTime,jdbcType=TIMESTAMP})
+    </insert>
+
+    
+    <update id="update" parameterType="com.ajaya.cashloan.cl.domain.BankCardLog">
+        update cl_bank_card_log set 
+            borrow_id = #{borrowId,jdbcType=BIGINT},
+            user_id = #{userId,jdbcType=BIGINT},
+            status = #{status,jdbcType=VARCHAR},
+            reference = #{reference,jdbcType=VARCHAR},
+            access_code = #{accessCode,jdbcType=VARCHAR},
+            authorization_url = #{authorizationUrl,jdbcType=VARCHAR},
+            type = #{type,jdbcType=VARCHAR},
+            webhook_data = #{webhookData,jdbcType=VARCHAR},
+            data = #{data,jdbcType=VARCHAR},
+            create_time = #{createTime,jdbcType=TIMESTAMP},
+            update_time = #{updateTime,jdbcType=TIMESTAMP}
+        where id = #{id ,jdbcType=INTEGER}
+    </update>
+
+
+    <update id="updateSelective"  parameterType="java.util.HashMap">
+        update cl_bank_card_log
+          <set>
+            <if test="borrowId != null and borrowId != '' ">        
+                borrow_id = #{borrowId,jdbcType=BIGINT},                
+            </if>
+            <if test="userId != null and userId != '' ">        
+                user_id = #{userId,jdbcType=BIGINT},                
+            </if>
+            <if test="status != null and status != '' ">        
+                status = #{status,jdbcType=VARCHAR},                
+            </if>
+            <if test="reference != null and reference != '' ">        
+                reference = #{reference,jdbcType=VARCHAR},                
+            </if>
+            <if test="accessCode != null and accessCode != '' ">        
+                access_code = #{accessCode,jdbcType=VARCHAR},                
+            </if>
+            <if test="authorizationUrl != null and authorizationUrl != '' ">        
+                authorization_url = #{authorizationUrl,jdbcType=VARCHAR},                
+            </if>
+            <if test="type != null and type != '' ">        
+                type = #{type,jdbcType=VARCHAR},                
+            </if>
+            <if test="webhookData != null and webhookData != '' ">        
+                webhook_data = #{webhookData,jdbcType=VARCHAR},                
+            </if>
+            <if test="data != null and data != '' ">        
+                data = #{data,jdbcType=VARCHAR},                
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},                
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP}                
+            </if>
+        </set>    
+        where id = #{id ,jdbcType=INTEGER}
+    </update>
+
+
+    <select id="findByPrimary" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List" />
+        from cl_bank_card_log
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
+	<select id="findSelective" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+        select
+        <include refid="Base_Column_List" />
+        from cl_bank_card_log
+        <include refid="searchBy"/>
+    </select>
+               
+    <select id="listSelective" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+        select
+        <include refid="Base_Column_List" />
+        from cl_bank_card_log
+        <include refid="searchBy"/>
+    </select>
+    
+</mapper>
