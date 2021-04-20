@@ -2,11 +2,14 @@
 <project version="4">
   <component name="ArtifactsWorkspaceSettings">
     <artifacts-to-build>
-      <artifact name="cashloan-api:war exploded" />
+      <artifact name="cashloan-manage:war exploded" />
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4c0d997e-5ef0-4c61-8cbf-a1e63b708715" name="Default" comment="" />
+    <list default="true" id="4c0d997e-5ef0-4c61-8cbf-a1e63b708715" name="Default" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <ignored path="$PROJECT_DIR$/cashloan-rc/target/" />
     <ignored path="$PROJECT_DIR$/cashloan-cl/target/" />
     <ignored path="$PROJECT_DIR$/cashloan-cr/target/" />
@@ -60,8 +63,8 @@
       <file leaf-file-name="1.chunk.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/cashloan-manage/src/main/webapp/build/1.chunk.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-7">
-              <caret column="1095" selection-start-column="1095" selection-end-column="1095" />
+            <state relative-caret-position="67">
+              <caret column="2201" selection-start-column="2201" selection-end-column="2201" />
             </state>
           </provider>
         </entry>
@@ -174,6 +177,7 @@
   </component>
   <component name="Git.Settings">
     <option name="ROOT_SYNC" value="DONT_SYNC" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
@@ -254,6 +258,7 @@
     <option name="width" value="1750" />
     <option name="height" value="970" />
   </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
     <navigator proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
@@ -279,14 +284,14 @@
     <property name="SearchEverywhereHistoryKey" value="SDK&#9;null&#9;null&#10;sdk&#9;null&#9;null&#10;api&#9;FILE&#9;file://D:/project/risk/cashloan-product-africa/cashloan-api/src/main/java/com/ajaya/cashloan/api&#10;sms&#9;FILE&#9;file://D:/project/risk/cashloan-product-africa/cashloan-api/src/main/java/com/ajaya/cashloan/api/controller/SmsController.java&#10;India&#9;FILE&#9;file://D:/project/risk/cashloan-product-africa/cashloan-manage/src/main/resources/config/India.json&#10;getIndiaJson&#9;PSI&#9;JAVA://com.ajaya.cashloan.manage.controller.ChannelController#getIndiaJson&#10;/modules/manage/borrow/repay/list&#9;null&#9;null&#10;jdbc&#9;null&#9;null&#10;png&#9;FILE&#9;file://D:/project/risk/cashloan-product-africa/cashloan-manage/src/main/webapp/dev/images/bg-login.png&#10;1.chunk&#9;FILE&#9;file://D:/project/risk/cashloan-product-africa/cashloan-manage/src/main/webapp/build/1.chunk.js&#10;index&#9;FILE&#9;file://D:/project/risk/cashloan-product-africa/cashloan-manage/src/main/webapp/dev/index.html&#10;login&#9;FILE&#9;file://D:/project/risk/cashloan-product-africa/cashloan-manage/src/main/java/com/ajaya/cashloan/manage/controller/SysLoginController.java&#10;DruidDataSource&#9;PSI&#9;JAVA://com.alibaba.druid.pool.DruidDataSource" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="D:/Development tools/git/GIT/Git/bin/git.exe" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/.." />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
-    <property name="settings.editor.selected.configurable" value="vcs.Git" />
+    <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -306,7 +311,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Tomcat Server.Unnamed (1)">
+  <component name="RunManager" selected="Tomcat Server.Unnamed">
     <configuration name="StartAdminApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.ajaya.cashloan.manage.StartAdminApplication" />
       <module name="cashloan-manage" />
@@ -536,12 +541,12 @@
       <workItem from="1617932443109" duration="17760000" />
       <workItem from="1618193442396" duration="3470000" />
       <workItem from="1618208162078" duration="17082000" />
-      <workItem from="1618366277037" duration="73308000" />
+      <workItem from="1618366277037" duration="79771000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="158216000" />
+    <option name="totallyTimeSpent" value="164679000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -553,12 +558,12 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-7" y="-7" width="1550" height="838" extended-state="7" />
+    <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
     <layout>
       <window_info anchor="right" id="Palette" order="3" />
-      <window_info anchor="bottom" id="Event Log" order="8" sideWeight="0.09986595" side_tool="true" weight="1.0" />
+      <window_info anchor="bottom" id="Event Log" order="8" sideWeight="0.29959786" side_tool="true" visible="true" weight="0.29957205" />
       <window_info anchor="bottom" id="Application Servers" order="9" weight="0.32905984" />
-      <window_info anchor="right" id="Maven Projects" order="3" visible="true" weight="0.052949063" />
+      <window_info anchor="right" id="Maven Projects" order="3" weight="0.052949063" />
       <window_info anchor="bottom" id="Database Changes" order="10" show_stripe_button="false" />
       <window_info id="Capture Tool" order="2" />
       <window_info id="Designer" order="2" />
@@ -566,19 +571,19 @@
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info id="UI Designer" order="2" />
-      <window_info active="true" anchor="bottom" id="Debug" order="3" sideWeight="0.8713137" visible="true" weight="0.22649573" />
+      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.7741287" weight="0.67902994" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32905984" />
       <window_info anchor="bottom" id="Messages" order="11" sideWeight="0.4953083" weight="0.47578347" />
       <window_info anchor="right" id="Palette&#9;" order="3" />
       <window_info id="Image Layers" order="2" />
       <window_info anchor="bottom" id="Java Enterprise" order="12" weight="0.32905984" />
       <window_info anchor="right" id="Capture Analysis" order="3" />
-      <window_info anchor="bottom" id="Version Control" order="13" show_stripe_button="false" />
+      <window_info active="true" anchor="bottom" id="Version Control" order="13" sideWeight="0.70040214" visible="true" weight="0.29957205" />
       <window_info anchor="bottom" id="Run" order="2" sideWeight="0.8719839" weight="0.67236465" />
       <window_info anchor="bottom" id="Spring" order="7" sideWeight="0.12868632" side_tool="true" weight="0.75498575" />
       <window_info anchor="bottom" id="Terminal" order="14" weight="0.32905984" />
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.23793566" />
-      <window_info anchor="right" id="Bean Validation" order="4" />
+      <window_info anchor="right" id="Bean Validation" order="4" visible="true" weight="0.3297587" />
       <window_info id="Web" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Find" order="1" />
       <window_info anchor="right" id="Theme Preview" order="3" />
@@ -592,6 +597,32 @@
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="RECENTLY_FILTERED_USER_GROUPS">
+                <collection />
+              </option>
+              <option name="RECENTLY_FILTERED_BRANCH_GROUPS">
+                <collection />
+              </option>
+              <option name="COLUMN_ORDER">
+                <list>
+                  <option value="0" />
+                  <option value="1" />
+                  <option value="2" />
+                  <option value="3" />
+                </list>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
@@ -1074,8 +1105,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/cashloan-manage/src/main/webapp/build/1.chunk.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-7">
-          <caret column="1095" selection-start-column="1095" selection-end-column="1095" />
+        <state relative-caret-position="67">
+          <caret column="2201" selection-start-column="2201" selection-end-column="2201" />
         </state>
       </provider>
     </entry>
